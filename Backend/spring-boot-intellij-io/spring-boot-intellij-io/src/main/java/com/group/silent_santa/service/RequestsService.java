@@ -69,4 +69,8 @@ public class RequestsService {
                 .map(RequestsModel::getLetter)  // Extract the Letter from each Request
                 .collect(Collectors.toList());
     }
+    public List<LettersModel> getAllRequests() {
+        //todo
+        return List.of();
+    }
 }
