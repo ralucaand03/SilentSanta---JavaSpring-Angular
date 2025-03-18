@@ -25,18 +25,19 @@ public class LettersModel {
     @NotBlank(message = "Title is required")
     private String title;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "letter_wish_list", joinColumns = @JoinColumn(name = "letter_id"))
     @Column(name = "wish_item")
     @NotNull(message = "Wish list must not be null")
     private List<String> wishList;
+
 
     @NotBlank(message = "Child name is required")
     private String childName;
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")
-    private LetterStatus status = LetterStatus.ACTIVE;
+    private LetterStatus status = LetterStatus.WAITING;
 
     private LocalDateTime createdAt;
 
@@ -46,15 +47,15 @@ public class LettersModel {
     private UsersModel postedBy;
 
     public enum LetterStatus {
-        ACTIVE, INACTIVE
+        WAITING, WORKING, DONE
     }
 
     public LettersModel(String title, List<String> wishList, String childName, LetterStatus status, UsersModel postedBy) {
-        this.id = UUID.randomUUID();
+        //this.id = UUID.randomUUID();
         this.title = title;
         this.wishList = wishList;
         this.childName = childName;
-        this.status = status != null ? status : LetterStatus.ACTIVE;
+        this.status = status != null ? status : LetterStatus.WAITING;
         this.postedBy = postedBy;
         this.createdAt = LocalDateTime.now();
     }

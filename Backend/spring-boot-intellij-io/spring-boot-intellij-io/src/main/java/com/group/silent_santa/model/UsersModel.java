@@ -4,8 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,7 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class UsersModel {
+public class UsersModel implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,6 +46,7 @@ public class UsersModel {
 
     private LocalDateTime createdAt;
 
+
     public enum Role {
         USER, ADMIN
     }
@@ -61,4 +66,40 @@ public class UsersModel {
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+    @Override
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
+        // This can be customized based on your roles
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;  // or implement the logic based on your requirements
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;  // or implement the logic based on your requirements
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;  // or implement the logic based on your requirements
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;  // or implement the logic based on your requirements
+    }
+
 }

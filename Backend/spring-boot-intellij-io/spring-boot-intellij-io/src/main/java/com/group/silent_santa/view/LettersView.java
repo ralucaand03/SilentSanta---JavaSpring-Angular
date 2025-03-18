@@ -81,28 +81,34 @@ public class LettersView {
 
         // Set cell renderer and editor for "View" button column
         table.getColumn("View").setCellRenderer(new ButtonRenderer());
-        table.getColumn("View").setCellEditor(new ButtonEditor(new JCheckBox(), controller, this));
+        table.getColumn("View").setCellEditor(new ButtonEditor(new JCheckBox(),controller, this));
 
         // Button actions
         backButton.addActionListener(e -> controller.back());
         addLetterButton.addActionListener(e -> controller.addLetter(this));
     }
-
     public void populateLetters(List<LettersModel> letterList) {
-        letters.clear();
-        tableModel.setRowCount(0);
-        for (LettersModel letter : letterList) {
-            letters.add(letter);
+        if (letterList == null || letterList.isEmpty()) {
+            //JOptionPane.showMessageDialog(null, "No letters available.");
+            System.out.println("No letters");
+        } else {
+            letters.clear(); // Clear existing letters list
+            tableModel.setRowCount(0); // Clear existing rows from the table model
+            for (LettersModel letter : letterList) {
+                letters.add(letter); // Add new letter data to the list
 
-            tableModel.addRow(new Object[]{
-                    letter.getChildName(),
-                    letter.getCreatedAt(),
-                    letter.getPostedBy().getFirstName() + " " + letter.getPostedBy().getLastName(),
-                    letter.getStatus().name(),
-                    "View"
-            });
+                tableModel.addRow(new Object[]{
+                        letter.getChildName(),
+                        letter.getCreatedAt(),
+                        letter.getPostedBy().getFirstName() + " " + letter.getPostedBy().getLastName(),
+                        letter.getStatus().name(),
+                        "View"
+                });
+            }
         }
     }
+
+
 
     public LettersModel getLetterAt(int rowIndex) {
         if (rowIndex >= 0 && rowIndex < letters.size()) {
@@ -124,7 +130,6 @@ class ButtonRenderer extends JButton implements javax.swing.table.TableCellRende
         return this;
     }
 }
-
 class ButtonEditor extends DefaultCellEditor {
     private final JButton button;
     private String label;
@@ -140,23 +145,31 @@ class ButtonEditor extends DefaultCellEditor {
         this.button = new JButton();
         button.setOpaque(true);
 
+        // Ensure the button works by stopping editing and triggering the action
         button.addActionListener(e -> fireEditingStopped());
     }
 
     @Override
-    public Component getTableCellEditorComponent(JTable table, Object value,
-                                                 boolean isSelected, int row, int column) {
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        // Validate that the row index is within the bounds of the table
+        if (row < 0 || row >= table.getRowCount()) {
+            return button;  // Return the button without any further interaction
+        }
+
         label = (value == null) ? "" : value.toString();
         button.setText(label);
         clicked = true;
-        selectedRow = row;
+        selectedRow = row;  // Store the selected row index
         return button;
     }
 
     @Override
     public Object getCellEditorValue() {
         if (clicked) {
-            controller.onViewLetter(selectedRow);
+            // Only proceed if the row index is valid
+            if (selectedRow >= 0 && selectedRow < view.getLetters().size()) {
+                controller.onViewLetter(selectedRow);
+            }
         }
         clicked = false;
         return label;

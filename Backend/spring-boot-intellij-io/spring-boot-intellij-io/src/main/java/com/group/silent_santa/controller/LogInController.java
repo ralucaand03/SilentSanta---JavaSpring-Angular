@@ -5,6 +5,9 @@ import com.group.silent_santa.service.UsersService;
 import com.group.silent_santa.view.LogInView;
 import com.group.silent_santa.view.SignUpView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -39,7 +42,6 @@ public class LogInController {
     public void setView(LogInView view) {
         this.view = view;
     }
-
     public void loginButtonClicked() {
         String email = view.getEmailField().getText().trim();
         String rawPassword = new String(view.getPasswordField().getPassword()).trim();
@@ -75,6 +77,10 @@ public class LogInController {
             return;
         }
 
+        // After successful login:
+        Authentication auth = new UsernamePasswordAuthenticationToken(user, rawPassword, user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(auth);  // Store the authentication object in the context.
+
         JOptionPane.showMessageDialog(
                 null,
                 "✅ Login successful! Welcome, " + user.getFirstName() + "!"
@@ -83,10 +89,10 @@ public class LogInController {
         // Open Admin Dashboard if user is ADMIN
         if (user.getRole() == UsersModel.Role.ADMIN) {
             adminDashboardController.openDashboard();
-            view.getFrame().dispose(); // close login window
+            view.getFrame().dispose(); // Close login window
         } else {
             JOptionPane.showMessageDialog(null, "👤 Logged in as regular user. No admin access.");
-            // or open a user dashboard here
+            // Or open user dashboard here
         }
     }
 

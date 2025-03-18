@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 public class UsersService {
@@ -57,5 +60,15 @@ public class UsersService {
                 .findFirst()
                 .orElse(null);
     }
+    public UsersModel getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof UserDetails) {
+            // This assumes your UserDetails object contains the email or unique identifier
+            String email = ((UserDetails) auth.getPrincipal()).getUsername();
+            return findByEmail(email); // or a dedicated method to fetch your UsersModel
+        }
+        return null;
+    }
+
 
 }
