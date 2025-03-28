@@ -1,0 +1,80 @@
+<div class="page">
+    <div class="signup-container"> <!-- reusing the same styling classes as in the login component -->
+      <img src="assets/elf.png" alt="Elf" class="elf-image" />
+      <h1>Create an Account</h1>
+  
+      <form (submit)="onSignupSubmit()" class="inputs">
+        <div class="input-group">
+          <label for="name">Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            name="name" 
+            [(ngModel)]="name"
+            placeholder=" 🖊 Your Name"
+            required
+          />
+        </div>
+  
+       
+  
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            [(ngModel)]="email" 
+            placeholder=" ✉ Your email" 
+            required
+          />
+        </div>
+  
+        <div class="input-group">
+          <label for="phone">Phone</label>
+          <input 
+            type="tel" 
+            id="phone" 
+            name="phone" 
+            [(ngModel)]="phone"
+            placeholder=" ✆ Your phone"
+            required
+          />
+        </div>
+  
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            [(ngModel)]="password"
+            placeholder=" ◮ Your password"
+            required
+          />
+        </div>
+  
+        <div class="role-buttons">
+            <button 
+              type="button" 
+              [class.selected]="role === 'Giver'" 
+              (click)="selectRole('Giver')">
+              Giver
+            </button>
+            <button 
+              type="button" 
+              [class.selected]="role === 'Helper'" 
+              (click)="selectRole('Helper')">
+              Helper
+            </button>
+          </div>
+  
+        <button 
+          type="submit" 
+          class="login-button">
+          Sign Up
+        </button>
+      </form>
+    </div>
+  </div>
+  

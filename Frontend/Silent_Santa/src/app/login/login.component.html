@@ -1,23 +1,29 @@
-<div class="login-container">
-    <h1>Register</h1>
-  
-    <form (submit)="onLoginSubmit()">
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="✉️Your email" required />
-      </div>
-  
-      <div class="input-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" placeholder="🔑Your password" required />
-      </div>
-  
-      <button type="submit" class="login-button">Log In</button>
-    </form>
-  
-    <div class="signup-link">
-      <span>Don't have an account?</span>
-      <a href="/signup">SIGN UP</a>
+<!-- <app-header></app-header>   -->
+<div class="page">
+    <div class="login-container">
+        <!-- Small, centered image -->
+        <img src="assets/surprise.png" alt="Surprise" class="surprise-image" />
+
+        <h1>Register</h1>
+<div class = "inputs">
+        <form (submit)="onLoginSubmit()">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" [(ngModel)]="email" name="email" placeholder=" ✉ Your email" required />
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" [(ngModel)]="password" name="password" placeholder=" ◮ Your password" required />
+            </div>
+
+            <button type="submit" class="login-button">Log In</button>
+        </form>
+
+        <div class="signup-link">
+            <span>Don't have an account?</span>
+            <a href="/signup"> ✨ SIGN UP </a>
+        </div>
     </div>
-  </div>
-  
+</div>
+</div>

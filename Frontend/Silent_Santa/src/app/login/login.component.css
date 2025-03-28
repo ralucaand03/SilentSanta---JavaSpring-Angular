@@ -1,21 +1,46 @@
+.page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Comfortaa', sans-serif;
+  /* background: linear-gradient(to right,  #cfd5d4aa,#efd9d995); */
+  background: linear-gradient(to right, #ef6e6e32, #46ac9848);
+  display: flex; /* Flexbox for centering */
+  align-items: center;  /* Center vertically */
+  justify-content: center; /* Center horizontally */ 
+}
+
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
-    background: linear-gradient(to right,  #ef6e6e74,#46ac985c);
-    padding: 20px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* background: linear-gradient(to right, #eedede, #dde2e2); */
+  background: rgba(255, 255, 255, 0.281);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur 50px;
+  padding: 50px;
+  border-radius: 20px;
+  width: 100%; 
+  max-width: 350px; 
+  box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+}
+
+  .surprise-image {
+      display: block;
+      width: 90px; 
+      height: auto;
   }
-  
+
   h1 {
-    font-family: 'Arial', sans-serif;
-    color: white;
+    font-family: 'Comfortaa', sans-serif;  /* Apply Comfortaa font */
+    color: #46ac97;  /* Set text color */
     margin-bottom: 20px;
   }
+  
   
   .input-group {
     width: 100%;
@@ -23,22 +48,35 @@
   }
   
   .input-group label {
+    margin-left: 10px;
     font-size: 14px;
-    color: white;
+    color: #46ac97;
   }
-  
-  .input-group input {
+
+  .inputs {
     width: 100%;
-    padding: 10px;
+    display: flex;
+    flex-direction: column;  
+    align-items: center;     /* Center horizontally */
+  }
+  .input-group input {
+    width: 100%;  /* Ensures the input field takes full width */
+    padding: 10px;  /* Same padding as the button */
     margin-top: 5px;
+    padding-left: 15px;
     border: none;
     border-radius: 20px;
     outline: none;
+    background-color: #ffffffd5;
+    font-family: 'Comfortaa', sans-serif; 
+    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
   }
   
   .login-button {
-    width: 100%;
-    padding: 10px;
+    width: 100%;  /* Ensures the button takes full width */
+    padding: 10px;  /* Same padding as the input field */
+    margin-top: 15px;
     background-color: #46ac97;
     color: white;
     border: none;
@@ -46,7 +84,10 @@
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s;
+    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Ensures padding doesn't affect the width */
   }
+  
   
   .login-button:hover {
     background: #ef6e6e;
@@ -55,7 +96,7 @@
   
   .signup-link {
     margin-top: 15px;
-    color: white;
+    color: #46ac97;
   }
   
   .signup-link a {
@@ -63,6 +104,7 @@
     text-decoration: none;
     font-weight: bold;
   }
+
   .signup-link:hover a {
     color: #46ac97;
     text-decoration: none;

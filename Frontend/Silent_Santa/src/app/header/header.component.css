@@ -1,0 +1,65 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f3f4f6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo {
+    width: 50px;
+    margin-right: 20px;
+  }
+  
+  .search-bar {
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    width: 300px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  
+  .user-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .user-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 20px;
+  }
+  
+  .add-wish-btn {
+    padding: 10px 20px;
+    background-color: #46ac97;
+    color: white;
+    font-size: 14px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-wish-btn:hover {
+    background-color: #ef6e6e;
+  }
+  

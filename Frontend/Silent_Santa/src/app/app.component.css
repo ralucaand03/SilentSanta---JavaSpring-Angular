@@ -1,0 +1,8 @@
+html,body {
+    font-family: 'Comfortaa', sans-serif; 
+    height: 100%; /* Set height to 100% of the viewport */
+    width: 100%;/* Optional: limits the page's width */
+    background-color: #994545; 
+    display:grid;
+  }
+  
