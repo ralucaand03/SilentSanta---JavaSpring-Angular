@@ -1,23 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 
-import { HeaderComponent } from './header.component';
+@Component({
+  selector: 'app-header',
+  standalone: true,  // Ensure this is set to true for standalone components
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+export class HeaderComponent {
+  // Simulating authentication (you can replace this with actual logic)
+  isAuthenticated: boolean = false;  // Change to true for testing authenticated state
+  
+  // Toggle the dropdown visibility
+  dropdownOpen: boolean = false;
 
-describe('HeaderComponent', () => {
-  let component: HeaderComponent;
-  let fixture: ComponentFixture<HeaderComponent>;
+  // Toggle dropdown visibility
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HeaderComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(HeaderComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  // Simulate logging out (you would replace this with your actual logout logic)
+  logOut() {
+    console.log('User logged out');
+    this.isAuthenticated = false;  // Set to false when logging out
+    this.dropdownOpen = false;     // Close the dropdown on logout
+  }
+}

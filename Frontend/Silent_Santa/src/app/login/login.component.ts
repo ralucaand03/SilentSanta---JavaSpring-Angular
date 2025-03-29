@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';  // Import FormsModule
+import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from "../header/header.component";  // Import FormsModule
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],  // Add FormsModule here
+  imports: [FormsModule, HeaderComponent], 
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

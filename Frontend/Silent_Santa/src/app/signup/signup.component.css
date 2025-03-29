@@ -1,117 +1,140 @@
 .page {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    font-family: 'Comfortaa', sans-serif;
-    background: linear-gradient(to right, #ef6e6e32, #46ac9848);
-    display: flex;
-    align-items: center;  
-    justify-content: center; 
-  }
+  position:fixed;
+  width: 100vw;
+  bottom: 0;
+  left:0;
+  height: 88vh;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  padding-right: 15px;
+  margin: 0;
+  font-family: 'Comfortaa', sans-serif;
+  background: linear-gradient(to right, #ef6e6e32, #46ac9848);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;  
   
-  .signup-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.281);
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur 50px;
-    padding: 50px;
-    border-radius: 20px;
-    width: 100%; 
-    max-width: 350px; 
-    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .elf-image {
-    display: block;
-    width: 90px; 
-    height: auto;
-  }
-  
-  h1 {
-    font-family: 'Comfortaa', sans-serif;
-    color: #46ac97;
-    margin-bottom: 20px;
-  }
-  
-  .inputs {
-    width: 350px;
-    display: flex;
-    flex-direction: column;  
-    align-items: center;     
-  }
-  
-  .input-group {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  
-  .input-group label {
-    margin-left: 10px;
-    font-size: 14px;
-    color: #46ac97;
-  }
-  
-  .input-group input {
-    width: 350px;
-    height: 35px;
-    margin-top: 5px;
-    padding-left: 15px;
-    border: none;
-    border-radius: 20px;
-    outline: none;
-    background-color: #ffffffd5;
-    font-family: 'Comfortaa', sans-serif; 
-    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-  }
-  
-  .login-button {
-    width: 350px; /* Ensure button is the same width as input */
-    padding: 10px; /* Same padding for consistency */
-    background-color: #46ac97;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-  }
-  
-  .login-button:hover {
-    background: #ef6e6e;
-    color: #ffffff;
-  }
-  
-  .role-buttons {
-    display: flex; /* Aligns the buttons horizontally */
-    justify-content: space-between; /* Adds space between the buttons */
-    width: 350px; /* Ensures the container width matches the buttons */
-    margin-bottom: 15px; /* Adjust space between the role buttons and other elements */
-  }
-  
-  .role-buttons button {
-    width: 165px; /* Set each button width to ensure they fit in one row */
-    padding: 10px;
-    font-size: 16px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    color: #46ac97;
-    border-radius: 20px;
-    cursor: pointer;
-    box-sizing: border-box; /* Ensure padding doesn't affect width */
-  }
-  
-  .role-buttons button.selected {
-    background-color: #ef6e6e;
-    color: white;
-  }
-  
-  
+  overflow-y: auto; 
+}
+
+.page::-webkit-scrollbar {
+  width: 10px; 
+}
+
+.page::-webkit-scrollbar-thumb {
+  background-color: #61baa8; 
+  border-radius: 10px;
+}
+
+.page::-webkit-scrollbar-thumb:hover {
+  background-color: #46ac97;
+}
+
+.page::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1); 
+}
+
+.signup-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.281);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(50px);
+  padding: 50px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 350px;
+  box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+}
+
+.elf-image {
+  display: block;
+  width: 90px;
+  height: auto;
+}
+
+h1 {
+  font-family: 'Comfortaa', sans-serif;
+  color: #46ac97;
+  margin-bottom: 20px;
+}
+
+.inputs {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-group {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #46ac97;
+}
+
+.input-group input {
+  width: 350px;
+  height: 35px;
+  margin-top: 5px;
+  padding-left: 15px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background-color: #ffffffd5;
+  font-family: 'Comfortaa', sans-serif;
+  box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.login-button {
+  width: 350px;
+  padding: 10px;
+  background-color: #46ac97;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+.login-button:hover {
+  background: #ef6e6e;
+  color: #ffffff;
+}
+
+.role-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 350px;
+  margin-bottom: 15px;
+}
+
+.role-buttons button {
+  width: 165px;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  color: #46ac97;
+  border-radius: 20px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.role-buttons button.selected {
+  background-color: #ef6e6e;
+  color: white;
+}

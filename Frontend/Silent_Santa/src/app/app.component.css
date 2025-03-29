@@ -4,5 +4,7 @@ html,body {
     width: 100%;/* Optional: limits the page's width */
     background-color: #994545; 
     display:grid;
+    
   }
+
   

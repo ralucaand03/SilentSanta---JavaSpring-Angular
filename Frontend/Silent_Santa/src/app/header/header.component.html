@@ -1,12 +1,27 @@
 <header class="app-header">
   <nav class="navbar">
-    <div class="navbar-brand">
-      <a href="/">My App</a>
+    <div class="navbar-left">
+      <a href="/" class="nav-link"> Home</a>
+      <a href="/letters" class="nav-link">Letters</a>
+      <a href="/favorites" class="nav-link">Favorites</a>
+      <a href="/my-letters" class="nav-link">My Letters</a>
     </div>
-    <ul class="navbar-nav">
-      <li><a href="/">Home</a></li>
-      <li><a href="/signup">Sign Up</a></li>
-      <li><a href="/login">Log In</a></li>
-    </ul>
+    <div class="navbar-right">
+      <img src="assets/Silent_Santa.png" alt="User Icon" class="user-icon" />
+      
+      <!-- Account Button with Dropdown Toggle -->
+      <button class="account-button" (click)="toggleDropdown()">Account</button>
+      
+      <!-- Dropdown Menu for Account -->
+      <div class="dropdown-menu" *ngIf="dropdownOpen">
+        <ul>
+          <li *ngIf="isAuthenticated"><a href="/my-account">My Account</a></li>
+          <li *ngIf="isAuthenticated"><a href="#" (click)="logOut()">Log Out</a></li>
+          <li *ngIf="!isAuthenticated"><a href="/login">Login</a></li>
+          <li *ngIf="!isAuthenticated"><a href="/signup">Sign Up</a></li>
+        </ul>
+      </div>
+      
+    </div>
   </nav>
 </header>

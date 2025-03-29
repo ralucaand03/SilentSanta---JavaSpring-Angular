@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-favorites',
   standalone: true,
   imports: [HeaderComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  templateUrl: './favorites.component.html',
+  styleUrl: './favorites.component.css'
 })
-export class HomeComponent {
+export class FavoritesComponent {
 
 }
