@@ -3,9 +3,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-
+} 
 
 .app-container {
   font-family: 'Comfortaa', sans-serif;
@@ -15,10 +13,8 @@
   width: 100%; /* Full width */ 
   overflow-x: hidden; /* Prevent horizontal scrolling */
   overflow-y: auto;
-}
+} 
 
-
-/* Scrollbar styling */
 .app-container::-webkit-scrollbar {
   width: 10px;
 }

@@ -92,6 +92,7 @@
   background-color: rgba(255, 255, 255, 0.4);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  
 }
 
 .hero-image {
@@ -99,9 +100,7 @@
   height: auto;
   margin-right: 40px;
 }
-.h2{
-  color: #000;
-}
+
 /* Section Styles */
 .section {
   width: 100%;

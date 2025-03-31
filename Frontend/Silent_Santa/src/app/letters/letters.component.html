@@ -1,79 +1,159 @@
-<div class="page"> 
-    <main class="letters-page">
-      <div class="letters-header">
-        <h1 class="page-title">Children's Letters</h1>
-        <p class="page-description">Browse through heartfelt letters from children and choose one to fulfill their Christmas wishes.</p>
+<div class="page">
+    <div class="letters-container">
+      <!-- Sidebar Filters -->
+      <aside class="filters-sidebar">
+        <div class="filters-header">
+          <h2>Filters</h2>
+          <button class="clear-filters-button" (click)="clearFilters()">Clear All</button>
+        </div>
         
-        <div class="filters">
-          <div class="filter-group">
-            <label>Filter by School:</label>
-            <div class="filter-buttons">
+        <div class="search-box">
+          <input 
+            type="text" 
+            placeholder="Search by name or item..." 
+            (input)="updateSearch($event)"
+            [value]="searchQuery">
+          <i class="icon-search"></i>
+        </div>
+        
+        <div class="filter-section">
+          <h3>School</h3>
+          <div class="filter-options">
+            <button 
+              class="filter-option" 
+              [class.active]="selectedLocation === null" 
+              (click)="filterByLocation(null)">
+              All Schools
+            </button>
+            <button 
+              *ngFor="let location of locations" 
+              class="filter-option" 
+              [class.active]="selectedLocation === location" 
+              (click)="filterByLocation(location)">
+              {{ location }}
+            </button>
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3>Gender</h3>
+          <div class="filter-options">
+            <button 
+              class="filter-option" 
+              [class.active]="selectedGender === null" 
+              (click)="filterByGender(null)">
+              All
+            </button>
+            <button 
+              class="filter-option gender-boy" 
+              [class.active]="selectedGender === 'boy'" 
+              (click)="filterByGender('boy')">
+              <i class="icon-boy"></i> Boys
+            </button>
+            <button 
+              class="filter-option gender-girl" 
+              [class.active]="selectedGender === 'girl'" 
+              (click)="filterByGender('girl')">
+              <i class="icon-girl"></i> Girls
+            </button>
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3>Age</h3>
+          <div class="filter-options">
+            <button 
+              class="filter-option" 
+              [class.active]="selectedAgeRange === null" 
+              (click)="filterByAgeRange(null)">
+              All Ages
+            </button>
+            <button 
+              *ngFor="let range of ageRanges" 
+              class="filter-option" 
+              [class.active]="selectedAgeRange === range" 
+              (click)="filterByAgeRange(range)">
+              {{ range }} years
+            </button>
+          </div>
+        </div>
+        
+        <div class="filter-stats">
+          <p>Showing <span>{{ filteredLetters.length }}</span> of <span>{{ letters.length }}</span> letters</p>
+        </div>
+      </aside>
+      
+      <!-- Main Content -->
+      <main class="letters-content">
+        <div class="letters-header">
+          <h1 class="page-title">Children's Letters</h1>
+          <p class="page-description">Browse through heartfelt letters from children and choose one to fulfill their Christmas wishes.</p>
+        </div>
+        
+        <div class="letters-grid">
+          <div 
+            *ngFor="let letter of filteredLetters" 
+            class="letter-card" 
+            [class.requested]="letter.isRequested"
+            [class.boy]="letter.gender === 'boy'"
+            [class.girl]="letter.gender === 'girl'"
+            (click)="toggleLetterView(letter, $event)">
+            
+            <div class="letter-header">
+              <div class="letter-header-content">
+                <h2 class="child-name">{{ letter.childName }}, {{ letter.childAge }}</h2>
+                <div class="letter-badges">
+                  <span class="gender-badge" [class]="letter.gender">
+                    <i [class]="'icon-' + letter.gender"></i>
+                  </span>
+                  <span class="location-badge">{{ letter.location }}</span>
+                </div>
+              </div>
+              <div class="letter-snowflake"></div>
+            </div>
+            
+            <div class="letter-content" *ngIf="!letter.showImage">
+              <h3 class="wishes-title">Christmas Wishes:</h3>
+              <ul class="wishes-list">
+                <li *ngFor="let item of letter.items">{{ item }}</li>
+              </ul>
+              <div class="letter-hint">Double-click to see letter</div>
+            </div>
+            
+            <div class="letter-image" *ngIf="letter.showImage">
+              <img src="assets/letter.png" alt="Child's handwritten letter" class="letter-img">
+              <p class="image-hint">Double-click to see wishes</p>
+            </div>
+            
+            <div class="letter-footer">
               <button 
-                class="filter-button" 
-                [class.active]="selectedLocation === null" 
-                (click)="filterByLocation(null)">
-                All Schools
+                class="favorite-button" 
+                [class.active]="letter.isFavorite" 
+                (click)="toggleFavorite(letter); $event.stopPropagation()">
+                <i class="icon-heart"></i>
               </button>
+              
               <button 
-                *ngFor="let location of locations" 
-                class="filter-button" 
-                [class.active]="selectedLocation === location" 
-                (click)="filterByLocation(location)">
-                {{ location }}
+                class="request-button" 
+                [disabled]="letter.isRequested" 
+                (click)="requestLetter(letter); $event.stopPropagation()">
+                <i class="icon-mail"></i>
+                <span>{{ letter.isRequested ? 'Requested' : 'Request Letter' }}</span>
               </button>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="letters-grid">
-        <div 
-          *ngFor="let letter of filteredLetters" 
-          class="letter-card" 
-          [class.requested]="letter.isRequested"
-          (click)="toggleLetterView(letter, $event)">
-          
-          <div class="letter-header">
-            <h2 class="child-name">{{ letter.childName }}, {{ letter.childAge }}</h2>
-            <span class="location-badge">{{ letter.location }}</span>
-          </div>
-          
-          <div class="letter-content" *ngIf="!letter.showImage">
-            <h3 class="wishes-title">Christmas Wishes:</h3>
-            <ul class="wishes-list">
-              <li *ngFor="let item of letter.items">{{ item }}</li>
-            </ul>
-          </div>
-          
-          <div class="letter-image" *ngIf="letter.showImage">
-            <img src="assets/letter.png" alt="Child's handwritten letter" class="letter-img">
-            <p class="image-hint">Double-click to see wishes</p>
-          </div>
-          
-          <div class="letter-footer">
-            <button 
-              class="favorite-button" 
-              [class.active]="letter.isFavorite" 
-              (click)="toggleFavorite(letter); $event.stopPropagation()">
-              <i class="icon-heart"></i>
-              <span>{{ letter.isFavorite ? '' : '' }}</span>
-            </button>
-            
-            <button 
-              class="request-button" 
-              [disabled]="letter.isRequested" 
-              (click)="requestLetter(letter); $event.stopPropagation()">
-              <i class="icon-mail"></i>
-              <span>{{ letter.isRequested ? 'Requested' : 'Request Letter' }}</span>
-            </button>
+        
+        <div class="letters-empty" *ngIf="filteredLetters.length === 0">
+          <div class="empty-state">
+            <i class="icon-search-large"></i>
+            <h3>No letters found</h3>
+            <p>Try adjusting your filters or search criteria</p>
+            <button class="clear-filters-button" (click)="clearFilters()">Clear All Filters</button>
           </div>
         </div>
-      </div>
-      
-      <div class="letters-empty" *ngIf="filteredLetters.length === 0">
-        <p>No letters found for the selected filter.</p>
-      </div>
-    </main>
+      </main>
+    </div>
      
   </div>
   

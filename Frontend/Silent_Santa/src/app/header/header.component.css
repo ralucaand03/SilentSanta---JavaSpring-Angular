@@ -53,6 +53,10 @@
  
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
   color: white;
   font-weight: 600;
   border: none;
@@ -79,7 +83,7 @@
   font-size: 20px;
   font-family: 'Comfortaa', sans-serif;
   background-color: rgba(255, 255, 255, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
   margin-right: 90px;
@@ -92,7 +96,9 @@
 
 .account-button:hover {
   background-color: #ef6e6e;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  border: none;
 }
 
 .dropdown-menu {
@@ -225,7 +231,7 @@
   }
   
   .user-icon {
-    width: auto;
+    width: a;
     height: 40px;
     margin-right: 10px;
   }
