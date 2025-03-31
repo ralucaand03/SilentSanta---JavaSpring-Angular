@@ -1,11 +1,18 @@
 <header class="app-header">
   <nav class="navbar">
-    <div class="navbar-left">
-      <a href="/" class="nav-link"> Home</a>
+    <!-- Mobile menu toggle button -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" *ngIf="isMobile">
+      <span *ngIf="!mobileMenuOpen">≡</span>
+      <span *ngIf="mobileMenuOpen">✕</span>
+    </button>
+    
+    <div class="navbar-left" [class.mobile-open]="mobileMenuOpen">
+      <a href="/" class="nav-link">Home</a>
       <a href="/letters" class="nav-link">Letters</a>
       <a href="/favorites" class="nav-link">Favorites</a>
       <a href="/my-letters" class="nav-link">My Letters</a>
     </div>
+    
     <div class="navbar-right">
       <img src="assets/Silent_Santa.png" alt="User Icon" class="user-icon" />
       
@@ -13,7 +20,7 @@
       <button class="account-button" (click)="toggleDropdown()">Account</button>
       
       <!-- Dropdown Menu for Account -->
-      <div class="dropdown-menu" *ngIf="dropdownOpen">
+      <div class="dropdown-menu" [class.open]="dropdownOpen">
         <ul>
           <li *ngIf="isAuthenticated"><a href="/my-account">My Account</a></li>
           <li *ngIf="isAuthenticated"><a href="#" (click)="logOut()">Log Out</a></li>
@@ -21,7 +28,6 @@
           <li *ngIf="!isAuthenticated"><a href="/signup">Sign Up</a></li>
         </ul>
       </div>
-      
     </div>
   </nav>
 </header>

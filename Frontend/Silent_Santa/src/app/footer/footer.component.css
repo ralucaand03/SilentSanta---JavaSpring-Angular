@@ -1,0 +1,145 @@
+.app-footer {
+    font-family: 'Comfortaa', sans-serif;
+    background-color: #46ac97;
+    color: white;
+    width: 100%; /* Full width */
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
+    padding: 2rem 0 1rem;
+    margin: 0; /* Remove any margin */
+    position: sticky;
+    left: 0;
+    bottom: 0;
+  }
+  
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 30px;
+    padding: 0 20px;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .footer-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .footer-section p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+  
+  .footer-links {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    transition: all 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+  
+  .subscribe-form {
+    display: flex;
+    margin-top: 10px;
+    max-width: 100%; /* Ensure it doesn't overflow */
+    padding-right: 20px; /* Add padding on the right */
+  }
+  
+  .email-input {
+    padding: 8px 12px;
+    border-radius: 20px 0 0 20px;
+    border: none;
+    outline: none;
+    font-family: 'Comfortaa', sans-serif;
+    width: 100%;
+  }
+  
+  .subscribe-button {
+    padding: 8px 15px;
+    background-color: #ef6e6e;
+    color: white;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+  
+  .subscribe-button:hover {
+    background-color: #e05555;
+  }
+  
+  .footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 12px;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .footer-container {
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 25px; /* Increased padding */
+    }
+  
+    .footer-section {
+      width: 100%;
+    }
+    
+    .subscribe-form {
+      padding-right: 15px; /* Adjusted padding for responsive */
+      max-width: 95%; /* Ensure it doesn't overflow */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .app-footer {
+      padding: 30px 15px 15px;
+    }
+  
+    .subscribe-form {
+      flex-direction: column;
+      padding-right: 10px; /* Further adjusted for smaller screens */
+      max-width: 90%; /* Ensure it doesn't overflow */
+    }
+  
+    .email-input {
+      border-radius: 20px;
+      margin-bottom: 10px;
+      width: 93%;
+
+    }
+  
+    .subscribe-button {
+      border-radius: 20px;
+      
+      width: 100%;
+    }
+  }

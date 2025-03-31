@@ -1,17 +1,3 @@
-.page {
-  position: fixed;
-  padding-top:20px;
-  left: 0;
-  height: 87%;
-  width: 100%;
-  bottom: 0;
-  font-family: 'Comfortaa', sans-serif;
-  /* background: linear-gradient(to right,  #cfd5d4aa,#efd9d995); */
-  background: linear-gradient(to right, #ef6e6e32, #46ac9848);
-  display: flex; /* Flexbox for centering */
-  align-items: center;  /* Center vertically */
-  justify-content: center; /* Center horizontally */ 
-}
 
 .login-container {
   display: flex;

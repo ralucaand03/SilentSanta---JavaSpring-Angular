@@ -1,10 +1,37 @@
-html,body {
-    font-family: 'Comfortaa', sans-serif; 
-    height: 100%; /* Set height to 100% of the viewport */
-    width: 100%;/* Optional: limits the page's width */
-    background-color: #994545; 
-    display:grid;
-    
-  }
+/* Reset all margins and padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  
+
+
+.app-container {
+  font-family: 'Comfortaa', sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%; /* Full width */ 
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto;
+}
+
+
+/* Scrollbar styling */
+.app-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.app-container::-webkit-scrollbar-thumb {
+  background-color: #61baa8;
+  border-radius: 10px;
+}
+
+.app-container::-webkit-scrollbar-thumb:hover {
+  background-color: #46ac97;
+}
+
+.app-container::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+}

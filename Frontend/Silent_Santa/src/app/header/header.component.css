@@ -3,7 +3,7 @@
   background-color: #46ac97;
   padding: 20px 30px;
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
@@ -18,6 +18,19 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background-color: #46ac97;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 15px;
 }
 
 .navbar-left {
@@ -50,6 +63,7 @@
   display: flex;
   align-items: center;
   position: relative;
+  padding-right: 20px; /* Added padding to ensure space on the right */
 }
 
 .user-icon {
@@ -95,6 +109,11 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
+.dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+}
+
 .navbar-right:hover .dropdown-menu {
   opacity: 1;
   visibility: visible;
@@ -109,7 +128,6 @@
 .dropdown-menu li {
   padding-top: 10px;
   padding-right: 10px;
-  
   padding-left: 10px;
   cursor: pointer;
 }
@@ -127,8 +145,99 @@
   border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
-  
   color: white;
   border-radius: 20px;
   cursor: pointer; 
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 15px;
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .navbar {
+    flex-wrap: wrap;
+  }
+  
+  .navbar-left {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #46ac97;
+    flex-direction: column;
+    gap: 10px;
+    margin-left: 0;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 1001;
+  }
+  
+  .navbar-left.mobile-open {
+    display: flex;
+  }
+  
+  .nav-link {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .user-icon {
+    margin-right: 15px;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .account-button {
+    margin-right: 20px; /* Ensure margin on the right in responsive mode */
+    padding: 8px 20px;
+    font-size: 12px;
+  }
+  
+  .dropdown-menu {
+    margin-top: 180px;
+    width: 180px;
+    right: 0;
+  }
+  
+  .navbar-right {
+    padding-right: 15px; /* Adjusted padding for responsive */
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    padding: 10px;
+  }
+  
+  .navbar {
+    padding: 0 5px;
+  }
+  
+  .user-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+  
+  .account-button {
+    padding: 6px 15px;
+    font-size: 11px;
+    margin-right: 15px; /* Ensure margin on smaller screens */
+  }
+  
+  .dropdown-menu {
+    margin-top: 160px;
+    width: 150px;
+  }
+  
+  .navbar-right {
+    padding-right: 10px; /* Further adjusted for smaller screens */
+  }
 }

@@ -9,6 +9,7 @@ import com.group.silent_santa.view.LettersView;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Controller
 public class LettersController {
 
     private final LettersRepository lettersRepository;

@@ -1,24 +1,54 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { Component, type OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
 
 @Component({
-  selector: 'app-header',
-  standalone: true,  // Ensure this is set to true for standalone components
-  imports: [CommonModule],  // Add CommonModule here
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  selector: "app-header",
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: "./header.component.html",
+  styleUrls: ["./header.component.css"],
 })
-export class HeaderComponent {
-  isAuthenticated: boolean = false;  // Simulated authentication state
-  dropdownOpen: boolean = false;
+export class HeaderComponent implements OnInit {
+  isAuthenticated = false
+  dropdownOpen = false
+  mobileMenuOpen = false
+  isMobile = false
 
-  toggleDropdown() {
-    this.dropdownOpen = !this.dropdownOpen;
+  constructor() {}
+
+  ngOnInit(): void {
+    // Check screen size on initialization
+    this.checkScreenSize()
+
+    // Listen for window resize events
+    window.addEventListener("resize", () => {
+      this.checkScreenSize()
+    })
   }
 
-  logOut() {
-    console.log('User logged out');
-    this.isAuthenticated = false;
-    this.dropdownOpen = false;
+  // Check if the screen is mobile size
+  checkScreenSize(): void {
+    this.isMobile = window.innerWidth < 768
+    if (window.innerWidth >= 768) {
+      this.mobileMenuOpen = false
+    }
+  }
+
+  // Toggle dropdown menu
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen
+  }
+
+  // Toggle mobile menu
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen
+  }
+
+  // Handle logout
+  logOut(): void {
+    this.isAuthenticated = false
+    this.dropdownOpen = false
+    // Add your actual logout logic here
+    console.log("User logged out")
   }
 }
