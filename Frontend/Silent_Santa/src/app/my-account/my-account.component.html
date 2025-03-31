@@ -1,0 +1,108 @@
+<div class="page-container">
+    <main class="account-page">
+      <h1 class="page-title">My Account</h1>
+      
+      <div class="account-container">
+        <!-- Profile Information Section -->
+        <div class="profile-section">
+          <div class="profile-header">
+            <div class="profile-image-container">
+              <img src="assets/elf_icon.png" alt="Profile" class="profile-image"> 
+              <button class="edit-profile-button">
+                <i class="icon-user"></i>
+                <span>Edit</span>
+              </button>
+            </div>
+            
+            <div class="profile-info">
+              <h2 class="profile-name">{{ user.name }}</h2>
+              <p class="profile-role">{{ user.role }}</p>
+              
+              <div class="profile-deatails">
+                <div class="detail-item">
+                  <i class="icon-mail"></i>
+                  <span>{{ user.email }}</span>
+                </div>
+                <div class="detail-item">
+                  <i class="icon-calendar"></i>
+                  <span>Joined {{ user.joinDate }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-stats">
+            <h3 class="stats-title">Your Impact</h3>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value">{{ user.stats.lettersSent }}</div>
+                <div class="stat-label">Letters Sent</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">{{ user.stats.favoriteLetters }}</div>
+                <div class="stat-label">Favorites</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">{{ user.stats.childrenHelped }}</div>
+                <div class="stat-label">Children Helped</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="profile-bio">
+            <h3 class="bio-title">About Me</h3>
+            <p class="bio-text">
+              I'm passionate about making a difference in children's lives during the holiday season. 
+              As a donor since 2021, I've had the privilege of fulfilling wishes and spreading joy.
+            </p>
+            <button class="edit-bio-button">Edit Bio</button>
+          </div>
+        </div>
+        
+        <!-- Actions Section -->
+        <div class="actions-section">
+          <h3 class="actions-title">Quick Actions</h3>
+          
+          <div class="action-buttons">
+            <a href="/my-letters" class="action-button">
+              <i class="icon-mail"></i>
+              <div class="button-text">
+                <span class="button-title">My Letters</span>
+                <span class="button-description">View and manage your letters</span>
+              </div>
+            </a>
+            
+            <a href="/favorites" class="action-button">
+              <i class="icon-heart"></i>
+              <div class="button-text">
+                <span class="button-title">Favorite Letters</span>
+                <span class="button-description">Access your saved letters</span>
+              </div>
+            </a>
+            
+            <a href="/account-settings" class="action-button">
+              <i class="icon-settings"></i>
+              <div class="button-text">
+                <span class="button-title">Account Settings</span>
+                <span class="button-description">Update your preferences</span>
+              </div>
+            </a>
+            
+            <a href="/certificates" class="action-button">
+              <i class="icon-award"></i>
+              <div class="button-text">
+                <span class="button-title">My Certificates</span>
+                <span class="button-description">View your impact certificates</span>
+              </div>
+            </a>
+            
+            <button class="logout-button" (click)="logout()">
+              <i class="icon-log-out"></i>
+              <span>Log Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  

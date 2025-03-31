@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LettersComponent } from './letters/letters.component';
 import { FavoritesComponent } from './favorites/favorites.component';
 import { MyLettersComponent } from './my-letters/my-letters.component';
+import { MyAccountComponent } from './my-account/my-account.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },  
   { path: 'home', component: HomeComponent},
@@ -13,8 +14,8 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent},
   { path: 'letters', component:LettersComponent},
   { path: 'favorites', component:FavoritesComponent},
-  { path: 'my-letters', component: MyLettersComponent}
-
+  { path: 'my-letters', component: MyLettersComponent},
+  { path: "my-account", component: MyAccountComponent}
  ];
  @NgModule({
   imports: [RouterModule.forRoot(routes)],

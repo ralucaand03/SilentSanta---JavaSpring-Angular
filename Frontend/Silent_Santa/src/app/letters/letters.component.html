@@ -1,4 +1,80 @@
-
-<div class="page">
-<p>letters works!</p>
-</div>
+<div class="page"> 
+    <main class="letters-page">
+      <div class="letters-header">
+        <h1 class="page-title">Children's Letters</h1>
+        <p class="page-description">Browse through heartfelt letters from children and choose one to fulfill their Christmas wishes.</p>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label>Filter by School:</label>
+            <div class="filter-buttons">
+              <button 
+                class="filter-button" 
+                [class.active]="selectedLocation === null" 
+                (click)="filterByLocation(null)">
+                All Schools
+              </button>
+              <button 
+                *ngFor="let location of locations" 
+                class="filter-button" 
+                [class.active]="selectedLocation === location" 
+                (click)="filterByLocation(location)">
+                {{ location }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="letters-grid">
+        <div 
+          *ngFor="let letter of filteredLetters" 
+          class="letter-card" 
+          [class.requested]="letter.isRequested"
+          (click)="toggleLetterView(letter, $event)">
+          
+          <div class="letter-header">
+            <h2 class="child-name">{{ letter.childName }}, {{ letter.childAge }}</h2>
+            <span class="location-badge">{{ letter.location }}</span>
+          </div>
+          
+          <div class="letter-content" *ngIf="!letter.showImage">
+            <h3 class="wishes-title">Christmas Wishes:</h3>
+            <ul class="wishes-list">
+              <li *ngFor="let item of letter.items">{{ item }}</li>
+            </ul>
+          </div>
+          
+          <div class="letter-image" *ngIf="letter.showImage">
+            <img src="assets/letter.png" alt="Child's handwritten letter" class="letter-img">
+            <p class="image-hint">Double-click to see wishes</p>
+          </div>
+          
+          <div class="letter-footer">
+            <button 
+              class="favorite-button" 
+              [class.active]="letter.isFavorite" 
+              (click)="toggleFavorite(letter); $event.stopPropagation()">
+              <i class="icon-heart"></i>
+              <span>{{ letter.isFavorite ? '' : '' }}</span>
+            </button>
+            
+            <button 
+              class="request-button" 
+              [disabled]="letter.isRequested" 
+              (click)="requestLetter(letter); $event.stopPropagation()">
+              <i class="icon-mail"></i>
+              <span>{{ letter.isRequested ? 'Requested' : 'Request Letter' }}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="letters-empty" *ngIf="filteredLetters.length === 0">
+        <p>No letters found for the selected filter.</p>
+      </div>
+    </main>
+     
+  </div>
+  
+  

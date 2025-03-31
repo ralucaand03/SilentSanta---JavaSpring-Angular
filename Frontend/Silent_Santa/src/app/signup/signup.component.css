@@ -67,6 +67,8 @@ h1 {
   border: none;
   border-radius: 20px;
   font-size: 16px;
+  
+  font-family: 'Comfortaa', sans-serif;
   cursor: pointer;
   transition: background-color 0.3s;
   box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
@@ -82,6 +84,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   width: 350px;
+   
   margin-bottom: 15px;
 }
 
@@ -90,6 +93,8 @@ h1 {
   padding: 10px;
   font-size: 16px;
   background-color: #f0f0f0;
+  
+  font-family: 'Comfortaa', sans-serif;
   border: 1px solid #ccc;
   color: #46ac97;
   border-radius: 20px;

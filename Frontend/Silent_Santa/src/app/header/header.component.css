@@ -1,5 +1,6 @@
 .app-header {
   font-family: 'Comfortaa', sans-serif;
+   
   background-color: #46ac97;
   padding: 20px 30px;
   width: 100%;
@@ -42,7 +43,7 @@
 .nav-link {
   text-decoration: none;
   color: #ffffff;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 500;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding: 12px 25px;
@@ -67,15 +68,16 @@
 }
 
 .user-icon {
-  width: 45px;
-  height: 45px;
+  width: 55px;
+  height: auto;
   margin-right: 25px;
   object-fit: cover;
 }
 
 .account-button {
   padding: 10px 30px;
-  font-size: 14px;
+  font-size: 20px;
+  font-family: 'Comfortaa', sans-serif;
   background-color: rgba(255, 255, 255, 0.3);
   border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
@@ -95,8 +97,8 @@
 
 .dropdown-menu {
   position: absolute;
-  margin-top: 210px;
-  right: 0;
+  margin-top: 210px; 
+  left:0;
   background-color: #ef6e6e;
   color: #ffffff;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -138,6 +140,7 @@
   display: block;
   font-weight: 500;
   padding: 10px; 
+  font-size: 20px;
 }
 
 .dropdown-menu a:hover {
@@ -186,6 +189,7 @@
   .nav-link {
     width: 100%;
     text-align: center;
+    
   }
   
   .user-icon {
@@ -211,7 +215,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1200px) {
   .app-header {
     padding: 10px;
   }
@@ -221,14 +225,14 @@
   }
   
   .user-icon {
-    width: 30px;
-    height: 30px;
+    width: auto;
+    height: 40px;
     margin-right: 10px;
   }
   
   .account-button {
     padding: 6px 15px;
-    font-size: 11px;
+    font-size: 18px;
     margin-right: 15px; /* Ensure margin on smaller screens */
   }
   
