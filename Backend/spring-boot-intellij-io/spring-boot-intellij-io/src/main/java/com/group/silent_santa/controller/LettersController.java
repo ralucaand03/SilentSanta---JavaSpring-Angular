@@ -8,8 +8,6 @@ import com.group.silent_santa.service.UsersService;
 import com.group.silent_santa.view.LettersView;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
@@ -17,8 +15,11 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
+@RequestMapping("/api/letters")        // <-- the base path for all "letters" endpoints
+@CrossOrigin(origins = "http://localhost:4200") // <-- so Angular can call this from port 4200
 public class LettersController {
 
     private final LettersRepository lettersRepository;
@@ -45,6 +46,31 @@ public class LettersController {
     public void setAdminDashboardControllerProvider(ObjectProvider<AdminDashboardController> provider) {
         this.adminDashboardControllerProvider = provider;
     }
+    //-------------------------------------------------------------------added
+    @GetMapping
+    public List<LettersModel> getAllLetters() {
+        // This will automatically convert the List<LettersModel> to JSON
+        return lettersService.getAllLetters();
+    }
+
+
+    @GetMapping("/{id}")
+    public LettersModel getLetterById(@PathVariable UUID id) {
+        return lettersService.getLetterById(id);
+    }
+
+    @PostMapping
+    public LettersModel createLetter(@RequestBody LettersModel newLetter) {
+        return lettersService.saveLetter(newLetter);
+    }
+
+    @DeleteMapping("/{id}")
+    public boolean deleteLetter(@PathVariable UUID id) {
+        return lettersService.deleteLetter(id);
+    }
+
+
+    //-------------------------------------------------------------------Swing
 
     public void loadLetters(LettersView view) {
         this.view = view;

@@ -115,7 +115,8 @@
             <div class="letter-content" *ngIf="!letter.showImage">
               <h3 class="wishes-title">Christmas Wishes:</h3>
               <ul class="wishes-list">
-                <li *ngFor="let item of letter.items">{{ item }}</li>
+               <li *ngFor="let item of letter.wishList">{{ item }}</li>
+
               </ul>
               <div class="letter-hint">Double-click to see letter</div>
             </div>
