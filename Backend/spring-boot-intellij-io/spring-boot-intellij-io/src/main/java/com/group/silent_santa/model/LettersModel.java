@@ -31,9 +31,22 @@ public class LettersModel {
     @NotNull(message = "Wish list must not be null")
     private List<String> wishList;
 
-
     @NotBlank(message = "Child name is required")
     private String childName;
+
+    // New fields
+    private Integer childAge;
+
+    private String gender;
+
+    private String location;
+
+    private Boolean isFavorite = false;
+
+    private Boolean isRequested = false;
+
+    private String imagePath;
+    // End of new fields
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Status is required")
@@ -50,8 +63,26 @@ public class LettersModel {
         WAITING, WORKING, DONE
     }
 
+    // Update the constructor to include new fields
+    public LettersModel(String title, List<String> wishList, String childName,
+                        Integer childAge, String gender, String location,
+                        String imagePath, LetterStatus status, UsersModel postedBy) {
+        this.title = title;
+        this.wishList = wishList;
+        this.childName = childName;
+        this.childAge = childAge;
+        this.gender = gender;
+        this.location = location;
+        this.imagePath = imagePath;
+        this.isFavorite = false;
+        this.isRequested = false;
+        this.status = status != null ? status : LetterStatus.WAITING;
+        this.postedBy = postedBy;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Keep the old constructor for backward compatibility
     public LettersModel(String title, List<String> wishList, String childName, LetterStatus status, UsersModel postedBy) {
-        //this.id = UUID.randomUUID();
         this.title = title;
         this.wishList = wishList;
         this.childName = childName;

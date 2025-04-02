@@ -1,4 +1,3 @@
-// src/app/models/letter.model.ts
 export interface Letters {
     id: string;
     title: string;
@@ -9,9 +8,15 @@ export interface Letters {
     gender?: string;
     location?: string;
     childAge?: number;
-    items?: string[];
+    imagePath?: string;
     isFavorite?: boolean;
     isRequested?: boolean;
     showImage?: boolean;
+    postedBy?: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      email: string;
+    };
   }
   

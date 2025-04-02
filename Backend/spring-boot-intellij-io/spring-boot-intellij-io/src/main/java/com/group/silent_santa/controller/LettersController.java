@@ -8,6 +8,7 @@ import com.group.silent_santa.service.UsersService;
 import com.group.silent_santa.view.LettersView;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -64,13 +66,150 @@ public class LettersController {
         return lettersService.saveLetter(newLetter);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<?> createLetterWithDetails(@RequestBody LetterCreationDTO letterDTO) {
+        try {
+            UsersModel currentUser = usersService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.badRequest().body("No authenticated user found");
+            }
+
+            LettersModel newLetter = lettersService.addLetterWithDetails(
+                    letterDTO.getTitle(),
+                    letterDTO.getWishList(),
+                    letterDTO.getChildName(),
+                    letterDTO.getChildAge(),
+                    letterDTO.getGender(),
+                    letterDTO.getLocation(),
+                    letterDTO.getImagePath(),
+                    LettersModel.LetterStatus.valueOf(letterDTO.getStatus()),
+                    currentUser
+            );
+
+            return ResponseEntity.ok(newLetter);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error creating letter: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public boolean deleteLetter(@PathVariable UUID id) {
         return lettersService.deleteLetter(id);
     }
 
+    // New endpoints to match Angular service
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LettersModel> updateLetter(@PathVariable UUID id, @RequestBody LettersModel letter) {
+        if (!id.equals(letter.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        LettersModel existingLetter = lettersService.getLetterById(id);
+        if (existingLetter == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Update the existing letter with new values
+        existingLetter.setTitle(letter.getTitle());
+        existingLetter.setChildName(letter.getChildName());
+        existingLetter.setChildAge(letter.getChildAge());
+        existingLetter.setGender(letter.getGender());
+        existingLetter.setLocation(letter.getLocation());
+        existingLetter.setImagePath(letter.getImagePath());
+        existingLetter.setStatus(letter.getStatus());
+        existingLetter.setWishList(letter.getWishList());
+
+        LettersModel updatedLetter = lettersService.saveLetter(existingLetter);
+        return ResponseEntity.ok(updatedLetter);
+    }
+
+    @PatchMapping("/{id}/favorite")
+    public ResponseEntity<LettersModel> toggleFavorite(@PathVariable UUID id, @RequestBody Map<String, Boolean> payload) {
+        LettersModel letter = lettersService.getLetterById(id);
+        if (letter == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Boolean isFavorite = payload.get("isFavorite");
+        if (isFavorite != null) {
+            letter.setIsFavorite(isFavorite);
+            LettersModel updatedLetter = lettersService.saveLetter(letter);
+            return ResponseEntity.ok(updatedLetter);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PatchMapping("/{id}/request")
+    public ResponseEntity<LettersModel> requestLetter(@PathVariable UUID id) {
+        LettersModel letter = lettersService.getLetterById(id);
+        if (letter == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        letter.setIsRequested(true);
+        LettersModel updatedLetter = lettersService.saveLetter(letter);
+        return ResponseEntity.ok(updatedLetter);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<LettersModel> changeStatus(@PathVariable UUID id, @RequestBody Map<String, String> payload) {
+        LettersModel letter = lettersService.getLetterById(id);
+        if (letter == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String status = payload.get("status");
+        if (status != null) {
+            try {
+                letter.setStatus(LettersModel.LetterStatus.valueOf(status));
+                LettersModel updatedLetter = lettersService.saveLetter(letter);
+                return ResponseEntity.ok(updatedLetter);
+            } catch (IllegalArgumentException e) {
+                return ResponseEntity.badRequest().build();
+            }
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
     //-------------------------------------------------------------------Swing
+    public static class LetterCreationDTO {
+        private String title;
+        private List<String> wishList;
+        private String childName;
+        private Integer childAge;
+        private String gender;
+        private String location;
+        private String imagePath;
+        private String status = "WAITING";
+
+        // Getters and setters
+        public String getTitle() { return title; }
+        public void setTitle(String title) { this.title = title; }
+
+        public List<String> getWishList() { return wishList; }
+        public void setWishList(List<String> wishList) { this.wishList = wishList; }
+
+        public String getChildName() { return childName; }
+        public void setChildName(String childName) { this.childName = childName; }
+
+        public Integer getChildAge() { return childAge; }
+        public void setChildAge(Integer childAge) { this.childAge = childAge; }
+
+        public String getGender() { return gender; }
+        public void setGender(String gender) { this.gender = gender; }
+
+        public String getLocation() { return location; }
+        public void setLocation(String location) { this.location = location; }
+
+        public String getImagePath() { return imagePath; }
+        public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+    }
 
     public void loadLetters(LettersView view) {
         this.view = view;
@@ -242,10 +381,18 @@ public class LettersController {
 
 
     private void onRequestLetter(LettersModel selectedLetter) {
-
+        // Implement the request letter functionality for the Swing UI
+        try {
+            selectedLetter.setIsRequested(true);
+            lettersService.saveLetter(selectedLetter);
+            JOptionPane.showMessageDialog(null, "✅ Letter requested successfully!");
+            loadLetters(view);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "❌ Error requesting letter: " + ex.getMessage());
+        }
     }
-
-
 
     public void back() {
         if (view != null) {
@@ -259,15 +406,27 @@ public class LettersController {
         JPanel panel = new JPanel(new GridLayout(0, 2, 10, 10));
         JTextField titleField = new JTextField();
         JTextField childNameField = new JTextField();
+        JTextField childAgeField = new JTextField();
+        JComboBox<String> genderBox = new JComboBox<>(new String[]{"boy", "girl"});
+        JTextField locationField = new JTextField();
         JTextField wishesField = new JTextField();
+        JTextField imagePathField = new JTextField();
         JComboBox<String> statusBox = new JComboBox<>(new String[]{"WAITING", "WORKING", "DONE"});
 
         panel.add(new JLabel("Title:"));
         panel.add(titleField);
         panel.add(new JLabel("Child Name:"));
         panel.add(childNameField);
+        panel.add(new JLabel("Child Age:"));
+        panel.add(childAgeField);
+        panel.add(new JLabel("Gender:"));
+        panel.add(genderBox);
+        panel.add(new JLabel("School/Location:"));
+        panel.add(locationField);
         panel.add(new JLabel("Wish List (comma-separated):"));
         panel.add(wishesField);
+        panel.add(new JLabel("Image Path (optional):"));
+        panel.add(imagePathField);
         panel.add(new JLabel("Status:"));
         panel.add(statusBox);
 
@@ -278,6 +437,25 @@ public class LettersController {
             try {
                 String title = titleField.getText().trim();
                 String childName = childNameField.getText().trim();
+
+                // Parse child age
+                Integer childAge = null;
+                if (!childAgeField.getText().trim().isEmpty()) {
+                    try {
+                        childAge = Integer.parseInt(childAgeField.getText().trim());
+                    } catch (NumberFormatException e) {
+                        JOptionPane.showMessageDialog(null,
+                                "⚠ Invalid age format. Please enter a number.",
+                                "Error",
+                                JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+
+                String gender = (String) genderBox.getSelectedItem();
+                String location = locationField.getText().trim();
+                String imagePath = imagePathField.getText().trim();
+
                 // Process wish list: split by comma, trim each item, and filter out empty strings.
                 List<String> wishList = Arrays.stream(wishesField.getText().split(","))
                         .map(String::trim)
@@ -296,13 +474,23 @@ public class LettersController {
                     return;
                 }
 
+                // Create a new letter with all the fields
                 LettersModel letter = new LettersModel(
                         title,
                         wishList,
                         childName,
+                        childAge,
+                        gender,
+                        location,
+                        imagePath,
                         status,
                         currentUser
                 );
+
+                // Set default values for isFavorite and isRequested
+                letter.setIsFavorite(false);
+                letter.setIsRequested(false);
+
                 lettersService.saveLetter(letter);
                 JOptionPane.showMessageDialog(null, "✅ Letter added!");
                 loadLetters(lettersView);

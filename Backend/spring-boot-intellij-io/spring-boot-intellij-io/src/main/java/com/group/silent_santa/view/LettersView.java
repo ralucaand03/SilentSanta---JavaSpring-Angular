@@ -43,11 +43,11 @@ public class LettersView {
         panel.add(titleLabel, BorderLayout.NORTH);
 
         // Table setup
-        String[] columns = {"Child Name", "Created At", "Posted By", "Status", "View"};
+        String[] columns = {"Child Name", "Age", "Gender", "Location", "Created At", "Posted By", "Status", "View"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 4; // Only "View" button column editable
+                return column == 7; // Only "View" button column editable
             }
         };
         table = new JTable(tableModel);
@@ -75,21 +75,21 @@ public class LettersView {
         controller.loadLetters(this);
 
         frame.setContentPane(panel);
-        frame.setSize(800, 400);
+        frame.setSize(1000, 500); // Increased width to accommodate more columns
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         // Set cell renderer and editor for "View" button column
         table.getColumn("View").setCellRenderer(new ButtonRenderer());
-        table.getColumn("View").setCellEditor(new ButtonEditor(new JCheckBox(),controller, this));
+        table.getColumn("View").setCellEditor(new ButtonEditor(new JCheckBox(), controller, this));
 
         // Button actions
         backButton.addActionListener(e -> controller.back());
         addLetterButton.addActionListener(e -> controller.addLetter(this));
     }
+
     public void populateLetters(List<LettersModel> letterList) {
         if (letterList == null || letterList.isEmpty()) {
-            //JOptionPane.showMessageDialog(null, "No letters available.");
             System.out.println("No letters");
         } else {
             letters.clear(); // Clear existing letters list
@@ -99,6 +99,9 @@ public class LettersView {
 
                 tableModel.addRow(new Object[]{
                         letter.getChildName(),
+                        letter.getChildAge() != null ? letter.getChildAge() : "-",
+                        letter.getGender() != null ? letter.getGender() : "-",
+                        letter.getLocation() != null ? letter.getLocation() : "-",
                         letter.getCreatedAt(),
                         letter.getPostedBy().getFirstName() + " " + letter.getPostedBy().getLastName(),
                         letter.getStatus().name(),
@@ -108,8 +111,6 @@ public class LettersView {
         }
     }
 
-
-
     public LettersModel getLetterAt(int rowIndex) {
         if (rowIndex >= 0 && rowIndex < letters.size()) {
             return letters.get(rowIndex);
@@ -117,7 +118,8 @@ public class LettersView {
         return null;
     }
 }
-// Button Renderer and Editor
+
+// Button Renderer and Editor classes remain unchanged
 class ButtonRenderer extends JButton implements javax.swing.table.TableCellRenderer {
     public ButtonRenderer() {
         setOpaque(true);
@@ -130,6 +132,7 @@ class ButtonRenderer extends JButton implements javax.swing.table.TableCellRende
         return this;
     }
 }
+
 class ButtonEditor extends DefaultCellEditor {
     private final JButton button;
     private String label;
