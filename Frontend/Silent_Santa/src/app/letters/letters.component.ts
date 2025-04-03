@@ -13,6 +13,9 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrls: ['./letters.component.css']
 })
 export class LettersComponent implements OnInit {
+handleImageError($event: ErrorEvent) {
+throw new Error('Method not implemented.');
+}
   letters: Letters[] = [];
   filteredLetters: Letters[] = [];
   searchQuery = '';
@@ -22,7 +25,7 @@ export class LettersComponent implements OnInit {
   selectedGender: string | null = null;
   selectedAgeRange: number | null = null;
   locations: string[] = [];
-  ageRanges: number[] = [3, 4, 5, 6, 7, 8, 9, 10];
+  ageRanges: number[] = [ ];
   
   // Edit letter properties
   editForm: FormGroup;
@@ -76,6 +79,13 @@ export class LettersComponent implements OnInit {
           )
         ];
         
+        this.ageRanges = [
+          ...new Set(
+            data
+              .map(letter => letter.childAge)
+              .filter((loc): loc is number => loc !== undefined)
+          )
+        ];
         this.isLoading = false;
       },
       error: (err) => {

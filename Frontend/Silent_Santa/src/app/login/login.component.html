@@ -15,7 +15,12 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" [(ngModel)]="password" name="password" placeholder=" ◮ Your password" required />
             </div>
-
+            <div class="form-group checkbox">
+                <label>
+                    <input type="checkbox" name="rememberMe" [(ngModel)]=" rememberMe">
+                    <span>Remember me</span>
+                </label>
+            </div>
             <button type="submit" class="login-button">Log In</button>
         </form>
 

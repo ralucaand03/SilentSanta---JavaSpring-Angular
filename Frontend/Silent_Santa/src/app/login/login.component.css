@@ -15,7 +15,12 @@
   max-width: 350px; 
   box-shadow: 5px 6px 6px rgba(0, 0, 0, 0.1);
 }
-
+  .checkbox{
+    color: #46ac97;
+    accent-color: #46ac97;
+    margin-left: 10px; 
+  } 
+  
   .surprise-image {
       display: block;
       width: 90px; 

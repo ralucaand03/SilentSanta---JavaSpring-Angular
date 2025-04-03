@@ -10,7 +10,8 @@ import { HeaderComponent } from "../header/header.component";
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
-  name: string = '';
+  firstname: string = '';
+  lastname: string = '';
   email: string = '';
   phone: string = '';
   password: string = '';
@@ -21,7 +22,8 @@ export class SignupComponent {
       alert('Please select a role (Giver or Helper)');
       return;
     }
-    console.log('Name:', this.name);
+    console.log('Name:', this.firstname);
+    console.log('Name:', this.lastname);
     console.log('Email:', this.email);
     console.log('Phone:', this.phone);
     console.log('Password:', this.password);

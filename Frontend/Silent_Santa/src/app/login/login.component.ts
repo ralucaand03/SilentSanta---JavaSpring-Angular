@@ -12,6 +12,7 @@ import { HeaderComponent } from "../header/header.component";  // Import FormsMo
 export class LoginComponent {
   email: string = '';
   password: string = '';
+  rememberMe: boolean = false ;
 
   onLoginSubmit() {
     console.log('Email:', this.email);

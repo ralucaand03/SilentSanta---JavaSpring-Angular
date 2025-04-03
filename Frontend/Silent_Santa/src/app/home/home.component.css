@@ -11,7 +11,7 @@
 
 /* Hero Section */
 .hero-section {
-  width: 100%;
+  width: 70%;
   max-width: 1400px;
   display: flex;
   align-items: center;
@@ -31,14 +31,14 @@
 }
 
 .hero-content h1 {
-  font-size: 3.2rem;
+  font-size: 2.7rem;
   color: #46ac97;
   margin-bottom: 25px;
   line-height: 1.2;
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   color: #333;
   margin-bottom: 40px;
   line-height: 1.5;
@@ -66,7 +66,7 @@
 }
 
 .primary-button:hover {
-  background-color: #3a9080;
+  background-color: #ef6e6e;
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(70, 172, 151, 0.4);
 }
@@ -103,7 +103,7 @@
 
 /* Section Styles */
 .section {
-  width: 100%;
+  width: 70%;
   max-width: 1400px;
   padding: 70px 40px;
   margin: 0 20px 50px;
@@ -114,7 +114,7 @@
 
 .section-title {
   text-align: center;
-  font-size: 2.6rem;
+  font-size: 2.3rem;
   color: #46ac97;
   margin-bottom: 50px;
 }
@@ -129,7 +129,7 @@
 
 .step-card {
   flex: 1;
-  min-width: 220px;
+  min-width: 150 px;
   max-width: calc(25% - 25px);
   background: white;
   padding: 35px;
@@ -162,20 +162,20 @@
 }
 
 .step-icon {
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   margin-bottom: 25px;
 }
 
 .step-card h3 {
   color: #46ac97;
-  margin-bottom: 20px;
+  margin-bottom: 17px;
   font-size: 1.5rem;
 }
 
 .step-card p {
   color: #555;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 1.7;
   margin: 0 10px;
 }
@@ -441,7 +441,7 @@
 
 .cta-section .secondary-button {
   background-color: rgba(255, 255, 255, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   color: white;
 }
 
