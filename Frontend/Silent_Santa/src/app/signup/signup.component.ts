@@ -1,35 +1,83 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from "../header/header.component";
+import { Component } from "@angular/core"
+import { FormsModule } from "@angular/forms"
+import { HeaderComponent } from "../header/header.component"
+import   { AuthService } from "../services/login.service"
+import   { Router } from "@angular/router"
+import { HttpClientModule } from "@angular/common/http"
+import { CommonModule } from "@angular/common"
+import { RouterModule } from "@angular/router"
 
 @Component({
-  selector: 'app-signup',
+  selector: "app-signup",
   standalone: true,
-  imports: [FormsModule, HeaderComponent],
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  imports: [FormsModule, HeaderComponent, HttpClientModule, CommonModule, RouterModule],
+  templateUrl: "./signup.component.html",
+  styleUrls: ["./signup.component.css"],
 })
 export class SignupComponent {
-  firstname: string = '';
-  lastname: string = '';
-  email: string = '';
-  phone: string = '';
-  password: string = '';
-  role: string = ''; 
+  firstname = ""
+  lastname = ""
+  email = ""
+  phone = ""
+  password = ""
+  role = ""
+  errorMessage = ""
+  isLoading = false
+
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
+  private mapRoleToBackend(role: string): string {
+    switch (role.toUpperCase()) {
+      case "GIVER":
+        return "ADMIN";
+      case "HELPER":
+        return "USER";
+      default:
+        return "USER";
+    }
+  }
 
   onSignupSubmit() {
     if (!this.role) {
-      alert('Please select a role (Giver or Helper)');
-      return;
+      alert("Please select a role (Giver or Helper)")
+      return
     }
-    console.log('Name:', this.firstname);
-    console.log('Name:', this.lastname);
-    console.log('Email:', this.email);
-    console.log('Phone:', this.phone);
-    console.log('Password:', this.password);
-    console.log('Role:', this.role);
+
+    this.isLoading = true
+    this.errorMessage = ""
+
+    const signupData = {
+      firstName: this.firstname,
+      lastName: this.lastname,
+      email: this.email,
+      phone: this.phone,
+      password: this.password,
+      role: this.mapRoleToBackend(this.role),  
+    }
+
+    this.authService.signup(signupData).subscribe({
+      next: (response) => {
+        console.log("Signup successful:", response)
+        this.isLoading = false
+        // Navigate to login page after successful signup
+        this.router.navigate(["/login"])
+      },
+      error: (error) => {
+        console.error("Signup error:", error)
+        this.isLoading = false
+        if (error.status === 409) {
+          this.errorMessage = "Email already registered"
+        } else {
+          this.errorMessage = "An error occurred during signup. Please try again."
+        }
+      },
+    })
   }
+
   selectRole(role: string) {
-    this.role = role;  // Set the selected role
+    this.role = role
   }
 }
+

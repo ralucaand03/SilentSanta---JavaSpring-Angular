@@ -3,31 +3,38 @@
         <!-- Small, centered image -->
         <img src="assets/surprise_icon.png" alt="Surprise" class="surprise-image" />
 
-        <h1>Register</h1>
-<div class = "inputs">
-        <form (submit)="onLoginSubmit()">
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" [(ngModel)]="email" name="email" placeholder=" ✉ Your email" required />
-            </div>
-            
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" [(ngModel)]="password" name="password" placeholder=" ◮ Your password" required />
-            </div>
-            <div class="form-group checkbox">
-                <label>
-                    <input type="checkbox" name="rememberMe" [(ngModel)]=" rememberMe">
-                    <span>Remember me</span>
-                </label>
-            </div>
-            <button type="submit" class="login-button">Log In</button>
-        </form>
+        <h1>Login</h1> <!-- Changed from Register to Login -->
+        <div class="inputs">
+            <form (submit)="onLoginSubmit()">
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" [(ngModel)]="email" name="email" placeholder=" ✉ Your email" required />
+                </div>
+                
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" [(ngModel)]="password" name="password" placeholder=" ◮ Your password" required />
+                </div>
+                <div class="form-group checkbox">
+                    <label>
+                        <input type="checkbox" name="rememberMe" [(ngModel)]="rememberMe">
+                        <span>Remember me</span>
+                    </label>
+                </div>
+                
+                <div *ngIf="errorMessage" class="error-message">
+                    {{ errorMessage }}
+                </div>
+                
+                <button type="submit" class="login-button" [disabled]="isLoading">
+                    {{ isLoading ? 'Loading...' : 'Log In' }}
+                </button>
+            </form>
 
-        <div class="signup-link">
-            <span>Don't have an account?</span>
-            <a href="/signup"> ✨ SIGN UP </a>
+            <div class="signup-link">
+                <span>Don't have an account?</span>
+                <a routerLink="/signup"> ✨ SIGN UP </a>
+            </div>
         </div>
     </div>
-</div>
 </div>

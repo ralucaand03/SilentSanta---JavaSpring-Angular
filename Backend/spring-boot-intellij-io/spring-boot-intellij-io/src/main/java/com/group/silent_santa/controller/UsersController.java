@@ -33,20 +33,19 @@ public class UsersController {
     public void setAdminDashboardController(AdminDashboardController adminController) {
         this.adminDashboardController = adminController;
     }
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UsersModel user) {
         try {
-            // Check if email already exists
             if (usersService.findByEmail(user.getEmail()) != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(Map.of("message", "Email already registered"));
             }
 
-            // Set the role based on the role string from frontend
-            if ("HELPER".equalsIgnoreCase(user.getRole().toString())) {
+             if ("HELPER".equalsIgnoreCase(user.getRole().toString())) {
                 user.setRole(UsersModel.Role.USER);
             } else if ("GIVER".equalsIgnoreCase(user.getRole().toString())) {
-                user.setRole(UsersModel.Role.ADMIN); // Both are users, you can differentiate them in another way if needed
+                user.setRole(UsersModel.Role.ADMIN);
             }
 
             UsersModel registeredUser = usersService.registerUser(user);
@@ -58,9 +57,9 @@ public class UsersController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody Map<String, String> credentials) {
-        String email = credentials.get("email");
-        String password = credentials.get("password");
+    public ResponseEntity<?> loginUser(@RequestBody Map<String, Object> credentials) {
+        String email = (String) credentials.get("email");
+        String password = (String) credentials.get("password");
 
         UsersModel user = usersService.findByEmail(email);
 
@@ -70,7 +69,6 @@ public class UsersController {
         }
 
         if (usersService.verifyPassword(password, user.getPassword())) {
-            // Don't return the password in the response
             user.setPassword(null);
             return ResponseEntity.ok(user);
         } else {
@@ -93,10 +91,9 @@ public class UsersController {
 
     public void back() {
         if (view != null) {
-            view.getFrame().dispose(); // Close UsersView window
+            view.getFrame().dispose();
         }
-        // Now safely call openDashboard, because adminDashboardController
-        // is injected *after* this bean is created
         adminDashboardController.openDashboard();
     }
 }
+

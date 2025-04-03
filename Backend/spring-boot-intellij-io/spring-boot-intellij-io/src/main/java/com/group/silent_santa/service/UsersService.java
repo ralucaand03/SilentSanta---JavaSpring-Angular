@@ -51,9 +51,8 @@ public class UsersService {
         return passwordEncoder.matches(rawPassword, hashedPassword);
     }
     public String encodePassword(String rawPassword) {
-        return new BCryptPasswordEncoder().encode(rawPassword);
+        return passwordEncoder.encode(rawPassword);
     }
-
     public UsersModel getAdminUser() {
         return usersRepository.findAll().stream()
                 .filter(user -> user.getRole() == UsersModel.Role.ADMIN)

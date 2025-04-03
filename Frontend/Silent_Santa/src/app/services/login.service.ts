@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core"
-import type { HttpClient } from "@angular/common/http"
-import { type Observable, BehaviorSubject } from "rxjs"
+import { HttpClient } from "@angular/common/http" 
+import { Observable, BehaviorSubject } from "rxjs"
 import { tap } from "rxjs/operators"
-import type { LogIn } from "../models/login.model"
-import type { SignUp } from "../models/signup.model"
+import { LogIn } from "../models/login.model"
+import { SignUp } from "../models/signup.model"
 
 @Injectable({
   providedIn: "root",
@@ -37,8 +37,23 @@ export class AuthService {
       }),
     )
   }
-
+  // Add this helper function to your AuthService
+  private mapRoleToBackend(role: string): string {
+    // Map frontend roles to backend enum values
+    switch (role.toUpperCase()) {
+      case "GIVER":
+        return "USER"
+      case "HELPER":
+        return "ADMIN"
+      default:
+        return "USER"
+    }
+  }
   signup(user: SignUp): Observable<SignUp> {
+    const userToSend = {
+      ...user,
+      role: this.mapRoleToBackend(user.role),
+    }
     return this.http.post<SignUp>(`${this.baseUrl}/signup`, user)
   }
 
@@ -56,5 +71,20 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.currentUserSubject.value
   }
-}
+  // Get user role
+  getUserRole(): string | null {
+    const user = this.getCurrentUser()
+    return user ? user.role : null
+  }
 
+  // Check if user has specific role
+  hasRole(role: string): boolean {
+    const userRole = this.getUserRole()
+    return userRole === role
+  }
+
+  // Check if user is admin
+  isAdmin(): boolean {
+    return this.hasRole("ADMIN")
+  }
+}
