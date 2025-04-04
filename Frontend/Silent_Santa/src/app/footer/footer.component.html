@@ -1,41 +1,49 @@
 <footer class="app-footer">
-    <div class="footer-container">
-      <div class="footer-section">
-        <h3>⭐Silent Santa</h3>
-        <p>Spreading joy and kindness through anonymous letters.</p>
-      </div>
-      
-      <div class="footer-section">
-        <h3>📌Quick Links</h3>
-        <ul class="footer-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/letters">Letters</a></li>
-          <li><a href="/favorites">Favorites</a></li>
-          <li><a href="/my-letters">My Letters</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3>📞Connect</h3>
-        <ul class="footer-links">
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/contact">Contact</a></li>
-          <li><a href="/faq">FAQ</a></li>
-          <li><a href="/privacy">Privacy Policy</a></li>
-        </ul>
-      </div>
-      
-      <div class="footer-section">
-        <h3>🌟Subscribe</h3>
-        <p>Stay updated with our newsletter</p>
-        <div class="subscribe-form">
-          <input type="email" placeholder="Your email" class="email-input">
-          <button class="subscribe-button">Subscribe</button>
-        </div>
-      </div>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>⭐Silent Santa</h3>
+      <p>Spreading joy and kindness through anonymous letters.</p>
     </div>
     
-    <div class="footer-bottom">
-      <p>&copy; {{currentYear}} Silent Santa. All rights reserved.</p>
+    <div class="footer-section">
+      <h3>📌Quick Links</h3>
+      <ul class="footer-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/letters">Letters</a></li>
+        <li><a href="/favorites">Favorites</a></li>
+        <li><a href="/my-letters">My Letters</a></li>
+      </ul>
     </div>
-  </footer>
+    
+    <div class="footer-section">
+      <h3>📞Connect</h3>
+      <ul class="footer-links">
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+    
+    <div class="footer-section">
+      <h3>🌟Subscribe</h3>
+      <p>Stay updated with our newsletter</p>
+      <div class="subscribe-form">
+        <input 
+          type="email" 
+          placeholder="Your email" 
+          class="email-input" 
+          [(ngModel)]="email" 
+          required>
+        <button 
+          class="subscribe-button" 
+          (click)="subscribeToNewsletter()">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>&copy; {{currentYear}} Silent Santa. All rights reserved.</p>
+  </div>
+</footer>
+

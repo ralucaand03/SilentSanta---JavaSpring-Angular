@@ -1,6 +1,9 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-
+import  { AuthService } from "../services/login.service"
+import  { User } from "../models/user.model"
+import { Router } from "@angular/router"
+import type { Subscription } from "rxjs"
 @Component({
   selector: "app-header",
   standalone: true,
@@ -10,14 +13,24 @@ import { CommonModule } from "@angular/common"
 })
 export class HeaderComponent implements OnInit {
   isAuthenticated = false
+  isAdmin = false
   dropdownOpen = false
   mobileMenuOpen = false
   isMobile = false
+  private userSub: Subscription | null = null
+  currentUser: User | null = null
 
-  constructor() {}
-
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
   ngOnInit(): void {
-    // Check screen size on initialization
+      this.userSub = this.authService.currentUser$.subscribe((user) => {
+      this.isAuthenticated = !!user
+      this.currentUser = user
+      this.isAdmin = user?.role === "ADMIN"
+    })
+
     this.checkScreenSize()
 
     // Listen for window resize events
@@ -47,8 +60,11 @@ export class HeaderComponent implements OnInit {
   // Handle logout
   logOut(): void {
     this.isAuthenticated = false
-    this.dropdownOpen = false
-    // Add your actual logout logic here
-    console.log("User logged out")
+      this.authService.logout()
+      this.router.navigate(["/login"])
+      console.log("User logged out")
+      // Redirect to login page or home page
+      // this.router.navigate(['/login']);
   }
+     
 }

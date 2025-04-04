@@ -48,17 +48,23 @@ public class UsersService {
     }
 
     public boolean verifyPassword(String rawPassword, String hashedPassword) {
-        return passwordEncoder.matches(rawPassword, hashedPassword);
+        // Add debug logging
+        boolean matches = passwordEncoder.matches(rawPassword, hashedPassword);
+        System.out.println("Password verification: " + (matches ? "SUCCESS" : "FAILED"));
+        return matches;
     }
+
     public String encodePassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
+
     public UsersModel getAdminUser() {
         return usersRepository.findAll().stream()
                 .filter(user -> user.getRole() == UsersModel.Role.ADMIN)
                 .findFirst()
                 .orElse(null);
     }
+
     public UsersModel getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.getPrincipal() instanceof UserDetails) {
@@ -68,6 +74,5 @@ public class UsersService {
         }
         return null;
     }
-
-
 }
+

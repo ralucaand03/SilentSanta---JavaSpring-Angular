@@ -28,12 +28,13 @@ export class SignupComponent {
     private authService: AuthService,
     private router: Router,
   ) {}
+  
   private mapRoleToBackend(role: string): string {
     switch (role.toUpperCase()) {
       case "GIVER":
-        return "ADMIN";
-      case "HELPER":
         return "USER";
+      case "HELPER":
+        return "ADMIN";
       default:
         return "USER";
     }
@@ -60,8 +61,7 @@ export class SignupComponent {
     this.authService.signup(signupData).subscribe({
       next: (response) => {
         console.log("Signup successful:", response)
-        this.isLoading = false
-        // Navigate to login page after successful signup
+        this.isLoading = false 
         this.router.navigate(["/login"])
       },
       error: (error) => {

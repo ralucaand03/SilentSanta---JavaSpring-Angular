@@ -1,15 +1,11 @@
 export interface AuthResponseData {
-    id?: string
-    firstName?: string
-    lastName?: string
-    email: string
-    phone?: string
-    role?: string
-    // Original fields
-    idToken?: string
-    refreshToken?: string
-    expiresIn?: string
-    localId?: string
-  }
-  
-  
+  idToken: string
+  email: string
+  refreshToken?: string
+  expiresIn: number
+  localId: string
+  role?: string  
+  firstName?: string
+  lastName?: string 
+}
+

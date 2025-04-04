@@ -1,0 +1,98 @@
+<div class="add-letter-container" *ngIf="isAdmin">
+    <div class="add-letter-card">
+      <div class="add-letter-header">
+        <h1>Add New Letter</h1>
+        <p>Create a new letter for a child in need</p>
+      </div>
+  
+      <form [formGroup]="letterForm" (ngSubmit)="onSubmit()" class="add-letter-form">
+        <div class="form-group">
+          <label for="title">Letter Title</label>
+          <input type="text" id="title" formControlName="title" placeholder="Enter letter title">
+          <div class="error-message" *ngIf="letterForm.get('title')?.invalid && letterForm.get('title')?.touched">
+            Title is required
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="childName">Child's Name</label>
+            <input type="text" id="childName" formControlName="childName" placeholder="Enter child's name">
+            <div class="error-message" *ngIf="letterForm.get('childName')?.invalid && letterForm.get('childName')?.touched">
+              Child's name is required
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="childAge">Child's Age</label>
+            <input type="number" id="childAge" formControlName="childAge" min="1" max="18" placeholder="Enter age">
+            <div class="error-message" *ngIf="letterForm.get('childAge')?.invalid && letterForm.get('childAge')?.touched">
+              Valid age (1-18) is required
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" formControlName="gender">
+              <option value="" disabled selected>Select gender</option>
+              <option value="boy">Boy</option>
+              <option value="girl">Girl</option>
+            </select>
+            <div class="error-message" *ngIf="letterForm.get('gender')?.invalid && letterForm.get('gender')?.touched">
+              Gender is required
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="location">School/Location</label>
+            <input type="text" id="location" formControlName="location" placeholder="Enter school or location">
+            <div class="error-message" *ngIf="letterForm.get('location')?.invalid && letterForm.get('location')?.touched">
+              Location is required
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="imagePath">Image Path (optional)</label>
+          <input type="text" id="imagePath" formControlName="imagePath" placeholder="Enter image path">
+        </div>
+  
+        <div class="form-group wish-list-section">
+          <label>Wish List Items</label>
+          <div formArrayName="wishList" class="wish-list-items">
+            <div *ngFor="let wishItem of wishListArray.controls; let i = index" class="wish-item">
+              <input [formControlName]="i" placeholder="Enter wish item">
+              <button type="button" class="remove-wish-button" (click)="removeWishItem(i)" *ngIf="wishListArray.length > 1">
+                <i class="icon-remove"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" class="add-wish-button" (click)="addWishItem()">
+            <i class="icon-add"></i> Add Another Wish
+          </button>
+        </div>
+  
+        <div class="form-actions">
+          <button type="button" class="cancel-button" routerLink="/letters">Cancel</button>
+          <button type="submit" class="submit-button" [disabled]="letterForm.invalid || isLoading">
+            <span *ngIf="!isLoading">Add Letter</span>
+            <span *ngIf="isLoading">Adding...</span>
+          </button>
+        </div>
+  
+        <div class="message-container">
+          <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+          <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="unauthorized-message" *ngIf="!isAdmin">
+    <h2>Unauthorized Access</h2>
+    <p>You don't have permission to access this page.</p>
+    <button routerLink="/letters">Back to Letters</button>
+  </div>
+  

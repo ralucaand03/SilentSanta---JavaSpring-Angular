@@ -1,5 +1,7 @@
-export interface LogIn { 
-  email: string 
+export interface LogIn {
+  email: string
   password?: string
-  rememberMe?: boolean   
+  role?: string // Make role optional if it's not required for login
+  rememberMe?: boolean
 }
+

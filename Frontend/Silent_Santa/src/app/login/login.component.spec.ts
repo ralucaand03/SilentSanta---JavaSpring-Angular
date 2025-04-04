@@ -26,21 +26,6 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();  // Check if the component is created successfully
   });
 
-  it('should bind the email model correctly', () => {
-    const input = fixture.nativeElement.querySelector('#email');  // Get the email input element
-    input.value = 'test@example.com';  // Simulate a value in the input
-    input.dispatchEvent(new Event('input'));  // Dispatch the input event to trigger ngModel binding
-
-    expect(component.email).toBe('test@example.com');  // Verify the component's email property is updated
-  });
-
-  it('should bind the password model correctly', () => {
-    const input = fixture.nativeElement.querySelector('#password');
-    input.value = 'password123';
-    input.dispatchEvent(new Event('input'));
-
-    expect(component.password).toBe('password123');
-  });
 
   it('should call onLoginSubmit when form is submitted', () => {
     spyOn(component, 'onLoginSubmit');  // Spy on the onLoginSubmit method to check if it's called

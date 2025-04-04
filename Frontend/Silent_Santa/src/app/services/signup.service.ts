@@ -14,9 +14,9 @@ export class SignupService {
   private mapRoleToBackend(role: string): string {
     switch (role.toUpperCase()) {
       case "GIVER":
-        return "ADMIN";
-      case "HELPER":
         return "USER";
+      case "HELPER":
+        return "ADMIN";
       default:
         return "USER";
     }

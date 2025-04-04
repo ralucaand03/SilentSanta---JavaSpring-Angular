@@ -1,12 +1,13 @@
 import { Component } from "@angular/core"
-import { FormsModule } from "@angular/forms"
+import { FormsModule, NgForm } from "@angular/forms"
 import { HeaderComponent } from "../header/header.component"
-import { AuthService } from "../services/login.service" // Remove "type"
-import { Router } from "@angular/router" // Remove "type"
+import { AuthService } from "../services/login.service"
+import { Router } from "@angular/router"
 import { HttpClientModule } from "@angular/common/http"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
 import { LogIn } from "../models/login.model"
+import { AuthResponseData } from "../models/auth.model"
 
 @Component({
   selector: "app-login",
@@ -16,41 +17,39 @@ import { LogIn } from "../models/login.model"
   styleUrls: ["./login.component.css"],
 })
 export class LoginComponent {
-  email = ""
-  password = ""
-  rememberMe = false
+  userData: LogIn = {
+    email: "",
+    role: "",
+    password: "",
+    rememberMe: false,
+  }
   errorMessage = ""
   isLoading = false
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-  ) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onLoginSubmit() {
+  onLoginSubmit(form: NgForm) {
     this.isLoading = true
     this.errorMessage = ""
 
-    const loginData = {
-      email: this.email,
-      password: this.password,
-      rememberMe: this.rememberMe,
+    if (!form.valid) {
+      this.errorMessage = "Form is invalid!"
+      this.isLoading = false
+      return
     }
 
-    this.authService.login(loginData as LogIn).subscribe({
-      next: (response) => {
-        console.log("Login successful:", response)
+    this.authService.login(this.userData).subscribe({
+      next: (logInResponse: AuthResponseData) => {
+        console.log("Log In successfully:", logInResponse)
         this.isLoading = false
         this.router.navigate(["/letters"])
+        form.reset()
       },
       error: (error) => {
-        console.error("Login error:", error)
+        this.errorMessage = "Log-in failed. Please try again."
+        console.error('Error during log-in:', error)
         this.isLoading = false
-        if (error.status === 401) {
-          this.errorMessage = "Invalid email or password"
-        } else {
-          this.errorMessage = "An error occurred during login. Please try again."
-        }
+        form.reset()
       },
     })
   }

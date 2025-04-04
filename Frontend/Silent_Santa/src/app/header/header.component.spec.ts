@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+[x: string]: any;
 dropdownOpen: any;
 toggleMobileMenu() {
 throw new Error('Method not implemented.');
