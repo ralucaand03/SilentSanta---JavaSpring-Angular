@@ -4,7 +4,9 @@ export class User {
       public id: string,
       public role: string,
       private _token: string,
-      private _tokenExpirationDate: Date
+      private _tokenExpirationDate: Date,
+      public firstname?:string,
+      public lastname?:string
     ) {}
   
     get token() {

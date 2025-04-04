@@ -77,20 +77,17 @@ export class FavoritesComponent implements OnInit {
    
       this.favoritesService.getUserFavorites(userId).subscribe({
         next: (favoriteLetters: Letters[]) => {
-          // Filter the favorite letters (the list should only contain the letters the user has favorited)
           this.letters = favoriteLetters.map(letter => {
-            letter.isFavorite = true;  // Set isFavorite to true for all favorite letters
+            letter.isFavorite = true;   
             return letter;
-          });
-          // Extract unique locations and age ranges from the favorite letters
+          }); 
           this.locations = [
             ...new Set(favoriteLetters.map((letter) => letter.location).filter((loc): loc is string => loc !== undefined)),
           ]
   
           this.ageRanges = [
             ...new Set(favoriteLetters.map((letter) => letter.childAge).filter((age): age is number => age !== undefined)),
-          ] 
-          // Apply filters after fetching favorite letters
+          ]  
           this.applyFilters()
   
           this.isLoading = false
@@ -102,7 +99,6 @@ export class FavoritesComponent implements OnInit {
         },
       })
     } else {
-      // If no user is logged in, handle this case as appropriate (e.g., show an error or an empty list)
       this.errorMessage = "Please log in to view your favorite letters."
       this.isLoading = false
     }

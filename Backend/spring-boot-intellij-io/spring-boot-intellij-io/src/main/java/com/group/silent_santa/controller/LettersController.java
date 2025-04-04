@@ -67,9 +67,25 @@ public class LettersController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createLetterWithDetails(@RequestBody LetterCreationDTO letterDTO) {
+    public ResponseEntity<?> createLetterWithDetails(@RequestBody LetterCreationWithUserDTO letterDTO) {
         try {
+            // Try to get the current user from the authentication context
             UsersModel currentUser = usersService.getCurrentUser();
+
+            // If no authenticated user found, try to use the user ID from the request
+            if (currentUser == null && letterDTO.getPostedBy() != null && letterDTO.getPostedBy().getId() != null) {
+                try {
+                    UUID userId = UUID.fromString(letterDTO.getPostedBy().getId());
+                    currentUser = usersService.getUserById(userId);
+
+                    if (currentUser == null) {
+                        return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+                    }
+                } catch (IllegalArgumentException e) {
+                    return ResponseEntity.badRequest().body("Invalid user ID format");
+                }
+            }
+
             if (currentUser == null) {
                 return ResponseEntity.badRequest().body("No authenticated user found");
             }
@@ -175,6 +191,31 @@ public class LettersController {
     }
 
     //-------------------------------------------------------------------Swing
+    // Extended DTO that includes user information
+    public static class LetterCreationWithUserDTO extends LetterCreationDTO {
+        private UserDTO postedBy;
+
+        public UserDTO getPostedBy() {
+            return postedBy;
+        }
+
+        public void setPostedBy(UserDTO postedBy) {
+            this.postedBy = postedBy;
+        }
+
+        public static class UserDTO {
+            private String id;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+        }
+    }
+
     public static class LetterCreationDTO {
         private String title;
         private List<String> wishList;
@@ -502,3 +543,4 @@ public class LettersController {
         }
     }
 }
+

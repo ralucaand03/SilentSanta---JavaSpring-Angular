@@ -41,6 +41,10 @@ public class UsersService {
         }
         return false;
     }
+    public UsersModel getUserById(UUID id) {
+        Optional<UsersModel> user = usersRepository.findById(id);
+        return user.orElse(null);  // Returns the user if present, or null if not found
+    }
 
     public UsersModel findByEmail(String email) {
         Optional<UsersModel> optionalUser = usersRepository.findByEmail(email);
