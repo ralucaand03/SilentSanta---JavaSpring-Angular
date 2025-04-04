@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silent Santa - New Letter Alert!</title>
+    <!-- Fix for Google Fonts - corrected wght parameter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Nunito', 'Comfortaa', sans-serif;
+            background-color: #f9f9f9;
+            margin: 10px;
+            padding: 10px;
+            color: #333333;
+        }
+        .email-container {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            padding: 0;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .email-header {
+            background-color: #46ac97;
+            padding: 25px 20px;
+            text-align: center;
+        }
+        .email-header h1 {
+            color: #ffffff;
+            font-size: 32px;
+            margin: 0;
+            font-family: 'Comfortaa', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .email-content {
+            padding: 30px;
+            font-size: 16px;
+            line-height: 1.6;
+            background: linear-gradient(to right, rgba(239, 110, 110, 0.2), rgba(70, 172, 151, 0.3));
+        }
+        .section-title {
+            color: #46ac97;
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-family: 'Comfortaa', sans-serif;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        .letter-details {
+            background-color: rgba(255,255, 255, 0.5);
+            border-left: 4px solid #46ac97;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .letter-details p {
+            margin: 8px 0;
+        }
+        .cta-button {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 12px 20px;
+            text-align: center;
+            background-color: #ef6e6e;
+            color: white !important; /* Important to override email client styles */
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 8px rgba(239, 110, 110, 0.3);
+        }
+        .secondary-button {
+            display: block;
+            width: 150px;
+            margin: 20px auto;
+            padding: 8px;
+            text-align: center;
+            background-color: rgba(255,255, 255, 0.2);
+            color: #fff !important; /* Important to override email client styles */
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .email-footer {
+            text-align: center;
+            font-size: 14px;
+            color: #fff;
+            background-color: #46ac97;
+            padding: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+        .divider {
+            height: 1px;
+            background-color: #eeeeee;
+            margin: 25px 0;
+        }
+        .signature {
+            font-style: italic;
+            margin-top: 20px;
+        }
+        /* Emoji styles */
+        .emoji {
+            font-size: 18px;
+            display: inline-block;
+            margin: 0 2px;
+        }
+        @media only screen and (max-width: 600px) {
+            .email-content {
+                padding: 20px;
+            }
+            .cta-button {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="email-header">
+        <h1>&#11088; Silent Santa</h1>
+    </div>
+
+    <div class="email-content">
+        <p>Dear Subscriber,</p>
+
+        <p>We're excited to share that a new letter has arrived at the North Pole! <span class="emoji">&#127876;</span> A child is hoping for some holiday magic this year, and you could be the one to make their wish come true.</p>
+
+        <h2 class="section-title"><span class="emoji">&#128140;</span> New Letter Alert!</h2>
+
+        <div class="letter-details">
+            <p><strong>Child's Name:</strong> {{childName}}</p>
+            <p><strong>Age:</strong> {{childAge}} years old</p>
+            <p><strong>Location:</strong> {{location}}</p>
+        </div>
+
+        <p>Every letter represents a child's hope and dream for the holiday season. By becoming their Silent Santa, you'll bring joy that extends far beyond the gifts themselves.</p>
+
+        <a href="{{viewLetterLink}}" class="cta-button">Read Full Letter</a>
+
+        <div class="divider"></div>
+
+        <p>Thank you for being part of our community of caring individuals who make the holiday season brighter for children in need.</p>
+
+        <p class="signature">Warm wishes,<br>
+            <span class="emoji">&#10052;&#65039;</span> The Silent Santa Team <span class="emoji">&#10052;&#65039;</span></p>
+    </div>
+
+    <div class="email-footer">
+        <p>Silent Santa Foundation | Spreading Holiday Joy </p>
+        <a href="{{unsubscribeLink}}" class="secondary-button">Unsubscribe</a>
+        <p>If you no longer wish to receive emails from Silent Santa, you can unsubscribe at any time.</p>
+    </div>
+</div>
+</body>
+</html>

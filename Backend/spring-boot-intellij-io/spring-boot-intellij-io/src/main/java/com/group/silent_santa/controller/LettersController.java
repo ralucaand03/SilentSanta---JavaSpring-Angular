@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Map;
 import org.springframework.web.bind.annotation.*;
+import com.group.silent_santa.service.EmailService;
 
 @RestController
 @RequestMapping("/api/letters")        // <-- the base path for all "letters" endpoints
@@ -27,6 +28,7 @@ public class LettersController {
     private final LettersRepository lettersRepository;
     private final UsersService usersService;
     private final LettersService lettersService;
+    private final EmailService emailService;
 
     // Use setter injection for AdminDashboardController to break the cycle:
     private ObjectProvider<AdminDashboardController> adminDashboardControllerProvider;
@@ -37,10 +39,12 @@ public class LettersController {
     @Autowired
     public LettersController(LettersRepository lettersRepository,
                              UsersService usersService,
-                             LettersService lettersService) {
+                             LettersService lettersService,
+                             EmailService emailService ) {
         this.lettersRepository = lettersRepository;
         this.usersService = usersService;
         this.lettersService = lettersService;
+        this.emailService = emailService;
     }
 
     // Spring calls this *after* LettersController is constructed
@@ -101,8 +105,15 @@ public class LettersController {
                     LettersModel.LetterStatus.valueOf(letterDTO.getStatus()),
                     currentUser
             );
-
+            emailService.sendNewLetterNotification(
+                    letterDTO.getTitle(),
+                    letterDTO.getChildName(),
+                    letterDTO.getChildAge(),
+                    letterDTO.getLocation(),
+                    letterDTO.getWishList()
+            );
             return ResponseEntity.ok(newLetter);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error creating letter: " + e.getMessage());
         }
