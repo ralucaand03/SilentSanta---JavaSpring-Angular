@@ -1,6 +1,6 @@
 import { inject } from "@angular/core"
 import { Router } from "@angular/router"
-import { AuthService } from "../services/login.service"
+import { AuthService } from "../services/auth.service"
 
 // Functional route guard for Angular v18+
 export const authGuard = () => {

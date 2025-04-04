@@ -1,6 +1,6 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import  { AuthService } from "../services/login.service"
+import  { AuthService } from "../services/auth.service"
 import  { User } from "../models/user.model"
 import { Router } from "@angular/router"
 import type { Subscription } from "rxjs"

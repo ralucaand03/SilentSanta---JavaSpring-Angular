@@ -4,6 +4,8 @@ import { Letters } from '../models/letters.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
+import { FavoritesService } from '../services/favorites.service';
 
 @Component({
   selector: 'app-letters',
@@ -12,9 +14,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   styleUrls: ['./letters.component.css']
 })
+
 export class LettersComponent implements OnInit {
-handleImageError($event: ErrorEvent) {
-throw new Error('Method not implemented.');
+  handleImageError($event: ErrorEvent) {
+    throw new Error('Method not implemented.');
 }
   letters: Letters[] = [];
   filteredLetters: Letters[] = [];
@@ -41,7 +44,9 @@ throw new Error('Method not implemented.');
   successMessage = '';
 
   constructor(
+    private authService: AuthService,
     private lettersService: LettersService,
+    private favoritesService: FavoritesService,
     private fb: FormBuilder
   ) {
     this.editForm = this.fb.group({
@@ -57,46 +62,97 @@ throw new Error('Method not implemented.');
   }
 
   ngOnInit(): void {
-    this.fetchLetters();
+    this.fetchLetters()
+    //this.loadFavoriteStatus()
   }
 
   // Fetch letters from the backend
   fetchLetters(): void {
-    this.isLoading = true;
-    this.errorMessage = '';
-    
+    this.isLoading = true
+    this.errorMessage = ""
+
     this.lettersService.getLetters().subscribe({
       next: (data: Letters[]) => {
-        this.letters = data;
-        this.applyFilters();
-        
-        // Extract unique locations from letters
+        this.letters = data
+
+        // Extract unique locations and age ranges
         this.locations = [
-          ...new Set(
-            data
-              .map(letter => letter.location)
-              .filter((loc): loc is string => loc !== undefined)
-          )
-        ];
-        
+          ...new Set(data.map((letter) => letter.location).filter((loc): loc is string => loc !== undefined)),
+        ]
+
         this.ageRanges = [
-          ...new Set(
-            data
-              .map(letter => letter.childAge)
-              .filter((loc): loc is number => loc !== undefined)
-          )
-        ];
-        this.isLoading = false;
+          ...new Set(data.map((letter) => letter.childAge).filter((age): age is number => age !== undefined)),
+        ]
+
+        // Check if letters are in user's favorites
+        const currentUser = this.authService.getCurrentUser()
+        if (currentUser) {
+          const userId = currentUser.id
+
+          // Get user's favorites and update letter.isFavorite property
+          this.favoritesService.getUserFavorites(userId).subscribe({
+            next: (favoriteLetters: Letters[]) => {
+              // Create a set of favorite letter IDs for quick lookup
+              const favoriteIds = new Set(favoriteLetters.map((letter) => letter.id))
+
+              // Update isFavorite flag on all letters
+              this.letters.forEach((letter) => {
+                letter.isFavorite = favoriteIds.has(letter.id)
+              })
+
+              // Apply filters after updating favorites
+              this.applyFilters()
+            },
+            error: (err) => {
+              console.error("Error loading favorites:", err)
+              // Still apply filters even if favorites loading fails
+              this.applyFilters()
+            },
+          })
+        } else {
+          // No user logged in, just apply filters
+          this.applyFilters()
+        }
+
+        this.isLoading = false
       },
       error: (err) => {
-        this.errorMessage = 'Failed to load letters. Please try again.';
-        this.isLoading = false;
-        console.error('Error fetching letters:', err);
-      }
-    });
+        this.errorMessage = "Failed to load letters. Please try again."
+        this.isLoading = false
+        console.error("Error fetching letters:", err)
+      },
+    })
+  }
+  loadFavoriteStatus(): void {
+    const currentUser = this.authService.getCurrentUser()
+    if (!currentUser) {
+      return // User not logged in
+    }
+
+    const userId = currentUser.id
+
+    // Get all user favorites
+    this.favoritesService.getUserFavorites(userId).subscribe({
+      next: (favoriteLetters: Letters[]) => {
+        // Create a set of favorite letter IDs for quick lookup
+        const favoriteIds = new Set(favoriteLetters.map((letter) => letter.id))
+
+        // Update isFavorite flag on all letters
+        this.letters.forEach((letter) => {
+          letter.isFavorite = favoriteIds.has(letter.id)
+        })
+
+        // Update filtered letters as well
+        this.filteredLetters.forEach((letter) => {
+          letter.isFavorite = favoriteIds.has(letter.id)
+        })
+      },
+      error: (err) => {
+        console.error("Error loading favorites:", err)
+      },
+    })
   }
 
-  // Apply all current filters
   applyFilters(): void {
     this.filteredLetters = this.letters.filter(letter => {
       // Filter by location
@@ -131,8 +187,7 @@ throw new Error('Method not implemented.');
       return true;
     });
   }
-
-  // Clear all filters and search
+ 
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedLocation = null;
@@ -140,15 +195,14 @@ throw new Error('Method not implemented.');
     this.selectedAgeRange = null;
     this.filteredLetters = [...this.letters];
   }
-
-  // Update search results based on input
+ 
   updateSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.searchQuery = input.value;
     this.applyFilters();
   }
 
-  // Toggle between showing the letter content and image
+  
   toggleLetterView(letter: Letters, event: Event)
 : void
 {
@@ -164,39 +218,64 @@ throw new Error('Method not implemented.');
     }
   }
 }
-
-  // Toggle favorite status - FIXED: Now handles event internally
+ //FAV
   toggleFavorite(letter: Letters): void {
-    const previousState = letter.isFavorite;
-    letter.isFavorite = !letter.isFavorite;
-    
-    // Call the service to update on the server
-    this.lettersService.toggleFavorite(letter.id, letter.isFavorite).subscribe({
-      next: (response) => {
-        this.successMessage = letter.isFavorite ? 
-          'Letter added to favorites!' : 
-          'Letter removed from favorites!';
-          
-        // Clear success message after 3 seconds
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 3000);
-      },
-      error: (err) => {
-        // Revert the change if the server update fails
-        letter.isFavorite = previousState;
-        this.errorMessage = 'Failed to update favorite status. Please try again.';
-        console.error('Error toggling favorite status:', err);
-        
-        // Clear error message after 3 seconds
-        setTimeout(() => {
-          this.errorMessage = '';
-        }, 3000);
-      }
-    });
-  }
+    const currentUser = this.authService.getCurrentUser()
+    if (!currentUser) {
+      this.errorMessage = "You must be logged in to favorite letters."
+      setTimeout(() => {
+        this.errorMessage = ""
+      }, 3000)
+      return
+    }
 
-  // Mark a letter as requested - FIXED: Now handles event internally
+    const userId = currentUser.id
+    const previousState = letter.isFavorite
+
+    // Optimistically update UI
+    letter.isFavorite = !letter.isFavorite
+
+    if (letter.isFavorite) {
+      // Add to favorites
+      this.favoritesService.addFavorite(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter added to favorites!"
+          setTimeout(() => {
+            this.successMessage = ""
+          }, 3000)
+        },
+        error: (err) => {
+          // Revert the change if the server update fails
+          letter.isFavorite = previousState
+          this.errorMessage = "Failed to add to favorites. Please try again."
+          console.error("Error adding to favorites:", err)
+          setTimeout(() => {
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
+    } else {
+      // Remove from favorites
+      this.favoritesService.removeFavorite(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter removed from favorites!"
+          setTimeout(() => {
+            this.successMessage = ""
+          }, 3000)
+        },
+        error: (err) => {
+          // Revert the change if the server update fails
+          letter.isFavorite = previousState
+          this.errorMessage = "Failed to remove from favorites. Please try again."
+          console.error("Error removing from favorites:", err)
+          setTimeout(() => {
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
+    }
+  }
+   
   requestLetter(letter: Letters): void {
     if (!letter.isRequested) {
       const previousState = letter.isRequested;
@@ -226,8 +305,7 @@ throw new Error('Method not implemented.');
       });
     }
   }
-
-  // Change letter status
+ 
   changeStatus(letter: Letters, status: string): void {
     const previousStatus = letter.status;
     letter.status = status;
@@ -254,8 +332,7 @@ throw new Error('Method not implemented.');
       }
     });
   }
-
-  // Delete a letter
+ 
   deleteLetter(letter: Letters): void {
     if (confirm(`Are you sure you want to delete the letter from ${letter.childName}?`)) {
       this.lettersService.deleteLetter(letter.id).subscribe({
@@ -287,8 +364,7 @@ throw new Error('Method not implemented.');
       });
     }
   }
-
-  // Open edit form for a letter
+ 
   editLetter(letter: Letters): void {
     this.currentEditLetter = letter;
     this.isEditing = true;
@@ -304,15 +380,13 @@ throw new Error('Method not implemented.');
       status: letter.status
     });
   }
-
-  // Cancel editing
+ 
   cancelEdit(): void {
     this.isEditing = false;
     this.currentEditLetter = null;
     this.editForm.reset();
   }
-
-  // Save edited letter
+ 
   saveEdit(): void {
     if (this.editForm.invalid || !this.currentEditLetter) {
       return;
@@ -353,26 +427,22 @@ throw new Error('Method not implemented.');
       }
     });
   }
-
-  // Filtering by location
+ 
   filterByLocation(location: string | null): void {
     this.selectedLocation = location;
     this.applyFilters();
   }
-
-  // Filtering by gender
+ 
   filterByGender(gender: string | null): void {
     this.selectedGender = gender;
     this.applyFilters();
   }
-
-  // Filtering by age range
+ 
   filterByAgeRange(ageRange: number | null): void {
     this.selectedAgeRange = ageRange;
     this.applyFilters();
   }
-  
-  // Navigate to add letter page
+   
   navigateToAddLetter(): void {
     window.location.href = '/letters/add';
   }
@@ -390,8 +460,5 @@ throw new Error('Method not implemented.');
   return 'assets/letters/' + imagePath;
 }
 
-// Add this to your toggleLetterView method
-
- 
 
 }

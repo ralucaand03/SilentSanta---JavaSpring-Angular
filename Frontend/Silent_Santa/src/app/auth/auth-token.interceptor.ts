@@ -1,7 +1,7 @@
 import type { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from "@angular/common/http"
 import { inject } from "@angular/core"
 import { catchError, throwError } from "rxjs"
-import { AuthService } from "../services/login.service"
+import { AuthService } from "../services/auth.service"
 import { Router } from "@angular/router"
 
 // Convert the class-based interceptor to a functional interceptor
