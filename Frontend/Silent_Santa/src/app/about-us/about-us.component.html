@@ -1,0 +1,88 @@
+<div class="page">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Our Story</h1>
+        <p class="hero-subtitle">Making the season bright, one letter at a time</p>
+      </div>
+      <img src="assets/falling-star.png" alt="Silent Santa Star" class="hero-image" />
+    </div>
+  
+    <!-- Mission Section -->
+    <div class="section mission-section">
+      <h2 class="section-title">Our Mission</h2>
+      <div class="mission-content">
+        <div class="mission-text">
+          <p>Silent Santa connects generous donors with children in need during the holiday season. We believe every child deserves to experience the magic of receiving a special gift that's just for them.</p>
+          <p>Through our platform, school administrators can submit letters from children, and kind-hearted donors can fulfill these wishes directly. It's a simple concept with a powerful impact - bringing joy to children while giving donors a meaningful way to give back.</p>
+          <p>We handle the logistics, you provide the magic!</p>
+        </div>
+        <div class="mission-stats">
+          <div class="stat-item">
+            <span class="stat-number">300+</span>
+            <span class="stat-label">Children Helped</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">170+</span>
+            <span class="stat-label">Generous Donors</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">25+</span>
+            <span class="stat-label">Partner Schools</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Values Section -->
+    <div class="section values-section">
+      <h2 class="section-title">Our Values</h2>
+      <div class="values-container">
+        <div *ngFor="let value of coreValues" class="value-card">
+          <img [src]="value.icon" alt="Value icon" class="value-icon">
+          <h3>{{value.title}}</h3>
+          <p>{{value.description}}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Timeline Section -->
+    <div class="section timeline-section">
+      <h2 class="section-title">Our Journey</h2>
+      <div class="timeline">
+        <div *ngFor="let milestone of milestones; let i = index" class="timeline-item" [class.right]="i % 2 !== 0">
+          <div class="timeline-content">
+            <div class="timeline-year">{{milestone.year}}</div>
+            <h3 class="timeline-title">{{milestone.title}}</h3>
+            <p class="timeline-description">{{milestone.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Team Section -->
+    <div class="section team-section">
+      <h2 class="section-title">Meet Our Team</h2>
+      <div class="team-container">
+        <div *ngFor="let member of teamMembers" class="team-card">
+          <div class="team-image-container">
+            <img [src]="member.image" alt="{{member.name}}" class="team-image">
+          </div>
+          <h3 class="team-name">{{member.name}}</h3>
+          <p class="team-role">{{member.role}}</p>
+          <p class="team-bio">{{member.bio}}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- CTA Section -->
+    <div class="section cta-section">
+      <h2>Ready to Make a Difference? 💫</h2>
+      <p>Join Silent Santa today and help make a child's Christmas wish come true.</p>
+      <div class="cta-buttons">
+        <a href="/signup" class="primary-button">Sign Up Now</a>
+        <a href="/contact" class="secondary-button">Contact Us</a>
+      </div>
+    </div>
+  </div>
+  

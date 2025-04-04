@@ -1,0 +1,76 @@
+<div class="page">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Frequently Asked Questions</h1>
+        <p class="hero-subtitle">Find answers to common questions about Silent Santa</p>
+      </div>
+      <img src="assets/questions.png" alt="FAQ" class="hero-image" />
+    </div>
+  
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-container">
+        <input type="text" placeholder="Search for answers..." class="search-input">
+        <button class="search-button">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+    </div>
+  
+    <!-- FAQ Categories -->
+    <!-- <div class="categories-section">
+      <div class="categories-container">
+        <a *ngFor="let category of faqCategories; let i = index" [href]="'#category-' + i" class="category-card">
+          <img [src]="category.icon" alt="Category icon" class="category-icon">
+          <h3>{{category.name}}</h3>
+          <span class="question-count">{{category.questions.length}} questions</span>
+        </a>
+      </div>
+    </div>
+   -->
+    <!-- FAQ Content -->
+    <div class="faq-content">
+      <div *ngFor="let category of faqCategories; let categoryIndex = index" class="faq-category" [id]="'category-' + categoryIndex">
+        <h2 class="category-title">{{category.name}} Questions</h2>
+        
+        <div class="accordion">
+          <div *ngFor="let faq of category.questions; let questionIndex = index" class="accordion-item">
+            <div class="accordion-header" (click)="toggleQuestion(categoryIndex, questionIndex)">
+              <h3>{{faq.question}}</h3>
+              <i class="icon-chevron-down" [class.expanded]="isExpanded(categoryIndex, questionIndex)"></i>
+            </div>
+            <div class="accordion-content" [class.expanded]="isExpanded(categoryIndex, questionIndex)">
+              <p>{{faq.answer}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Still Have Questions Section -->
+    <div class="section contact-cta">
+      <div class="contact-cta-content">
+        <h2>Still Have Questions?</h2>
+        <p>We're here to help! If you couldn't find the answer you were looking for, please reach out to us directly.</p>
+        <div class="cta-buttons">
+          <a href="/contact" class="primary-button">Contact Us</a>
+          <a href="mailto:silent.santa25@gmail.com" class="secondary-button">
+            <i class="icon-mail"></i> Email Us
+          </a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- CTA Section -->
+    <div class="section cta-section">
+      <h2>Ready to Spread Some Joy? 💫</h2>
+      <p>Join Silent Santa today and help make a child's Christmas wish come true.</p>
+      <div class="cta-buttons">
+        <a href="/signup" class="primary-button">Sign Up Now</a>
+        <a href="/letters" class="secondary-button">Browse Letters</a>
+      </div>
+    </div>
+  </div>
+  
+  

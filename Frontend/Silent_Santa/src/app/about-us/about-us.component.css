@@ -1,0 +1,530 @@
+.page {
+    padding-top: 90px;
+    width: 100%;
+    font-family: "Comfortaa", sans-serif;
+    background: linear-gradient(to right, #ef6e6e32, #46ac9848);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    width: 70%;
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 70px 40px;
+    margin: 0 20px 50px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hero-content {
+    flex: 1;
+    padding-right: 60px;
+    margin-left: 50px;
+    margin-right: 70px;
+  }
+  
+  .hero-content h1 {
+    font-size: 2.7rem;
+    color: #46ac97;
+    margin-bottom: 25px;
+    line-height: 1.2;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.4rem;
+    color: #333;
+    margin-bottom: 40px;
+    line-height: 1.5;
+  }
+  
+  .hero-image {
+    max-width: 15%;
+    height: auto;
+    margin-right: 40px;
+  }
+  
+  /* Section Styles */
+  .section {
+    width: 70%;
+    max-width: 1400px;
+    padding: 70px 40px;
+    margin: 0 20px 50px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.3rem;
+    color: #46ac97;
+    margin-bottom: 50px;
+  }
+  
+  /* Mission Section */
+  .mission-content {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  
+  .mission-text {
+    flex: 2;
+    min-width: 300px;
+  }
+  
+  .mission-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 20px;
+  }
+  
+  .mission-stats {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .stat-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ef6e6e;
+    margin-bottom: 10px;
+  }
+  
+  .stat-label {
+    color: #555;
+    font-size: 1.1rem;
+  }
+  
+  /* Values Section */
+  .values-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  
+  .value-card {
+    flex: 1;
+    min-width: 200px;
+    max-width: 250px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .value-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .value-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+  }
+  
+  .value-card h3 {
+    color: #46ac97;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+  }
+  
+  .value-card p {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* Timeline Section */
+  .timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: #46ac97;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+    border-radius: 3px;
+  }
+  
+  .timeline-item {
+    padding: 10px 40px;
+    position: relative;
+    width: 50%;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+  }
+  
+  .timeline-item::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -12px;
+    background-color: white;
+    border: 4px solid #ef6e6e;
+    top: 20px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .timeline-item.right {
+    left: 50%;
+  }
+  
+  .timeline-item.right::after {
+    left: -12px;
+  }
+  
+  .timeline-content {
+    padding: 20px 30px;
+    background-color: white;
+    position: relative;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+  
+  .timeline-year {
+    display: inline-block;
+    padding: 5px 15px;
+    background-color: #46ac97;
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .timeline-title {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+  }
+  
+  .timeline-description {
+    color: #555;
+    line-height: 1.6;
+  }
+  
+  /* Team Section */
+  .team-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .team-card {
+    flex: 1;
+    min-width: 250px;
+    max-width: 350px;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .team-image-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid #46ac97;
+  }
+  
+  .team-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .team-name {
+    color: #46ac97;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+  }
+  
+  .team-role {
+    color: #ef6e6e;
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+  }
+  
+  .team-bio {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    text-align: center;
+    background: linear-gradient(135deg, #46ac97, #3a9080);
+    color: white;
+  }
+  
+  .cta-section h2 {
+    font-size: 3rem;
+    margin-bottom: 25px;
+    color: white;
+  }
+  
+  .cta-section p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+  
+  .primary-button {
+    padding: 14px 32px;
+    background-color: white;
+    color: #46ac97;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .primary-button:hover {
+    background-color: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 255, 255, 0.4);
+  }
+  
+  .secondary-button {
+    padding: 14px 32px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .secondary-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 1300px) {
+    .section,
+    .hero-section {
+      margin: 0 15px 40px;
+      max-width: calc(100% - 30px);
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .hero-section {
+      flex-direction: column;
+      text-align: center;
+      padding: 50px 30px;
+    }
+  
+    .hero-content {
+      padding-right: 0;
+      margin-bottom: 40px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  
+    .hero-content h1 {
+      font-size: 2.8rem;
+    }
+  
+    .hero-image {
+      max-width: 20%;
+    }
+  
+    .mission-content {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .mission-stats {
+      flex-direction: row;
+      justify-content: center;
+      width: 100%;
+    }
+  
+    .stat-item {
+      flex: 1;
+      min-width: 120px;
+    }
+  
+    .timeline::after {
+      left: 31px;
+    }
+  
+    .timeline-item {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+  
+    .timeline-item::after {
+      left: 18px;
+      right: auto;
+    }
+  
+    .timeline-item.right {
+      left: 0;
+    }
+  
+    .timeline-item.right::after {
+      left: 18px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.6rem;
+      margin-bottom: 20px;
+    }
+  
+    .hero-subtitle {
+      font-size: 1.3rem;
+      margin-bottom: 30px;
+    }
+  
+    .section,
+    .hero-section {
+      padding: 40px 30px;
+      margin: 0 15px 30px;
+    }
+  
+    .section-title {
+      font-size: 2.2rem;
+      margin-bottom: 35px;
+    }
+  
+    .mission-stats {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 0 30px;
+    }
+  
+    .cta-buttons a {
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .cta-section h2 {
+      font-size: 2.4rem;
+    }
+  
+    .cta-section p {
+      font-size: 1.2rem;
+      padding: 0 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .page {
+      padding-top: 70px;
+    }
+  
+    .hero-content h1 {
+      font-size: 2.2rem;
+    }
+  
+    .hero-subtitle {
+      font-size: 1.1rem;
+    }
+  
+    .section,
+    .hero-section {
+      padding: 35px 30px;
+      margin: 0 10px 25px;
+    }
+  
+    .section-title {
+      font-size: 2rem;
+    }
+  
+    .value-card,
+    .team-card {
+      min-width: 100%;
+    }
+  
+    .cta-buttons {
+      padding: 0 30px;
+    }
+  
+    .cta-section p {
+      padding: 0 30px;
+    }
+  }
+  

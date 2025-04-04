@@ -1,0 +1,69 @@
+<div class="page">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Privacy Policy</h1>
+        
+      </div>
+      <img src="assets/balloon.png" alt="Privacy Shield" class="hero-image" />
+    </div>
+  
+    <!-- Introduction Section -->
+    <div class="section intro-section">
+      <div class="policy-intro">
+        <p>At Silent Santa, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.</p>
+        <p>Please read this Privacy Policy carefully. By accessing or using our website, you acknowledge that you have read, understood, and agree to be bound by all the terms of this Privacy Policy. If you do not agree with our policies and practices, please do not use our website.</p>
+      </div>
+  
+      <!-- Table of Contents -->
+      <div class="table-of-contents">
+        <h2>Contents</h2>
+        <ul>
+          <li *ngFor="let section of policySections">
+            <a [href]="'#' + section.id">{{section.title}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  
+    <!-- Policy Content -->
+    <div class="section policy-content">
+      <div *ngFor="let section of policySections" [id]="section.id" class="policy-section">
+        <h2>{{section.title}}</h2>
+        <div class="section-content">
+          <p *ngFor="let paragraph of section.content; let i = index" [class.highlight]="i === 0">
+            {{paragraph}}
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Acceptance Section -->
+    <div class="section acceptance-section">
+      <div class="acceptance-content">
+        <h2>Acceptance of This Policy</h2>
+        <p>By using our website, you signify your acceptance of this Privacy Policy. If you do not agree to this policy, please do not use our website. Your continued use of the website following the posting of changes to this policy will be deemed your acceptance of those changes.</p>
+        
+        <div class="acceptance-box">
+          <div class="acceptance-icon">
+            <i class="icon-check"></i>
+          </div>
+          <p>We're committed to protecting your privacy while making the holiday season brighter for children in need. If you have any questions about our Privacy Policy, please don't hesitate to contact us.</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Contact Section -->
+    <div class="section contact-section">
+      <h2>Questions About Our Privacy Policy?</h2>
+      <p>We're here to help! If you have any questions or concerns about our Privacy Policy, please reach out to us.</p>
+      <div class="contact-buttons">
+        <a href="/contact" class="primary-button">Contact Us</a>
+        <a href="mailto:silent.santa25@gmail.com" class="secondary-button">
+          <i class="icon-mail"></i> Email Us
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  

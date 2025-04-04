@@ -1,0 +1,159 @@
+<div class="page">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h1>Get in Touch</h1>
+        <p class="hero-subtitle">We'd love to hear from you! Whether you have questions, feedback, or want to get involved, we're here to help.</p>
+      </div>
+      <img src="assets/christmas.png" alt="Contact Us" class="hero-image" />
+    </div>
+  
+    <!-- Contact Form Section -->
+    <div class="section contact-section">
+      <div class="contact-container">
+        <!-- Contact Form -->
+        <div class="form-container">
+          <h2 class="section-title">Send Us a Message</h2>
+          
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                formControlName="name" 
+                [class.error]="hasError('name', 'required') || hasError('name', 'minlength')"
+              >
+              <div *ngIf="hasError('name', 'required')" class="error-message">
+                Name is required
+              </div>
+              <div *ngIf="hasError('name', 'minlength')" class="error-message">
+                Name must be at least 2 characters
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email"
+                [class.error]="hasError('email', 'required') || hasError('email', 'email')"
+              >
+              <div *ngIf="hasError('email', 'required')" class="error-message">
+                Email is required
+              </div>
+              <div *ngIf="hasError('email', 'email')" class="error-message">
+                Please enter a valid email
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input 
+                type="text" 
+                id="subject" 
+                formControlName="subject"
+                [class.error]="hasError('subject', 'required')"
+              >
+              <div *ngIf="hasError('subject', 'required')" class="error-message">
+                Subject is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Your Message</label>
+              <textarea 
+                id="message" 
+                formControlName="message" 
+                rows="5"
+                [class.error]="hasError('message', 'required') || hasError('message', 'minlength')"
+              ></textarea>
+              <div *ngIf="hasError('message', 'required')" class="error-message">
+                Message is required
+              </div>
+              <div *ngIf="hasError('message', 'minlength')" class="error-message">
+                Message must be at least 10 characters
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-button" [disabled]="submitted && !contactForm.valid">
+              <span *ngIf="!submitted">Send Message</span>
+              <span *ngIf="submitted && !contactForm.valid">Please fix errors</span>
+              <span *ngIf="submitted && contactForm.valid">Message Sent! ✓</span>
+            </button>
+          </form>
+        </div>
+        
+        <!-- Contact Info -->
+        <div class="info-container">
+          <div class="contact-info">
+            <h3>Contact Information</h3>
+            
+            <div class="info-item">
+              <i class="icon-mail"></i>
+              <div>
+                <h4>Email Us</h4>
+                <a href="mailto:silent.santa25@gmail.com">silent.santa25&#64;gmail.com</a>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <i class="icon-phone"></i>
+              <div>
+                <h4>Call Us</h4>
+                <p>(555) 123-GIFT</p>
+              </div>
+            </div>
+            
+            <div class="info-item">
+              <i class="icon-clock"></i>
+              <div>
+                <h4>Hours</h4>
+                <p>Monday-Friday: 9am-5pm</p>
+                <p>Weekend: Closed</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="social-links">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+              <a href="#" class="social-icon"><i class="icon-facebook"></i></a>
+              <a href="#" class="social-icon"><i class="icon-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="icon-instagram"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Locations Section -->
+    <div class="section locations-section">
+      <h2 class="section-title">Our Locations</h2>
+      <div class="locations-container">
+        <div *ngFor="let location of locations" class="location-card">
+          <div class="location-icon">
+            <i class="icon-map-pin"></i>
+          </div>
+          <h3>{{location.city}}</h3>
+          <p>{{location.address}}</p>
+          <p>{{location.phone}}</p>
+          <p>{{location.hours}}</p>
+        </div>
+      </div>
+    </div>
+  
+   
+    <!-- CTA Section -->
+    <div class="section cta-section">
+      <h2>Join Our Mission 💫</h2>
+      <p>Ready to spread joy and make a difference in a child's life?</p>
+      <div class="cta-buttons">
+        <a href="/signup" class="primary-button">Sign Up Now</a>
+        <a href="/letters" class="secondary-button">Browse Letters</a>
+      </div>
+    </div>
+  </div>
+  
+  
