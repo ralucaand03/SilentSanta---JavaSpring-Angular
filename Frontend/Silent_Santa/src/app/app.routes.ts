@@ -11,6 +11,7 @@ import { AddLetterComponent } from './add-letter/add-letter.component';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { ContactComponent } from './contact/contact.component';
 import { FaqComponent } from './faq/faq.component';
+import { RequestsComponent } from './requests/requests.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },  
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: "add-letter", component: AddLetterComponent},
   { path: "about-us", component:AboutUsComponent},
   { path: "contact", component:ContactComponent},
+  { path: "requests", component:RequestsComponent},
   { path: "faq", component:FaqComponent},
   { path: "privacy-policy", component:PrivacyPolicyComponent}
  ];

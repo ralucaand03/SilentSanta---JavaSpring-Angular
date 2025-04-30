@@ -75,6 +75,7 @@ export class LettersComponent implements OnInit {
       next: (data: Letters[]) => {
         this.letters = data
 
+        // Extract unique locations and age ranges
         this.locations = [
           ...new Set(data.map((letter) => letter.location).filter((loc): loc is string => loc !== undefined)),
         ]
@@ -83,12 +84,15 @@ export class LettersComponent implements OnInit {
           ...new Set(data.map((letter) => letter.childAge).filter((age): age is number => age !== undefined)),
         ]
 
+        // Check if letters are in user's favorites
         const currentUser = this.authService.getCurrentUser()
         if (currentUser) {
           const userId = currentUser.id
 
-            this.favoritesService.getUserFavorites(userId).subscribe({
+          // Get user's favorites and update letter.isFavorite property
+          this.favoritesService.getUserFavorites(userId).subscribe({
             next: (favoriteLetters: Letters[]) => {
+              // Create a set of favorite letter IDs for quick lookup
               const favoriteIds = new Set(favoriteLetters.map((letter) => letter.id))
 
               // Update isFavorite flag on all letters

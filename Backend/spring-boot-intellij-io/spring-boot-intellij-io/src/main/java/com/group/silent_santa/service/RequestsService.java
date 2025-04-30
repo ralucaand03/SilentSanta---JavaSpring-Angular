@@ -19,6 +19,12 @@ public class RequestsService {
     private final RequestsRepository requestsRepository;
 
     public RequestsModel addRequest(UsersModel user, LettersModel letter) {
+        // Check if a request already exists
+        List<RequestsModel> existingRequests = requestsRepository.findByUserAndLetter(user, letter);
+        if (!existingRequests.isEmpty()) {
+            return existingRequests.get(0); // Return the existing request
+        }
+
         RequestsModel request = new RequestsModel();
         request.setUser(user);
         request.setLetter(letter);
@@ -26,6 +32,7 @@ public class RequestsService {
 
         return requestsRepository.save(request);
     }
+
     public boolean acceptRequest(UUID requestId, UsersModel admin) {
         Optional<RequestsModel> optionalRequest = requestsRepository.findById(requestId);
 
@@ -60,6 +67,15 @@ public class RequestsService {
         }
         return false;
     }
+
+    public List<RequestsModel> getRequestsByUser(UsersModel user) {
+        return requestsRepository.findByUser(user);
+    }
+
+    public List<RequestsModel> getRequestsByLetter(LettersModel letter) {
+        return requestsRepository.findByLetter(letter);
+    }
+
     public List<LettersModel> getRequestedLettersByUser(UsersModel user) {
         // Find all requests made by the user
         List<RequestsModel> userRequests = requestsRepository.findByUser(user);
@@ -69,8 +85,26 @@ public class RequestsService {
                 .map(RequestsModel::getLetter)  // Extract the Letter from each Request
                 .collect(Collectors.toList());
     }
-    public List<LettersModel> getAllRequests() {
-        //todo
-        return List.of();
+
+    public List<LettersModel> getAcceptedLettersByUser(UsersModel user) {
+        // Find all accepted requests made by the user
+        List<RequestsModel> acceptedRequests = requestsRepository.findByUserAndStatus(
+                user, RequestsModel.RequestStatus.ACCEPTED);
+
+        // Extract and return the letters associated with those requests
+        return acceptedRequests.stream()
+                .map(RequestsModel::getLetter)
+                .collect(Collectors.toList());
+    }
+
+    public List<LettersModel> getWaitingLettersByUser(UsersModel user) {
+        // Find all waiting requests made by the user
+        List<RequestsModel> waitingRequests = requestsRepository.findByUserAndStatus(
+                user, RequestsModel.RequestStatus.WAITING);
+
+        // Extract and return the letters associated with those requests
+        return waitingRequests.stream()
+                .map(RequestsModel::getLetter)
+                .collect(Collectors.toList());
     }
 }

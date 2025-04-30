@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Favorites } from '../models/favorites.model';
 import { Letters } from '../models/letters.model';
 
@@ -27,5 +27,10 @@ export class FavoritesService {
   
   checkFavorite(userId: string, letterId: string): Observable<{isFavorite: boolean}> {
     return this.http.get<{isFavorite: boolean}>(`${this.baseUrl}/user/${userId}/letter/${letterId}`);
+  }
+  getUserFavoriteCount(userId: string): Observable<number> {
+    return this.getUserFavorites(userId).pipe(
+      map(favorites => favorites.length)
+    );
   }
 }
