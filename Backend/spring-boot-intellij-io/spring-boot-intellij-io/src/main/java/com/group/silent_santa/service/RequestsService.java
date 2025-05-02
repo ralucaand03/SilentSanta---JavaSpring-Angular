@@ -1,12 +1,19 @@
 package com.group.silent_santa.service;
 
+import com.group.silent_santa.model.FavoritesModel;
 import com.group.silent_santa.model.LettersModel;
 import com.group.silent_santa.model.RequestsModel;
 import com.group.silent_santa.model.UsersModel;
+import com.group.silent_santa.repository.UsersRepository;
+import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,12 +25,24 @@ public class RequestsService {
 
     private final RequestsRepository requestsRepository;
 
-    public RequestsModel addRequest(UsersModel user, LettersModel letter) {
-        // Check if a request already exists
-        List<RequestsModel> existingRequests = requestsRepository.findByUserAndLetter(user, letter);
-        if (!existingRequests.isEmpty()) {
-            return existingRequests.get(0); // Return the existing request
+    private final UsersRepository usersRepository;
+    private final LettersRepository lettersRepository;
+    public List<LettersModel> getAllRequests(UUID userId) {
+        return requestsRepository.findRequestLettersByUserId(userId);
+    }
+
+
+    public RequestsModel addRequest(UUID userId, UUID letterId) {
+        if (requestsRepository.existsByUserIdAndLetterId(userId, letterId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Letter is already in favorites");
         }
+
+        UsersModel user = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        LettersModel letter = lettersRepository.findById(letterId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Letter not found"));
+
 
         RequestsModel request = new RequestsModel();
         request.setUser(user);
@@ -31,6 +50,12 @@ public class RequestsService {
         request.setStatus(RequestsModel.RequestStatus.WAITING); // Default status
 
         return requestsRepository.save(request);
+    }
+    public void removeRequest(UUID userId, UUID letterId) {
+        RequestsModel req = requestsRepository.findByUserIdAndLetterId(userId, letterId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Favorite not found"));
+
+        requestsRepository.delete(req);
     }
 
     public boolean acceptRequest(UUID requestId, UsersModel admin) {
@@ -72,6 +97,10 @@ public class RequestsService {
         return requestsRepository.findByUser(user);
     }
 
+    public boolean isRequested(UUID userId, UUID letterId) {
+        return requestsRepository.existsByUserIdAndLetterId(userId, letterId);
+    }
+
     public List<RequestsModel> getRequestsByLetter(LettersModel letter) {
         return requestsRepository.findByLetter(letter);
     }
@@ -106,5 +135,26 @@ public class RequestsService {
         return waitingRequests.stream()
                 .map(RequestsModel::getLetter)
                 .collect(Collectors.toList());
+    }
+    public List<LettersModel> getRequestsForLetterOwner(UsersModel user) {
+        // Get all letters posted by this user
+        List<LettersModel> userLetters = lettersRepository.findByPostedBy(user);
+
+        if (userLetters.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Create a list to store letters that have requests
+        List<LettersModel> lettersWithRequests = new ArrayList<>();
+
+        // For each letter, check if it has requests
+        for (LettersModel letter : userLetters) {
+            List<RequestsModel> letterRequests = requestsRepository.findByLetter(letter);
+            if (!letterRequests.isEmpty()) {
+                lettersWithRequests.add(letter);
+            }
+        }
+
+        return lettersWithRequests;
     }
 }

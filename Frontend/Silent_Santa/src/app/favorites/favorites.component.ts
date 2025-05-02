@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { FavoritesService } from '../services/favorites.service';
+import { RequestsService } from '../services/requests.service';
 
 @Component({
   selector: 'app-letters',
@@ -14,7 +15,7 @@ import { FavoritesService } from '../services/favorites.service';
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   styleUrls: ['./favorites.component.css']
 })
-
+ 
 export class FavoritesComponent implements OnInit {
   handleImageError($event: ErrorEvent) {
     throw new Error('Method not implemented.');
@@ -47,6 +48,7 @@ export class FavoritesComponent implements OnInit {
     private authService: AuthService,
     private lettersService: LettersService,
     private favoritesService: FavoritesService,
+    private requestService: RequestsService,
     private fb: FormBuilder
   ) {
     this.editForm = this.fb.group({
@@ -98,6 +100,38 @@ export class FavoritesComponent implements OnInit {
           console.error("Error fetching favorites:", err)
         },
       })
+                // Get user's requets and update letter.isReq property
+          this.requestService.getUserRequests(userId).subscribe({
+            next: (reqLetters: Letters[]) => { 
+              const reqIds = new Set(reqLetters.map((letter) => letter.id))
+ 
+              this.letters.forEach((letter) => {
+                letter.isRequested = reqIds.has(letter.id)
+              })
+ 
+              
+            },
+            error: (err) => {
+              console.error("Error loading requests:", err) 
+              this.applyFilters()
+            },
+          })
+          // Get user's requets and update letter.isReq property
+          this.requestService.getUserRequests(userId).subscribe({
+            next: (reqLetters: Letters[]) => { 
+              const reqIds = new Set(reqLetters.map((letter) => letter.id))
+ 
+              this.letters.forEach((letter) => {
+                letter.isRequested = reqIds.has(letter.id)
+              })
+ 
+              
+            },
+            error: (err) => {
+              console.error("Error loading requests:", err) 
+              this.applyFilters()
+            },
+          })
     } else {
       this.errorMessage = "Please log in to view your favorite letters."
       this.isLoading = false
@@ -257,36 +291,60 @@ export class FavoritesComponent implements OnInit {
     }
   }
    
+  //REQ 
   requestLetter(letter: Letters): void {
-    if (!letter.isRequested) {
-      const previousState = letter.isRequested;
-      letter.isRequested = true;
-      
-      // Call the service to update on the server
-      this.lettersService.requestLetter(letter.id).subscribe({
-        next: (response) => {
-          this.successMessage = 'Letter requested successfully!';
-          
-          // Clear success message after 3 seconds
+    const currentUser = this.authService.getCurrentUser()
+    if (!currentUser) {
+      this.errorMessage = "You must be logged in to request letters."
+      setTimeout(() => {
+        this.errorMessage = ""
+      }, 3000)
+      return
+    }
+    const userId = currentUser.id
+    const previousState = letter.isRequested
+    letter.isRequested = !letter.isRequested
+
+    if (letter.isRequested) {
+      // Add to requests
+      this.requestService.addRequest(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter Requested!"
           setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
+            this.successMessage = ""
+          }, 3000)
         },
-        error: (err) => {
+        error: (err  ) => {
           // Revert the change if the server update fails
-          letter.isRequested = previousState;
-          this.errorMessage = 'Failed to request letter. Please try again.';
-          console.error('Error requesting letter:', err);
-          
-          // Clear error message after 3 seconds
+          letter.isRequested = previousState
+          this.errorMessage = "Failed to request. Please try again."
+          console.error("Error request:", err)
           setTimeout(() => {
-            this.errorMessage = '';
-          }, 3000);
-        }
-      });
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
+    } else {
+      // Remove from favorites
+      this.requestService.removeRequest(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter removed from requests!"
+          setTimeout(() => {
+            this.successMessage = ""
+          }, 3000)
+        },
+        error: (err ) => {
+          // Revert the change if the server update fails
+          letter.isRequested = previousState
+          this.errorMessage = "Failed to remove from rq. Please try again."
+          console.error("Error removing from rq:", err)
+          setTimeout(() => {
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
     }
   }
- 
   changeStatus(letter: Letters, status: string): void {
     const previousStatus = letter.status;
     letter.status = status;

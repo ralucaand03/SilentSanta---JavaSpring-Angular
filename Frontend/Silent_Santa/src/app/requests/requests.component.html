@@ -1,45 +1,32 @@
 <div class="page">
-    <div class="requests-container">
-      <!-- Header -->
-      <div class="requests-header">
-        <h1 class="page-title">My Letter Requests</h1>
-        <p class="page-description">Track the status of letters you've requested to fulfill.</p>
-      </div>
+  <div class="requests-container">
+    <!-- Header -->
+    <div class="requests-header">
+      <h1 class="page-title">My Letter Requests</h1>
+      <p class="page-description">Track the status of letters you've requested to fulfill.</p>
+    </div>
+    
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+      <div class="spinner"></div>
+      <p>Loading your requests...</p>
+    </div>
+    
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="errorMessage">
+      <p>{{ errorMessage }}</p>
+    </div>
+    
+    <!-- Success Message -->
+    <div class="success-message" *ngIf="successMessage">
+      <p>{{ successMessage }}</p>
+    </div>
+    
+    <!-- User Requests Section -->
+    <div class="section">
+      <h2 class="section-title">My Requested Letters</h2>
       
-      <!-- Loading State -->
-      <div class="loading-state" *ngIf="isLoading">
-        <div class="spinner"></div>
-        <p>Loading your requests...</p>
-      </div>
-      
-      <!-- Error Message -->
-      <div class="error-message" *ngIf="errorMessage">
-        <p>{{ errorMessage }}</p>
-      </div>
-      
-      <!-- Success Message -->
-      <div class="success-message" *ngIf="successMessage">
-        <p>{{ successMessage }}</p>
-      </div>
-      
-      <!-- Tabs -->
-      <div class="requests-tabs">
-        <button 
-          class="tab-button" 
-          [class.active]="activeTab === 'outgoing'"
-          (click)="setActiveTab('outgoing')">
-          My Requests
-        </button>
-        <button 
-          class="tab-button" 
-          [class.active]="activeTab === 'incoming'"
-          (click)="setActiveTab('incoming')">
-          Requests for My Letters
-        </button>
-      </div>
-      
-      <!-- Outgoing Requests (My Requests) -->
-      <div class="requests-list" *ngIf="activeTab === 'outgoing'">
+      <div class="requests-list">
         <div class="requests-empty" *ngIf="userRequests.length === 0 && !isLoading">
           <div class="empty-state">
             <i class="icon-mail-large"></i>
@@ -52,12 +39,12 @@
         <div class="request-card" *ngFor="let request of userRequests">
           <div class="request-header">
             <div class="request-header-content">
-              <h2 class="child-name">{{ request.letter?.childName }}, {{ request.letter?.childAge }}</h2>
+              <h2 class="child-name">{{ request.childName }}, {{ request.childAge }}</h2>
               <div class="request-badges">
-                <span class="gender-badge" [class]="request.letter?.gender">
-                  <i [class]="'icon-' + request.letter?.gender"></i>
+                <span class="gender-badge" [class]="request .gender">
+                  <i [class]="'icon-' + request .gender"></i>
                 </span>
-                <span class="location-badge">{{ request.letter?.location }}</span>
+                <span class="location-badge">{{ request .location }}</span>
                 <span class="status-badge" [class]="request.status.toLowerCase()">
                   {{ request.status }}
                 </span>
@@ -68,7 +55,7 @@
           <div class="request-content">
             <h3 class="wishes-title">Christmas Wishes:</h3>
             <ul class="wishes-list">
-              <li *ngFor="let item of request.letter?.wishList">{{ item }}</li>
+              <li *ngFor="let item of request.wishList">{{ item }}</li>
             </ul>
           </div>
           
@@ -89,9 +76,13 @@
           </div>
         </div>
       </div>
+    </div>
+    
+    <!-- Admin Section - Requests from Users -->
+    <div class="section" *ngIf="isAdmin">
+      <h2 class="section-title">Requested by Users</h2>
       
-      <!-- Incoming Requests (Requests for My Letters) -->
-      <div class="requests-list" *ngIf="activeTab === 'incoming'">
+      <div class="requests-list">
         <div class="requests-empty" *ngIf="letterOwnerRequests.length === 0 && !isLoading">
           <div class="empty-state">
             <i class="icon-mail-large"></i>
@@ -103,12 +94,12 @@
         <div class="request-card" *ngFor="let request of letterOwnerRequests">
           <div class="request-header">
             <div class="request-header-content">
-              <h2 class="child-name">{{ request.letter?.childName }}, {{ request.letter?.childAge }}</h2>
+              <h2 class="child-name">{{ request.childName }}, {{ request.childAge }}</h2>
               <div class="request-badges">
-                <span class="gender-badge" [class]="request.letter?.gender">
-                  <i [class]="'icon-' + request.letter?.gender"></i>
+                <span class="gender-badge" [class]="request.gender">
+                  <i [class]="'icon-' + request.gender"></i>
                 </span>
-                <span class="location-badge">{{ request.letter?.location }}</span>
+                <span class="location-badge">{{ request.location }}</span>
                 <span class="status-badge" [class]="request.status.toLowerCase()">
                   {{ request.status }}
                 </span>
@@ -118,8 +109,13 @@
           
           <div class="request-content">
             <h3 class="requester-info">Requested by:</h3>
-            <p class="requester-name">{{ request.user?.firstName }} {{ request.user?.lastName }}</p>
-            <p class="requester-email">{{ request.user?.email }}</p>
+            <!-- <p class="requester-name">{{ request.firstName }} {{ request.lastName }}</p>
+            <p class="requester-email">{{ request.email }}</p> -->
+            
+            <h3 class="wishes-title">Christmas Wishes:</h3>
+            <ul class="wishes-list">
+              <li *ngFor="let item of request.wishList">{{ item }}</li>
+            </ul>
           </div>
           
           <div class="request-footer">
@@ -137,7 +133,9 @@
             </div>
             <div class="status-message" [class]="request.status.toLowerCase()">
               <ng-container [ngSwitch]="request.status">
-                <span *ngSwitchCase="'WAITING'">This request is waiting for your response</span>
+                <span *ngSwitchCase="'WAITING'">
+                  User requested this letter
+                </span>
                 <span *ngSwitchCase="'ACCEPTED'">You've accepted this request</span>
                 <span *ngSwitchCase="'DENIED'">You've denied this request</span>
               </ng-container>
@@ -147,4 +145,4 @@
       </div>
     </div>
   </div>
-  
+</div>

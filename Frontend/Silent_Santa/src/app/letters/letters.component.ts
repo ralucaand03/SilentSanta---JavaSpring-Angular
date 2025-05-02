@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { FavoritesService } from '../services/favorites.service';
+import { RequestsService } from '../services/requests.service';
 
 @Component({
   selector: 'app-letters',
@@ -15,7 +16,7 @@ import { FavoritesService } from '../services/favorites.service';
   styleUrls: ['./letters.component.css']
 })
 
-export class LettersComponent implements OnInit {
+export class LettersComponent implements OnInit { 
   handleImageError($event: ErrorEvent) {
     throw new Error('Method not implemented.');
 }
@@ -47,6 +48,7 @@ export class LettersComponent implements OnInit {
     private authService: AuthService,
     private lettersService: LettersService,
     private favoritesService: FavoritesService,
+    private requestService: RequestsService,
     private fb: FormBuilder
   ) {
     this.editForm = this.fb.group({
@@ -73,18 +75,15 @@ export class LettersComponent implements OnInit {
 
     this.lettersService.getLetters().subscribe({
       next: (data: Letters[]) => {
-        this.letters = data
-
-        // Extract unique locations and age ranges
+        this.letters = data 
         this.locations = [
           ...new Set(data.map((letter) => letter.location).filter((loc): loc is string => loc !== undefined)),
-        ]
-
+        ] 
         this.ageRanges = [
           ...new Set(data.map((letter) => letter.childAge).filter((age): age is number => age !== undefined)),
         ]
 
-        // Check if letters are in user's favorites
+        // Check if letters are in user's favorites and requests
         const currentUser = this.authService.getCurrentUser()
         if (currentUser) {
           const userId = currentUser.id
@@ -109,11 +108,28 @@ export class LettersComponent implements OnInit {
               this.applyFilters()
             },
           })
+
+         // Get user's requets and update letter.isReq property
+          this.requestService.getUserRequests(userId).subscribe({
+            next: (reqLetters: Letters[]) => { 
+              const reqIds = new Set(reqLetters.map((letter) => letter.id))
+ 
+              this.letters.forEach((letter) => {
+                letter.isRequested = reqIds.has(letter.id)
+              })
+ 
+              
+            },
+            error: (err) => {
+              console.error("Error loading requests:", err) 
+              this.applyFilters()
+            },
+          })   
         } else {
           // No user logged in, just apply filters
           this.applyFilters()
         }
-
+        this.applyFilters()
         this.isLoading = false
       },
       error: (err) => {
@@ -123,6 +139,7 @@ export class LettersComponent implements OnInit {
       },
     })
   }
+
   loadFavoriteStatus(): void {
     const currentUser = this.authService.getCurrentUser()
     if (!currentUser) {
@@ -227,12 +244,9 @@ export class LettersComponent implements OnInit {
         this.errorMessage = ""
       }, 3000)
       return
-    }
-
+    } 
     const userId = currentUser.id
-    const previousState = letter.isFavorite
-
-    // Optimistically update UI
+    const previousState = letter.isFavorite 
     letter.isFavorite = !letter.isFavorite
 
     if (letter.isFavorite) {
@@ -275,34 +289,58 @@ export class LettersComponent implements OnInit {
       })
     }
   }
-   
+  //REQ  
   requestLetter(letter: Letters): void {
-    if (!letter.isRequested) {
-      const previousState = letter.isRequested;
-      letter.isRequested = true;
-      
-      // Call the service to update on the server
-      this.lettersService.requestLetter(letter.id).subscribe({
-        next: (response) => {
-          this.successMessage = 'Letter requested successfully!';
-          
-          // Clear success message after 3 seconds
+    const currentUser = this.authService.getCurrentUser()
+    if (!currentUser) {
+      this.errorMessage = "You must be logged in to request letters."
+      setTimeout(() => {
+        this.errorMessage = ""
+      }, 3000)
+      return
+    }
+    const userId = currentUser.id
+    const previousState = letter.isRequested
+    letter.isRequested = !letter.isRequested
+
+    if (letter.isRequested) {
+      // Add to requests
+      this.requestService.addRequest(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter Requested!"
           setTimeout(() => {
-            this.successMessage = '';
-          }, 3000);
+            this.successMessage = ""
+          }, 3000)
         },
-        error: (err) => {
+        error: (err  ) => {
           // Revert the change if the server update fails
-          letter.isRequested = previousState;
-          this.errorMessage = 'Failed to request letter. Please try again.';
-          console.error('Error requesting letter:', err);
-          
-          // Clear error message after 3 seconds
+          letter.isRequested = previousState
+          this.errorMessage = "Failed to request. Please try again."
+          console.error("Error request:", err)
           setTimeout(() => {
-            this.errorMessage = '';
-          }, 3000);
-        }
-      });
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
+    } else {
+      // Remove from favorites
+      this.requestService.removeRequest(userId, letter.id).subscribe({
+        next: () => {
+          this.successMessage = "Letter removed from requests!"
+          setTimeout(() => {
+            this.successMessage = ""
+          }, 3000)
+        },
+        error: (err ) => {
+          // Revert the change if the server update fails
+          letter.isRequested = previousState
+          this.errorMessage = "Failed to remove from rq. Please try again."
+          console.error("Error removing from rq:", err)
+          setTimeout(() => {
+            this.errorMessage = ""
+          }, 3000)
+        },
+      })
     }
   }
  
@@ -459,6 +497,5 @@ export class LettersComponent implements OnInit {
 
   return 'assets/letters/' + imagePath;
 }
-
-
+ 
 }

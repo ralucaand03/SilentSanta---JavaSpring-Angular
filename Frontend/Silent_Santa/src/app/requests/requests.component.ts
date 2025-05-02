@@ -1,8 +1,10 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
-import  { RequestsService, Request } from '../services/requests.service'
-import  { AuthService } from "../services/auth.service"
+import   { RequestsService } from "../services/requests.service"
+import   { AuthService } from "../services/auth.service"
+import   { LettersService } from "../services/letters.service"
+import { Letters } from "../models/letters.model"
 
 @Component({
   selector: "app-requests",
@@ -13,11 +15,11 @@ import  { AuthService } from "../services/auth.service"
 })
 export class RequestsComponent implements OnInit {
   // Requests data
-  userRequests: Request[] = []
-  letterOwnerRequests: Request[] = []
+  userRequests: Letters[] = []
+  letterOwnerRequests: Letters[] = []
 
   // UI state
-  activeTab: "outgoing" | "incoming" = "outgoing"
+  isAdmin = false
   isLoading = false
   errorMessage = ""
   successMessage = ""
@@ -25,14 +27,19 @@ export class RequestsComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private requestsService: RequestsService,
+    private lettersService: LettersService,
   ) {}
 
   ngOnInit(): void {
+    this.checkUserRole()
     this.loadRequests()
   }
 
-  setActiveTab(tab: "outgoing" | "incoming"): void {
-    this.activeTab = tab
+  checkUserRole(): void { 
+    const currentUser = this.authService.getCurrentUser()
+    if (currentUser?.role === "ADMIN") {
+      this.isAdmin = true
+    }
   }
 
   loadRequests(): void {
@@ -46,12 +53,14 @@ export class RequestsComponent implements OnInit {
       return
     }
 
-    const userId = currentUser.id
-
-    // Load outgoing requests (requests made by the user)
+    const userId = currentUser.id 
     this.requestsService.getUserRequests(userId).subscribe({
-      next: (requests) => {
-        this.userRequests = requests
+      next: (requests) => { 
+        if (!this.isAdmin) {
+          this.userRequests = requests.filter((req) => req.status === "WAITING")
+        } else {
+          this.userRequests = requests
+        }
         this.isLoading = false
       },
       error: (err) => {
@@ -60,26 +69,25 @@ export class RequestsComponent implements OnInit {
         console.error("Error loading user requests:", err)
       },
     })
-
-    // Load incoming requests (requests for letters posted by the user)
-    this.requestsService.getLetterOwnerRequests(userId).subscribe({
-      next: (requests) => {
-        this.letterOwnerRequests = requests
-      },
-      error: (err) => {
-        console.error("Error loading letter owner requests:", err)
-      },
-    })
+     if (this.isAdmin) {
+      this.requestsService.getLetterOwnerRequests(userId).subscribe({
+        next: (requests) => {
+          this.letterOwnerRequests = requests
+        },
+        error: (err) => {
+          console.error("Error loading letter owner requests:", err)
+        },
+      })
+    }
   }
 
-  cancelRequest(request: Request): void {
+  cancelRequest(request: Letters): void {
     if (confirm("Are you sure you want to cancel this request?")) {
-      this.requestsService.deleteRequest(request.id).subscribe({
+      this.requestsService.updateRequestStatus(request.id, "DENIED").subscribe({
         next: () => {
           this.userRequests = this.userRequests.filter((r) => r.id !== request.id)
           this.successMessage = "Request cancelled successfully!"
-
-          // Clear success message after 3 seconds
+  
           setTimeout(() => {
             this.successMessage = ""
           }, 3000)
@@ -87,8 +95,7 @@ export class RequestsComponent implements OnInit {
         error: (err) => {
           this.errorMessage = "Failed to cancel request. Please try again."
           console.error("Error cancelling request:", err)
-
-          // Clear error message after 3 seconds
+  
           setTimeout(() => {
             this.errorMessage = ""
           }, 3000)
@@ -96,14 +103,17 @@ export class RequestsComponent implements OnInit {
       })
     }
   }
-
-  updateRequestStatus(request: Request, status: "ACCEPTED" | "DENIED"): void {
+  
+  updateRequestStatus(request: Letters, status: "ACCEPTED" | "DENIED"): void {
     this.requestsService.updateRequestStatus(request.id, status).subscribe({
       next: (updatedRequest) => {
-        // Update the request in the array
         const index = this.letterOwnerRequests.findIndex((r) => r.id === request.id)
         if (index !== -1) {
           this.letterOwnerRequests[index] = updatedRequest
+        }
+
+        if (status === "ACCEPTED") {
+          this.updateLetterStatus(request.id, "WORKING")
         }
 
         this.successMessage = `Request ${status.toLowerCase()} successfully!`
@@ -121,6 +131,17 @@ export class RequestsComponent implements OnInit {
         setTimeout(() => {
           this.errorMessage = ""
         }, 3000)
+      },
+    })
+  }
+
+  updateLetterStatus(letterId: string, status: string): void {
+    this.lettersService.changeStatus(letterId, status).subscribe({
+      next: () => {
+        console.log(`Letter status updated to ${status}`)
+      },
+      error: (err) => {
+        console.error("Error updating letter status:", err)
       },
     })
   }
