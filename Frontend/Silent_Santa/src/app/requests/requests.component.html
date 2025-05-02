@@ -1,148 +1,274 @@
 <div class="page">
-  <div class="requests-container">
-    <!-- Header -->
-    <div class="requests-header">
-      <h1 class="page-title">My Letter Requests</h1>
-      <p class="page-description">Track the status of letters you've requested to fulfill.</p>
-    </div>
-    
-    <!-- Loading State -->
-    <div class="loading-state" *ngIf="isLoading">
-      <div class="spinner"></div>
-      <p>Loading your requests...</p>
-    </div>
-    
-    <!-- Error Message -->
-    <div class="error-message" *ngIf="errorMessage">
-      <p>{{ errorMessage }}</p>
-    </div>
-    
-    <!-- Success Message -->
-    <div class="success-message" *ngIf="successMessage">
-      <p>{{ successMessage }}</p>
-    </div>
-    
-    <!-- User Requests Section -->
-    <div class="section">
-      <h2 class="section-title">My Requested Letters</h2>
+  <div class="letters-container">
+    <!-- Sidebar Filters -->
+    <aside class="filters-sidebar">
+      <div class="filters-header">
+        <h2>Filters</h2>
+        <button class="clear-filters-button" (click)="clearFilters()">Clear All</button>
+      </div>
       
-      <div class="requests-list">
-        <div class="requests-empty" *ngIf="userRequests.length === 0 && !isLoading">
-          <div class="empty-state">
-            <i class="icon-mail-large"></i>
-            <h3>No letter requests</h3>
-            <p>You haven't requested any letters yet.</p>
-            <button class="primary-button" routerLink="/letters">Browse Letters</button>
-          </div>
-        </div>
-        
-        <div class="request-card" *ngFor="let request of userRequests">
-          <div class="request-header">
-            <div class="request-header-content">
-              <h2 class="child-name">{{ request.childName }}, {{ request.childAge }}</h2>
-              <div class="request-badges">
-                <span class="gender-badge" [class]="request .gender">
-                  <i [class]="'icon-' + request .gender"></i>
-                </span>
-                <span class="location-badge">{{ request .location }}</span>
-                <span class="status-badge" [class]="request.status.toLowerCase()">
-                  {{ request.status }}
-                </span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="request-content">
-            <h3 class="wishes-title">Christmas Wishes:</h3>
-            <ul class="wishes-list">
-              <li *ngFor="let item of request.wishList">{{ item }}</li>
-            </ul>
-          </div>
-          
-          <div class="request-footer">
-            <button 
-              class="cancel-button" 
-              *ngIf="request.status === 'WAITING'"
-              (click)="cancelRequest(request)">
-              Cancel Request
-            </button>
-            <div class="status-message" [class]="request.status.toLowerCase()">
-              <ng-container [ngSwitch]="request.status">
-                <span *ngSwitchCase="'WAITING'">Your request is pending approval</span>
-                <span *ngSwitchCase="'ACCEPTED'">Your request has been accepted!</span>
-                <span *ngSwitchCase="'DENIED'">Your request has been denied</span>
-              </ng-container>
-            </div>
-          </div>
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search by name or item..." 
+          (input)="updateSearch($event)"
+          [value]="searchQuery">
+        <i class="icon-search"></i>
+      </div>
+      
+      <div class="filter-section">
+        <h3>School</h3>
+        <div class="filter-options">
+          <button 
+            class="filter-option" 
+            [class.active]="selectedLocation === null" 
+            (click)="filterByLocation(null)">
+            All Schools
+          </button>
+          <button 
+            *ngFor="let location of locations" 
+            class="filter-option" 
+            [class.active]="selectedLocation === location" 
+            (click)="filterByLocation(location)">
+            {{ location }}
+          </button>
         </div>
       </div>
-    </div>
-    
-    <!-- Admin Section - Requests from Users -->
-    <div class="section" *ngIf="isAdmin">
-      <h2 class="section-title">Requested by Users</h2>
       
-      <div class="requests-list">
-        <div class="requests-empty" *ngIf="letterOwnerRequests.length === 0 && !isLoading">
-          <div class="empty-state">
-            <i class="icon-mail-large"></i>
-            <h3>No incoming requests</h3>
-            <p>You don't have any requests for your letters yet.</p>
-          </div>
+      <div class="filter-section">
+        <h3>Gender</h3>
+        <div class="filter-options">
+          <button 
+            class="filter-option" 
+            [class.active]="selectedGender === null" 
+            (click)="filterByGender(null)">
+            All
+          </button>
+          <button 
+            class="filter-option gender-boy" 
+            [class.active]="selectedGender === 'boy'" 
+            (click)="filterByGender('boy')">
+            <i class="icon-boy"></i> Boys
+          </button>
+          <button 
+            class="filter-option gender-girl" 
+            [class.active]="selectedGender === 'girl'" 
+            (click)="filterByGender('girl')">
+            <i class="icon-girl"></i> Girls
+          </button>
         </div>
-        
-        <div class="request-card" *ngFor="let request of letterOwnerRequests">
-          <div class="request-header">
-            <div class="request-header-content">
+      </div>
+      
+      <div class="filter-section">
+        <h3>Status</h3>
+        <div class="filter-options">
+          <button 
+            class="filter-option" 
+            [class.active]="selectedStatus === null" 
+            (click)="filterByStatus(null)">
+            All Status
+          </button>
+          <button 
+            class="filter-option status-waiting" 
+            [class.active]="selectedStatus === 'WAITING'" 
+            (click)="filterByStatus('WAITING')">
+            Waiting
+          </button>
+          <button 
+            class="filter-option status-accepted" 
+            [class.active]="selectedStatus === 'ACCEPTED'" 
+            (click)="filterByStatus('ACCEPTED')">
+            Accepted
+          </button>
+          <button 
+            class="filter-option status-denied" 
+            [class.active]="selectedStatus === 'DENIED'" 
+            (click)="filterByStatus('DENIED')">
+            Denied
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-stats">
+        <p>Showing <span>{{ filteredRequests.length }}</span> of <span>{{ allRequests.length }}</span> requests</p>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="letters-content">
+      <!-- User Requests Section -->
+      <div class="letters-header">
+        <h1 class="page-title">My Letter Requests</h1>
+        <p class="page-description">Track the status of letters you've requested to fulfill.</p>
+      </div>
+      
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading your requests...</p>
+      </div>
+      
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+      </div>
+      
+      <!-- Success Message -->
+      <div class="success-message" *ngIf="successMessage">
+        <p>{{ successMessage }}</p>
+      </div>
+      
+      <div class="letters-grid">
+        <div 
+          *ngFor="let request of filteredRequests" 
+          class="letter-card" 
+          [class.boy]="request.gender === 'boy'"
+          [class.girl]="request.gender === 'girl'"
+          (click)="toggleRequestView(request, $event)">
+          
+          <div class="letter-header">
+            <div class="letter-header-content">
               <h2 class="child-name">{{ request.childName }}, {{ request.childAge }}</h2>
-              <div class="request-badges">
+              <div class="letter-badges">
                 <span class="gender-badge" [class]="request.gender">
                   <i [class]="'icon-' + request.gender"></i>
                 </span>
                 <span class="location-badge">{{ request.location }}</span>
-                <span class="status-badge" [class]="request.status.toLowerCase()">
-                  {{ request.status }}
-                </span>
               </div>
             </div>
+            <div class="letter-snowflake"></div>
           </div>
           
-          <div class="request-content">
-            <h3 class="requester-info">Requested by:</h3>
-            <!-- <p class="requester-name">{{ request.firstName }} {{ request.lastName }}</p>
-            <p class="requester-email">{{ request.email }}</p> -->
-            
+          <div class="letter-content" *ngIf="!request.showImage">
             <h3 class="wishes-title">Christmas Wishes:</h3>
             <ul class="wishes-list">
               <li *ngFor="let item of request.wishList">{{ item }}</li>
             </ul>
+            <div class="letter-hint">Double-click to see letter</div>
           </div>
           
-          <div class="request-footer">
-            <div class="action-buttons" *ngIf="request.status === 'WAITING'">
-              <button 
-                class="accept-button" 
-                (click)="updateRequestStatus(request, 'ACCEPTED')">
-                Accept
-              </button>
-              <button 
-                class="deny-button" 
-                (click)="updateRequestStatus(request, 'DENIED')">
-                Deny
-              </button>
-            </div>
-            <div class="status-message" [class]="request.status.toLowerCase()">
-              <ng-container [ngSwitch]="request.status">
-                <span *ngSwitchCase="'WAITING'">
-                  User requested this letter
-                </span>
-                <span *ngSwitchCase="'ACCEPTED'">You've accepted this request</span>
-                <span *ngSwitchCase="'DENIED'">You've denied this request</span>
-              </ng-container>
-            </div>
+          <div class="letter-image" *ngIf="request.showImage">
+            <img [src]="getImageSrc(request.imagePath)" alt="Child's handwritten letter" class="letter-img">
+            <p class="image-hint">Double-click to see wishes</p>
+          </div>
+          
+          <div class="letter-footer">
+            <button 
+              class="favorite-button" 
+              [class.active]="request.status === 'ACCEPTED'" 
+              [disabled]="true">
+              <i class="icon-heart"></i>
+            </button>
+            
+            <button 
+              class="request-button" 
+              [disabled]="request.status !== 'WAITING'"
+              (click)="cancelRequest(request); $event.stopPropagation()">
+              <i class="icon-mail"></i>
+              <span>{{ request.status === 'WAITING' ? 'Cancel Request' : getStatusText(request.status) }}</span>
+            </button>
           </div>
         </div>
       </div>
-    </div>
+      
+      <div class="letters-empty" *ngIf="filteredRequests.length === 0 && !isLoading">
+        <div class="empty-state">
+          <i class="icon-search-large"></i>
+          <h3>No requests found</h3>
+          <p>You haven't requested any letters yet or no requests match your filters.</p>
+          <button class="primary-button" routerLink="/letters">Browse Letters</button>
+        </div>
+      </div>
+      
+      <!-- Admin Section - Requests from Users -->
+      <div class="admin-section" *ngIf="isAdmin">
+        <div class="section-divider"></div>
+        
+        <div class="letters-header">
+          <h1 class="page-title">Requested by Users</h1>
+          <p class="page-description">Manage requests from users who want to fulfill your letters.</p>
+        </div>
+        
+        <div class="letters-grid">
+          <div 
+            *ngFor="let request of filteredOwnerRequests" 
+            class="letter-card" 
+            [class.boy]="request.letter.gender === 'boy'"
+            [class.girl]="request.letter.gender === 'girl'"
+            (click)="toggleRequestView(request, $event)">
+            
+            <div class="letter-header">
+              <div class="letter-header-content">
+                <h2 class="child-name">{{ request.letter.childName }}, {{ request.letter.childAge }}</h2>
+                <div class="letter-badges">
+                  <span class="gender-badge" [class]="request.letter.gender">
+                    <i [class]="'icon-' + request.letter.gender"></i>
+                  </span>
+                  <span class="location-badge">{{ request.letter.location }}</span>
+                </div>
+              </div>
+              <div class="letter-snowflake"></div>
+            </div>
+            
+            <div class="letter-content" *ngIf="!request.letter.showImage">
+              <div class="requester-info-box">
+                <h3 class="requester-info">Requested by:</h3>
+                <p class="requester-name">{{ request.requester.firstname }}</p>
+                <p class="requester-name">{{ request.requester.lastname }}</p>
+                <p class="requester-email">{{ request.requester.email }}</p>
+              </div>
+              
+              <h3 class="wishes-title">Christmas Wishes:</h3>
+              <ul class="wishes-list">
+                <li *ngFor="let item of request.letter.wishList">{{ item }}</li>
+              </ul>
+              <div class="letter-hint">Double-click to see letter</div>
+            </div>
+            
+            <div class="letter-image" *ngIf="request.letter.showImage">
+              <img [src]="getImageSrc(request.letter.imagePath)" alt="Child's handwritten letter" class="letter-img">
+              <p class="image-hint">Double-click to see wishes</p>
+            </div>
+            
+            <div class="letter-footer admin-footer">
+              <div class="cute-buttons" *ngIf="request.status === 'WAITING'">
+                <button 
+                  class="cute-button accept-button" 
+                  (click)="updateRequestStatus(request, 'ACCEPTED'); $event.stopPropagation()">
+                  <i class="icon-check"></i>
+                  <span>Accept</span>
+                </button>
+                <button 
+                  class="cute-button deny-button" 
+                  (click)="updateRequestStatus(request, 'DENIED'); $event.stopPropagation()">
+                  <i class="icon-x"></i>
+                  <span>Deny</span>
+                </button>
+                <button 
+                  class="cute-button chat-button" 
+                  (click)="chatWithRequester(request); $event.stopPropagation()">
+                  <i class="icon-message"></i>
+                  <span>Chat</span>
+                </button>
+              </div>
+              <div class="status-message" [class]="request.status.toLowerCase()" *ngIf="request.status !== 'WAITING'">
+                <ng-container [ngSwitch]="request.status">
+                  <span *ngSwitchCase="'ACCEPTED'">You've accepted this request</span>
+                  <span *ngSwitchCase="'DENIED'">You've denied this request</span>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="letters-empty" *ngIf="filteredOwnerRequests.length === 0 && !isLoading">
+          <div class="empty-state">
+            <i class="icon-search-large"></i>
+            <h3>No incoming requests</h3>
+            <p>You don't have any requests for your letters yet or no requests match your filters.</p>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </div>

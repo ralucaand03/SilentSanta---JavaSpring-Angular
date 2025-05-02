@@ -1,9 +1,6 @@
 package com.group.silent_santa.service;
 
-import com.group.silent_santa.model.FavoritesModel;
-import com.group.silent_santa.model.LettersModel;
-import com.group.silent_santa.model.RequestsModel;
-import com.group.silent_santa.model.UsersModel;
+import com.group.silent_santa.model.*;
 import com.group.silent_santa.repository.UsersRepository;
 import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
@@ -136,7 +133,8 @@ public class RequestsService {
                 .map(RequestsModel::getLetter)
                 .collect(Collectors.toList());
     }
-    public List<LettersModel> getRequestsForLetterOwner(UsersModel user) {
+    // Add this method to RequestsService.java
+    public List<LetterRequestDTO> getLetterRequestsForOwner(UsersModel user) {
         // Get all letters posted by this user
         List<LettersModel> userLetters = lettersRepository.findByPostedBy(user);
 
@@ -144,17 +142,39 @@ public class RequestsService {
             return new ArrayList<>();
         }
 
-        // Create a list to store letters that have requests
-        List<LettersModel> lettersWithRequests = new ArrayList<>();
+        // Create a list to store letter requests
+        List<LetterRequestDTO> letterRequests = new ArrayList<>();
 
-        // For each letter, check if it has requests
+        // For each letter, get all requests and convert to DTOs
         for (LettersModel letter : userLetters) {
-            List<RequestsModel> letterRequests = requestsRepository.findByLetter(letter);
-            if (!letterRequests.isEmpty()) {
-                lettersWithRequests.add(letter);
+            List<RequestsModel> requests = requestsRepository.findByLetter(letter);
+            for (RequestsModel request : requests) {
+                letterRequests.add(LetterRequestDTO.fromRequestModel(request));
             }
         }
 
-        return lettersWithRequests;
+        return letterRequests;
     }
+    //    public List<LettersModel> getRequestsForLetterOwner(UsersModel user) {
+//        // Get all letters posted by this user
+//        List<LettersModel> userLetters = lettersRepository.findByPostedBy(user);
+//
+//        if (userLetters.isEmpty()) {
+//            return new ArrayList<>();
+//        }
+//
+//        // Create a list to store letters that have requests
+//        List<LettersModel> lettersWithRequests = new ArrayList<>();
+//
+//        // For each letter, check if it has requests
+//        for (LettersModel letter : userLetters) {
+//            List<RequestsModel> letterRequests = requestsRepository.findByLetter(letter);
+//            if (!letterRequests.isEmpty()) {
+//                lettersWithRequests.add(letter);
+//            }
+//        }
+//
+//        return lettersWithRequests;
+//    }
+
 }

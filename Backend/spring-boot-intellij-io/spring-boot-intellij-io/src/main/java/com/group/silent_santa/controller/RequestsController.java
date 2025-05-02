@@ -1,9 +1,6 @@
 package com.group.silent_santa.controller;
 
-import com.group.silent_santa.model.FavoritesModel;
-import com.group.silent_santa.model.LettersModel;
-import com.group.silent_santa.model.RequestsModel;
-import com.group.silent_santa.model.UsersModel;
+import com.group.silent_santa.model.*;
 import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
 import com.group.silent_santa.repository.UsersRepository;
@@ -42,14 +39,15 @@ public class RequestsController {
     }
 
     // Get all requests for letters posted by a user
+// Update this method in RequestsController.java
     @GetMapping("/letter-owner/{userId}")
     public ResponseEntity<?> getLetterOwnerRequests(@PathVariable UUID userId) {
         Optional<UsersModel> userOpt = usersRepository.findById(userId);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
-        List<LettersModel> allRequests = requestsService.getRequestsForLetterOwner(userOpt.get());
-        return ResponseEntity.ok(allRequests);
+        List<LetterRequestDTO> letterRequests = requestsService.getLetterRequestsForOwner(userOpt.get());
+        return ResponseEntity.ok(letterRequests);
     }
 
 
