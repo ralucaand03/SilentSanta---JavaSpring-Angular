@@ -291,7 +291,17 @@ export class RequestsComponent implements OnInit {
 
     return "assets/letters/" + imagePath
   }
+  sendNotificationToUser(request: Letters, status: string): void {
+    const notification = {
+      message: `Your request for letter ${request.childName} has been ${status}`,
+      userId: request, // Assuming userId is available
+      timestamp: new Date().toISOString(),
+      read: false,
+    };
 
+    // Send notification via the notification service
+    //this.notificationService.sendNotification(notification);
+  }
   chatWithRequester(request: LetterRequest): void {
     // This is a placeholder for the chat functionality
     // alert(`Opening chat with ${request.requester.name || "requester"}...`)

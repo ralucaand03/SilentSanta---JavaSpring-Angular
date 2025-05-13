@@ -1,13 +1,15 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import  { AuthService } from "../services/auth.service"
-import  { User } from "../models/user.model"
+import { AuthService } from "../services/auth.service"
+import { User } from "../models/user.model"
 import { Router } from "@angular/router"
-import type { Subscription } from "rxjs"
+import   { Subscription } from "rxjs"
+import { NotificationBellComponent } from "../notification/notification.component" // Import the notification component
+
 @Component({
   selector: "app-header",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NotificationBellComponent], // Add NotificationBellComponent to imports
   templateUrl: "./header.component.html",
   styleUrls: ["./header.component.css"],
 })
@@ -24,8 +26,9 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
   ) {}
+  
   ngOnInit(): void {
-      this.userSub = this.authService.currentUser$.subscribe((user) => {
+    this.userSub = this.authService.currentUser$.subscribe((user) => {
       this.isAuthenticated = !!user
       this.currentUser = user
       this.isAdmin = user?.role === "ADMIN"
@@ -60,11 +63,8 @@ export class HeaderComponent implements OnInit {
   // Handle logout
   logOut(): void {
     this.isAuthenticated = false
-      this.authService.logout()
-      this.router.navigate(["/login"])
-      console.log("User logged out")
-      // Redirect to login page or home page
-      // this.router.navigate(['/login']);
+    this.authService.logout()
+    this.router.navigate(["/login"])
+    console.log("User logged out")
   }
-     
 }

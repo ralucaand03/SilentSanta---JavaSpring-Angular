@@ -1,0 +1,35 @@
+.chat-dialog {
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    width: 400px;
+  }
+  
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .dialog-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+  }
+  
+  .close-button:hover {
+    color: #333;
+  }
+  
+  .dialog-content {
+    flex: 1;
+    overflow: hidden;
+  }

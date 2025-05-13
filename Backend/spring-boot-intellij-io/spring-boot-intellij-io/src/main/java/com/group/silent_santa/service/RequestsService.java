@@ -1,11 +1,11 @@
 package com.group.silent_santa.service;
 
+import com.group.silent_santa.DTO.LetterRequestDTO;
 import com.group.silent_santa.model.*;
 import com.group.silent_santa.repository.UsersRepository;
 import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

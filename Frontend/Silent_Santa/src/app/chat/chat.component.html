@@ -1,0 +1,49 @@
+<div class="chat-container">
+    <div class="chat-header">
+      <h3>Chat with {{ recipientName }}</h3>
+      <div class="connection-status" [class.connected]="isConnected">
+        {{ isConnected ? 'Connected' : 'Connecting...' }}
+      </div>
+    </div>
+    
+    <div class="messages-container">
+      <div *ngIf="messages.length === 0" class="no-messages">
+        No messages yet. Start the conversation!
+      </div>
+      
+      <div *ngFor="let msg of messages" 
+           class="message" 
+           [class.sent]="msg.senderId === currentUserId" 
+           [class.received]="msg.senderId !== currentUserId">
+        <div class="message-header">
+          <span class="sender-name">{{ msg.senderId === currentUserId ? 'You' : msg.senderName }}</span>
+          <span class="timestamp">{{ msg.timestamp | date:'short' }}</span>
+        </div>
+        <div class="message-content">
+          {{ msg.content }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="message-form">
+      <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+        <div class="form-group">
+          <textarea 
+            formControlName="message" 
+            placeholder="Type your message..." 
+            [disabled]="!isConnected"
+            rows="3">
+          </textarea>
+          <div *ngIf="messageForm.get('message')?.invalid && messageForm.get('message')?.touched" class="error-message">
+            Message is required and must be less than 500 characters.
+          </div>
+        </div>
+        <button 
+          type="submit" 
+          [disabled]="messageForm.invalid || !isConnected" 
+          class="send-button">
+          Send
+        </button>
+      </form>
+    </div>
+  </div>

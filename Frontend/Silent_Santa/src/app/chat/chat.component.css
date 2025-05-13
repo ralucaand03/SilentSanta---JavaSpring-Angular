@@ -1,0 +1,143 @@
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #46ac97;
+    color: white;
+  }
+  
+  .chat-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .connection-status {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .connection-status.connected {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .messages-container {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #f9f9f9;
+    height: 300px;
+  }
+  
+  .no-messages {
+    text-align: center;
+    color: #999;
+    margin: auto;
+  }
+  
+  .message {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 12px;
+    position: relative;
+  }
+  
+  .message.sent {
+    align-self: flex-end;
+    background-color: #e3f2fd;
+    border-bottom-right-radius: 0;
+  }
+  
+  .message.received {
+    align-self: flex-start;
+    background-color: white;
+    border-bottom-left-radius: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+  }
+  
+  .sender-name {
+    font-weight: bold;
+    color: #46ac97;
+  }
+  
+  .timestamp {
+    color: #999;
+  }
+  
+  .message-content {
+    word-break: break-word;
+  }
+  
+  .message-form {
+    padding: 15px;
+    background-color: white;
+    border-top: 1px solid #eee;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: none;
+    font-family: inherit;
+  }
+  
+  textarea:focus {
+    outline: none;
+    border-color: #46ac97;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 5px;
+  }
+  
+  .send-button {
+    background-color: #46ac97;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .send-button:hover:not([disabled]) {
+    background-color: #3a9080;
+  }
+  
+  .send-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }

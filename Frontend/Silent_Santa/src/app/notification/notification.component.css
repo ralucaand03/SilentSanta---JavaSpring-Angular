@@ -1,0 +1,131 @@
+.notification {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.icon-bell {
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ef6e6e;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 320px;
+  max-height: 400px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  background-color: #46ac97;
+  color: white;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.notification-header button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.notification-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.notification-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #f9f9f9;
+}
+
+.notification-item.unread {
+  background-color: #e3f2fd;
+}
+
+.notification-item.unread:hover {
+  background-color: #bbdefb;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-message {
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: #757575;
+}
+
+.no-notifications {
+  padding: 16px;
+  text-align: center;
+  color: #757575;
+  font-size: 0.875rem;
+}
+
+.notification-snackbar {
+  background-color: #323232;
+  color: white;
+}
+
+.notification-chat_message {
+  border-left: 4px solid #2196f3;
+}
+
+.notification-request_update {
+  border-left: 4px solid #ff9800;
+}
+
+.notification-system {
+  border-left: 4px solid #4caf50;
+}
+
+@media (max-width: 768px) {
+  .notification-dropdown {
+    width: 280px;
+    right: -70px;
+  }
+}

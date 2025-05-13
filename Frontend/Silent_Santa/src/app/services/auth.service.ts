@@ -119,17 +119,10 @@ export class AuthService {
     }
   }
 
-  // private mapRoleToBackend(role: string): string {
-  //   switch (role.toUpperCase()) {
-  //     case "GIVER":
-  //       return "USER";
-  //     case "HELPER":
-  //       return "ADMIN";
-  //     default:
-  //       return "USER";
-  //   }
-  // }
-
+  // Add this method to your existing AuthService
+  public getChatHistory(userId1: string, userId2: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/api/chat/history/${userId1}/${userId2}`);
+  }
   signup(user: SignUp): Observable<SignUp> {
     const userToSend = {
       ...user,

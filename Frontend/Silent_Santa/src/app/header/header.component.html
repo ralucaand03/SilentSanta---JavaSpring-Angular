@@ -15,6 +15,9 @@
     </div>
     
     <div class="navbar-right">
+      <!-- Add notification bell here -->
+      <app-notification *ngIf="isAuthenticated" class="notification-bell-container"></app-notification>
+      
       <img src="assets/Silent_Santa.png" alt="User Icon" class="user-icon" />
       
       <!-- Account Button with Dropdown Toggle -->

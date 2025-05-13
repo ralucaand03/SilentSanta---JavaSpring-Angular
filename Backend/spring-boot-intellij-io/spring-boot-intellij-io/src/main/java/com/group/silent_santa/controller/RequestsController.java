@@ -1,12 +1,11 @@
 package com.group.silent_santa.controller;
 
+import com.group.silent_santa.DTO.LetterRequestDTO;
 import com.group.silent_santa.model.*;
 import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
 import com.group.silent_santa.repository.UsersRepository;
-import com.group.silent_santa.service.FavoritesService;
 import com.group.silent_santa.service.RequestsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
