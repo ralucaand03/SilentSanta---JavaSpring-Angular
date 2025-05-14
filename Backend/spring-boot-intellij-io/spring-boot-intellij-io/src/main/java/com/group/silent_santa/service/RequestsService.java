@@ -155,6 +155,7 @@ public class RequestsService {
 
         return letterRequests;
     }
+    
     //    public List<LettersModel> getRequestsForLetterOwner(UsersModel user) {
 //        // Get all letters posted by this user
 //        List<LettersModel> userLetters = lettersRepository.findByPostedBy(user);

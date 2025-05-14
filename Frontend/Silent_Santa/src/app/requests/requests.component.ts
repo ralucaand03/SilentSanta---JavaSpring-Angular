@@ -1,10 +1,10 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
-import { RequestsService } from "../services/requests.service"
-import { AuthService } from "../services/auth.service"
-import { Letters } from "../models/letters.model"
-import { LetterRequest } from "../models/letter-request.model"
+import   { RequestsService } from "../services/requests.service"
+import   { AuthService } from "../services/auth.service"
+import   { Letters } from "../models/letters.model"
+import   { LetterRequest } from "../models/letter-request.model"
 
 @Component({
   selector: "app-requests",
@@ -160,9 +160,16 @@ export class RequestsComponent implements OnInit {
     })
   }
 
+  // Simplified method to handle request status updates - notification is now handled by backend
   updateRequestStatus(request: LetterRequest, status: "ACCEPTED" | "DENIED"): void {
-    this.requestsService.updateRequestStatus(request.requestId, status).subscribe({
-      next: () => {
+    const currentUser = this.authService.getCurrentUser()
+    if (!currentUser) {
+      this.errorMessage = "You must be logged in to update request status."
+      return
+    }
+
+    this.requestsService.updateRequestStatus(request.requestId, status, currentUser).subscribe({
+      next: (response) => {
         // Update in arrays
         const updateInArray = (arr: LetterRequest[]) => {
           const index = arr.findIndex((r) => r.requestId === request.requestId)
@@ -174,6 +181,7 @@ export class RequestsComponent implements OnInit {
         updateInArray(this.letterOwnerRequests)
         updateInArray(this.filteredOwnerRequests)
 
+        // Display success message
         this.successMessage = `Request ${status.toLowerCase()}.`
         setTimeout(() => {
           this.successMessage = ""
@@ -181,10 +189,31 @@ export class RequestsComponent implements OnInit {
       },
       error: (err) => {
         console.error(`Error updating request status to ${status}:`, err)
-        this.errorMessage = `Failed to ${status.toLowerCase()} request. Please try again.`
-        setTimeout(() => {
-          this.errorMessage = ""
-        }, 3000)
+
+        // Check if it's actually a successful response with text content
+        if (err.status === 200 && err.error && typeof err.error === "string") {
+          // This is actually a success case with text response
+          const updateInArray = (arr: LetterRequest[]) => {
+            const index = arr.findIndex((r) => r.requestId === request.requestId)
+            if (index !== -1) {
+              arr[index].status = status
+            }
+          }
+
+          updateInArray(this.letterOwnerRequests)
+          updateInArray(this.filteredOwnerRequests)
+
+          this.successMessage = `Request ${status.toLowerCase()}.`
+          setTimeout(() => {
+            this.successMessage = ""
+          }, 3000)
+        } else {
+          // This is a real error
+          this.errorMessage = `Failed to ${status.toLowerCase()} request. Please try again.`
+          setTimeout(() => {
+            this.errorMessage = ""
+          }, 3000)
+        }
       },
     })
   }
@@ -291,21 +320,10 @@ export class RequestsComponent implements OnInit {
 
     return "assets/letters/" + imagePath
   }
-  sendNotificationToUser(request: Letters, status: string): void {
-    const notification = {
-      message: `Your request for letter ${request.childName} has been ${status}`,
-      userId: request, // Assuming userId is available
-      timestamp: new Date().toISOString(),
-      read: false,
-    };
 
-    // Send notification via the notification service
-    //this.notificationService.sendNotification(notification);
-  }
   chatWithRequester(request: LetterRequest): void {
     // This is a placeholder for the chat functionality
     // alert(`Opening chat with ${request.requester.name || "requester"}...`)
-
     // You could navigate to a chat page or open a chat modal
     // For example:
     // this.router.navigate(['/chat'], { queryParams: { userId: request.requester.id } });

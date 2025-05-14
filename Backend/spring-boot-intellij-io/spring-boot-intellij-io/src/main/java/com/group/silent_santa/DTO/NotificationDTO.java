@@ -17,6 +17,8 @@ public class NotificationDTO {
     private UUID userId;
     private LocalDateTime timestamp;
     private NotificationType type;
+    private boolean read;
+
 
     public enum NotificationType {
         CHAT_MESSAGE, REQUEST_UPDATE, SYSTEM

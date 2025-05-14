@@ -1,12 +1,11 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, type Observable } from "rxjs"
-import { Client, type IMessage } from "@stomp/stompjs"
-// Fix the import to use default import instead of namespace import
+import { BehaviorSubject, Observable } from "rxjs"
+import { Client, IMessage } from "@stomp/stompjs"
 import SockJS from "sockjs-client"
-import   { AuthService } from "./auth.service"
-import   { HttpClient } from "@angular/common/http"
-import   { ChatMessage } from "../models/chat-message.model"
-import   { Notification } from "../models/notification.model"
+import { AuthService } from "./auth.service"
+import { HttpClient } from "@angular/common/http"
+import { ChatMessage } from "../models/chat-message.model"
+import { Notification } from "../models/notification.model"
 
 const API_URL = "http://localhost:8080"
 
@@ -28,7 +27,7 @@ export class WebsocketService {
     private http: HttpClient,
   ) {
     this.client = new Client({
-      // Fix the SockJS instantiation
+      // Use SockJS for WebSocket connection
       webSocketFactory: () => new SockJS(`${API_URL}/ws`),
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
@@ -82,6 +81,7 @@ export class WebsocketService {
   private onMessageReceived(message: IMessage): void {
     try {
       const chatMessage: ChatMessage = JSON.parse(message.body)
+      // Prevent duplicate messages
       this.messageSubject.next([...this.messageSubject.value, chatMessage])
     } catch (error) {
       console.error("Error parsing chat message:", error)
@@ -91,39 +91,44 @@ export class WebsocketService {
   private onNotificationReceived(message: IMessage): void {
     try {
       const notification: Notification = JSON.parse(message.body)
+      // Prevent duplicate notifications
       this.notificationSubject.next([...this.notificationSubject.value, notification])
     } catch (error) {
       console.error("Error parsing notification:", error)
     }
   }
 
+  // Send notifications to the specific user
   public sendNotification(notification: Notification): void {
     if (this.client.active) {
       this.client.publish({
-        destination: "/app/sendMessage",
+        destination: "/sendMessage",
         body: JSON.stringify(notification),
       })
     }
   }
 
+  // Send broadcast notifications to all users
   public sendBroadcastNotification(notification: Notification): void {
     if (this.client.active) {
       this.client.publish({
-        destination: "/app/sendBroadcast",
+        destination: "/sendBroadcast",
         body: JSON.stringify(notification),
       })
     }
   }
 
+  // Send a chat message
   public sendMessage(message: ChatMessage): void {
     if (this.client.active) {
       this.client.publish({
-        destination: "/app/chat.sendMessage",
+        destination: "/chat.sendMessage",
         body: JSON.stringify(message),
       })
     }
   }
 
+  // Get chat history between two users
   public getChatHistory(userId1: string, userId2: string): Observable<ChatMessage[]> {
     return this.http.get<ChatMessage[]>(`${API_URL}/api/chat/history/${userId1}/${userId2}`)
   }

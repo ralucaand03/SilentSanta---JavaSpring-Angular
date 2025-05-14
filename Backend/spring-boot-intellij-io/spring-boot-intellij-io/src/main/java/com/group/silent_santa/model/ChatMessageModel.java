@@ -30,9 +30,9 @@ public class ChatMessageModel {
     @JoinColumn(name = "recipient_id", nullable = false)
     private UsersModel recipient;
 
-    @Column(nullable = false)
-    private LocalDateTime timestamp;
+    @Column(name = "is_read", nullable = false)
+    private boolean read;
 
-    @Column(nullable = false)
-    private boolean read = false;
+    @Column(name = "timestamp", nullable = false)
+    private java.time.LocalDateTime timestamp;
 }
