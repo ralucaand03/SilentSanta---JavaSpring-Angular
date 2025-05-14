@@ -44,9 +44,9 @@
   text-decoration: none;
   color: #ffffff;
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   transition: background-color 0.3s ease, color 0.3s ease;
-  padding: 12px 25px;
+  padding: 12px 20px;
   border-radius: 30px;
   box-sizing: border-box;
 }
@@ -115,20 +115,24 @@
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
   border: none;
 }
-
+ 
 .dropdown-menu {
   position: absolute;
-  margin-top: 210px;
+  top: 100%;
+  right: auto;
   left: 0;
+  margin-top: 10px;
+  z-index: 1002;
+  
   background-color: #ef6e6e;
   color: #ffffff;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  width: 220px;
-  z-index: 1000;
+  width: 200px;
+   
   padding: 12px 0;
   opacity: 0;
-  visibility: hidden;
+   
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 

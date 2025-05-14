@@ -1,8 +1,8 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { AuthService } from "../services/auth.service"
-import { User } from "../models/user.model"
-import { Router } from "@angular/router"
+import   { AuthService } from "../services/auth.service"
+import   { User } from "../models/user.model"
+import   { Router } from "@angular/router"
 import   { Subscription } from "rxjs"
 import { NotificationBellComponent } from "../notification/notification.component" // Import the notification component
 
@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
   ) {}
-  
+
   ngOnInit(): void {
     this.userSub = this.authService.currentUser$.subscribe((user) => {
       this.isAuthenticated = !!user

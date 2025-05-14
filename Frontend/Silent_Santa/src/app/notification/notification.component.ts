@@ -31,6 +31,9 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
     this.unreadCountSubscription = this.notificationService.unreadCount$.subscribe((count) => {
       this.unreadCount = count
     })
+
+    // Add some test notifications if needed
+    // this.addTestNotifications();
   }
 
   @HostListener("document:click", ["$event"])
@@ -43,6 +46,7 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
   toggleNotifications(): void {
     this.showNotifications = !this.showNotifications
     if (this.showNotifications && this.unreadCount > 0) {
+      // Only mark as read when opening the dropdown
       this.markAllAsRead()
     }
   }
@@ -53,6 +57,23 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
   markAllAsRead(): void {
     this.notificationService.markAllAsRead()
+  }
+
+  // For testing purposes
+  private addTestNotifications(): void {
+    if (this.notifications.length === 0) {
+      const testNotification: Notification = {
+        id: "1",
+        message: "Welcome to Silent Santa!",
+        userId: "123",
+        timestamp: new Date(),
+        type: "SYSTEM",
+        read: false,
+      }
+
+      this.notificationService["notificationsSubject"].next([testNotification])
+      this.notificationService["unreadCountSubject"].next(1)
+    }
   }
 
   ngOnDestroy(): void {

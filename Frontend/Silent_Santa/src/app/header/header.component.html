@@ -21,7 +21,7 @@
       <img src="assets/Silent_Santa.png" alt="User Icon" class="user-icon" />
       
       <!-- Account Button with Dropdown Toggle -->
-      <button class="account-button" (click)="toggleDropdown()">Account</button>
+      <button class="account-button" (click)="toggleDropdown()">Account
       
       <!-- Dropdown Menu for Account -->
       <div class="dropdown-menu" [class.open]="dropdownOpen">
@@ -31,7 +31,7 @@
           <li *ngIf="!isAuthenticated"><a href="/login">Login</a></li>
           <li *ngIf="!isAuthenticated"><a href="/signup">Sign Up</a></li>
         </ul>
-      </div>
+      </div></button>
     </div>
   </nav>
 </header>
