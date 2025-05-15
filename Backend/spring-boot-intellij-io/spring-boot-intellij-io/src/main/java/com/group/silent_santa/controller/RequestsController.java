@@ -3,10 +3,10 @@ package com.group.silent_santa.controller;
 import com.group.silent_santa.DTO.LetterRequestDTO;
 import com.group.silent_santa.DTO.NotificationDTO;
 import com.group.silent_santa.model.*;
-import com.group.silent_santa.repository.LettersRepository;
 import com.group.silent_santa.repository.RequestsRepository;
 import com.group.silent_santa.repository.UsersRepository;
 import com.group.silent_santa.service.RequestsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,20 +23,21 @@ import java.util.UUID;
 @RequestMapping("/api/requests")
 @CrossOrigin(origins = "*")
 public class RequestsController {
-
+    @Autowired
     private RequestsService requestsService;
+    @Autowired
     private UsersRepository usersRepository;
-    private LettersRepository lettersRepository;
+    @Autowired
     private RequestsRepository requestsRepository;
+    @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
     public RequestsController(RequestsService requestsService, RequestsRepository requestsRepository,
-                              UsersRepository usersRepository, LettersRepository lettersRepository,
+                              UsersRepository usersRepository,
                               SimpMessagingTemplate messagingTemplate) {
         this.requestsService = requestsService;
         this.requestsRepository = requestsRepository;
         this.usersRepository = usersRepository;
-        this.lettersRepository = lettersRepository;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -64,17 +65,18 @@ public class RequestsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
 
+
     @PutMapping("/{requestId}/accept")
     public ResponseEntity<?> acceptedRequest(@PathVariable UUID requestId, @RequestBody UsersModel admin) {
         boolean isAccepted = requestsService.acceptRequest(requestId, admin);
-
         if (isAccepted) {
-            // Get the request to access user information
             Optional<RequestsModel> requestOpt = requestsRepository.findById(requestId);
             if (requestOpt.isPresent()) {
                 RequestsModel request = requestOpt.get();
 
-                // Create and send notification
+                System.out.println("Request accepted. Sending notification to user: " + request.getUser().getId());
+
+                // Create notification
                 NotificationDTO notification = new NotificationDTO();
                 notification.setId(UUID.randomUUID());
                 notification.setUserId(request.getUser().getId());
@@ -83,17 +85,35 @@ public class RequestsController {
                 notification.setType(NotificationDTO.NotificationType.REQUEST_UPDATE);
                 notification.setRead(false);
 
-                // Send notification via WebSocket
-                messagingTemplate.convertAndSendToUser(
-                        request.getUser().getId().toString(),
-                        "/queue/notifications",
-                        notification
-                );
+                // Convert UUID to string for messaging
+                String userIdStr = request.getUser().getId().toString();
 
-                System.out.println("Sent acceptance notification to user: " + request.getUser().getId());
+                try {
+                    // More explicit destination path
+                    String destination = "/user/" + userIdStr + "/queue/notifications";
+                    System.out.println("Sending to destination: " + destination);
+
+                    // Try direct path (alternative method)
+                    messagingTemplate.convertAndSend("/queue/notifications." + userIdStr, notification);
+
+                    // Also try with convertAndSendToUser
+                    messagingTemplate.convertAndSendToUser(
+                            userIdStr,
+                            "/queue/notifications",
+                            notification
+                    );
+
+                    // For debugging: Broadcast to all users as well
+                    messagingTemplate.convertAndSend("/topic/notifications", notification);
+
+                    System.out.println("Notification sent successfully");
+                } catch (Exception e) {
+                    System.err.println("Error sending notification: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
 
-            // Return JSON response instead of plain text
+            // Return JSON response
             Map<String, String> response = new HashMap<>();
             response.put("status", "success");
             response.put("message", "Request Accepted");
@@ -106,10 +126,11 @@ public class RequestsController {
         }
     }
 
+
     @PutMapping("/{requestId}/deny")
     public ResponseEntity<?> deniedRequest(@PathVariable UUID requestId, @RequestBody UsersModel admin) {
         boolean isDenied = requestsService.denyRequest(requestId, admin);
-
+//here send msg to user " ... accepted your request ..."
         if (isDenied) {
             // Get the request to access user information
             Optional<RequestsModel> requestOpt = requestsRepository.findById(requestId);

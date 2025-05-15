@@ -90,49 +90,11 @@ public class RequestsService {
         return false;
     }
 
-    public List<RequestsModel> getRequestsByUser(UsersModel user) {
-        return requestsRepository.findByUser(user);
-    }
-
     public boolean isRequested(UUID userId, UUID letterId) {
         return requestsRepository.existsByUserIdAndLetterId(userId, letterId);
     }
 
-    public List<RequestsModel> getRequestsByLetter(LettersModel letter) {
-        return requestsRepository.findByLetter(letter);
-    }
 
-    public List<LettersModel> getRequestedLettersByUser(UsersModel user) {
-        // Find all requests made by the user
-        List<RequestsModel> userRequests = requestsRepository.findByUser(user);
-
-        // Extract and return the letters associated with those requests
-        return userRequests.stream()
-                .map(RequestsModel::getLetter)  // Extract the Letter from each Request
-                .collect(Collectors.toList());
-    }
-
-    public List<LettersModel> getAcceptedLettersByUser(UsersModel user) {
-        // Find all accepted requests made by the user
-        List<RequestsModel> acceptedRequests = requestsRepository.findByUserAndStatus(
-                user, RequestsModel.RequestStatus.ACCEPTED);
-
-        // Extract and return the letters associated with those requests
-        return acceptedRequests.stream()
-                .map(RequestsModel::getLetter)
-                .collect(Collectors.toList());
-    }
-
-    public List<LettersModel> getWaitingLettersByUser(UsersModel user) {
-        // Find all waiting requests made by the user
-        List<RequestsModel> waitingRequests = requestsRepository.findByUserAndStatus(
-                user, RequestsModel.RequestStatus.WAITING);
-
-        // Extract and return the letters associated with those requests
-        return waitingRequests.stream()
-                .map(RequestsModel::getLetter)
-                .collect(Collectors.toList());
-    }
     // Add this method to RequestsService.java
     public List<LetterRequestDTO> getLetterRequestsForOwner(UsersModel user) {
         // Get all letters posted by this user
@@ -156,26 +118,5 @@ public class RequestsService {
         return letterRequests;
     }
     
-    //    public List<LettersModel> getRequestsForLetterOwner(UsersModel user) {
-//        // Get all letters posted by this user
-//        List<LettersModel> userLetters = lettersRepository.findByPostedBy(user);
-//
-//        if (userLetters.isEmpty()) {
-//            return new ArrayList<>();
-//        }
-//
-//        // Create a list to store letters that have requests
-//        List<LettersModel> lettersWithRequests = new ArrayList<>();
-//
-//        // For each letter, check if it has requests
-//        for (LettersModel letter : userLetters) {
-//            List<RequestsModel> letterRequests = requestsRepository.findByLetter(letter);
-//            if (!letterRequests.isEmpty()) {
-//                lettersWithRequests.add(letter);
-//            }
-//        }
-//
-//        return lettersWithRequests;
-//    }
 
 }

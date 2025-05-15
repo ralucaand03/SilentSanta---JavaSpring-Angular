@@ -2,7 +2,7 @@
 /* Main container layout */
 .letters-container {
     display: flex;
-    max-width: 1550px;
+   width: 98%;
     margin: 20px auto 50px;
     padding: 0 20px;
     gap: 30px;
