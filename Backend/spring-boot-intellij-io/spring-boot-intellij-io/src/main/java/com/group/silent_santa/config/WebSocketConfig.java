@@ -14,21 +14,16 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/queue", "/topic");
+        config.enableSimpleBroker("/topic");
         config.setApplicationDestinationPrefixes("/app");
-        config.setUserDestinationPrefix("/user");
-
-        // Set the user registry selector for proper user message routing
-        config.setPreservePublishOrder(true);
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("*")  // More permissive for development
+                .setAllowedOrigins("http://localhost:4200")
                 .withSockJS();
     }
 }

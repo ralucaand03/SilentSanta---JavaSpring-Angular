@@ -1,7 +1,6 @@
 package com.group.silent_santa.controller;
 
 import com.group.silent_santa.DTO.LetterRequestDTO;
-import com.group.silent_santa.DTO.NotificationDTO;
 import com.group.silent_santa.model.*;
 import com.group.silent_santa.repository.RequestsRepository;
 import com.group.silent_santa.repository.UsersRepository;
@@ -65,107 +64,37 @@ public class RequestsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
 
-
     @PutMapping("/{requestId}/accept")
     public ResponseEntity<?> acceptedRequest(@PathVariable UUID requestId, @RequestBody UsersModel admin) {
         boolean isAccepted = requestsService.acceptRequest(requestId, admin);
         if (isAccepted) {
-            Optional<RequestsModel> requestOpt = requestsRepository.findById(requestId);
-            if (requestOpt.isPresent()) {
-                RequestsModel request = requestOpt.get();
-
-                System.out.println("Request accepted. Sending notification to user: " + request.getUser().getId());
-
-                // Create notification
-                NotificationDTO notification = new NotificationDTO();
-                notification.setId(UUID.randomUUID());
-                notification.setUserId(request.getUser().getId());
-                notification.setMessage("Your request for letter from " + request.getLetter().getChildName() + " has been accepted.");
-                notification.setTimestamp(LocalDateTime.now());
-                notification.setType(NotificationDTO.NotificationType.REQUEST_UPDATE);
-                notification.setRead(false);
-
-                // Convert UUID to string for messaging
-                String userIdStr = request.getUser().getId().toString();
-
-                try {
-                    // More explicit destination path
-                    String destination = "/user/" + userIdStr + "/queue/notifications";
-                    System.out.println("Sending to destination: " + destination);
-
-                    // Try direct path (alternative method)
-                    messagingTemplate.convertAndSend("/queue/notifications." + userIdStr, notification);
-
-                    // Also try with convertAndSendToUser
-                    messagingTemplate.convertAndSendToUser(
-                            userIdStr,
-                            "/queue/notifications",
-                            notification
-                    );
-
-                    // For debugging: Broadcast to all users as well
-                    messagingTemplate.convertAndSend("/topic/notifications", notification);
-
-                    System.out.println("Notification sent successfully");
-                } catch (Exception e) {
-                    System.err.println("Error sending notification: " + e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-
-            // Return JSON response
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "success");
-            response.put("message", "Request Accepted");
-            return ResponseEntity.ok(response);
+            System.out.println("Request accepted and notification sent.");
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "success",
+                    "message", "Request accepted and notification sent."
+            ));
         } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "error");
-            response.put("message", "Failed to Accept Request");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "failure",
+                    "message", "Request not found or could not be accepted."
+            ));
         }
     }
 
-
     @PutMapping("/{requestId}/deny")
-    public ResponseEntity<?> deniedRequest(@PathVariable UUID requestId, @RequestBody UsersModel admin) {
-        boolean isDenied = requestsService.denyRequest(requestId, admin);
-//here send msg to user " ... accepted your request ..."
+     public ResponseEntity<?> deniedRequest(@PathVariable UUID requestId, @RequestBody UsersModel admin) {
+         boolean isDenied = requestsService.denyRequest(requestId, admin) ;
         if (isDenied) {
-            // Get the request to access user information
-            Optional<RequestsModel> requestOpt = requestsRepository.findById(requestId);
-            if (requestOpt.isPresent()) {
-                RequestsModel request = requestOpt.get();
-
-                // Create and send notification
-                NotificationDTO notification = new NotificationDTO();
-                notification.setId(UUID.randomUUID());
-                notification.setUserId(request.getUser().getId());
-                notification.setMessage("Your request for letter from " + request.getLetter().getChildName() + " has been denied.");
-                notification.setTimestamp(LocalDateTime.now());
-                notification.setType(NotificationDTO.NotificationType.SYSTEM);
-                notification.setRead(false);
-
-                // Send notification via WebSocket
-                messagingTemplate.convertAndSendToUser(
-                        request.getUser().getId().toString(),
-                        "/queue/notifications",
-                        notification
-                );
-
-                System.out.println("Sent denial notification to user: " + request.getUser().getId());
-            }
-
-            // Return JSON response instead of plain text
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "success");
-            response.put("message", "Request Denied");
-            return ResponseEntity.ok(response);
+            System.out.println("Request denied and notification sent.");
+            return ResponseEntity.ok().body(Map.of(
+                    "status", "success",
+                    "message", "Request denied and notification sent."
+            ));
         } else {
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "error");
-            response.put("message", "Failed to Deny Request");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of(
+                    "status", "failure",
+                    "message", "Request not found or could not be accepted."
+            ));
         }
     }
 

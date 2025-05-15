@@ -77,7 +77,7 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 500;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
 }
 
 .notification-header button {
@@ -86,7 +86,7 @@
   color: #ffffff;
   cursor: pointer;
   font-size: 0.875rem;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
   transition: opacity 0.2s;
 }
 
@@ -106,7 +106,7 @@
   text-align: center;
   color: #757575;
   font-size: 0.95rem;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
 }
 
 /* Notification item */
@@ -115,6 +115,8 @@
   border-bottom: 1px solid #f5f5f5;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: flex;
+  align-items: flex-start;
 }
 
 .notification-item:hover {
@@ -130,22 +132,73 @@
   background-color: #e0f2ef;
 }
 
+/* Notification icon */
+.notification-icon {
+  margin-right: 12px;
+  padding-top: 2px;
+}
+
+.notification-icon svg {
+  color: #555;
+}
+
+.icon-chat_message {
+  color: #4a6fa5 !important;
+}
+
+.icon-request_update {
+  color: #d9a441 !important;
+}
+
+.icon-system {
+  color: #46ac97 !important;
+}
+
+/* Notification content */
 .notification-content {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
-.notification-message {
-  font-size: 0.9rem;
-  margin-bottom: 6px;
+.notification-title {
+  font-size: 0.95rem;
+  margin-bottom: 4px;
   color: #333;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 500;
+}
+
+.notification-status {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-family: "Comfortaa", sans-serif;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-right: auto;
+}
+
+.status-accepted {
+  background-color: #e3f7ed;
+  color: #2a9d8f;
+}
+
+.status-waiting {
+  background-color: #fff8e6;
+  color: #e9c46a;
+}
+
+.status-denied {
+  background-color: #feeaea;
+  color: #e76f51;
 }
 
 .notification-time {
   font-size: 0.75rem;
   color: #757575;
-  font-family: 'Comfortaa', sans-serif;
+  font-family: "Comfortaa", sans-serif;
 }
 
 /* Responsive styles */
@@ -154,7 +207,7 @@
     width: 280px;
     right: -70px;
   }
-  
+
   .bell-icon {
     width: 22px;
     height: 22px;

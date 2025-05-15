@@ -1,8 +1,8 @@
-export interface Notification {
-  id: string
-  message: string
-  userId: string
-  timestamp: Date
+export interface Notification { 
   type: "CHAT_MESSAGE" | "REQUEST_UPDATE" | "SYSTEM"
-  read?: boolean
+  userId: string
+  letterTitle: string
+  status: "ACCEPTED" | "WAITING"| "DENIED"
+  timestamp: number
+   
 }

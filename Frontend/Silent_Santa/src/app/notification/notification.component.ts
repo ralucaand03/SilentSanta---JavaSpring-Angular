@@ -1,13 +1,19 @@
-// 1. Update the notification.component.ts to add debugging and ensure proper initialization
-
-import { Component, OnInit, OnDestroy, HostListener } from "@angular/core"
-import { NotificationService } from "../services/notification.service"
-import { Notification } from "../models/notification.model"
+import { Component, type OnInit, type OnDestroy, HostListener } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
-import { Subscription } from "rxjs"
+import { BehaviorSubject, type Subscription } from "rxjs"
+ 
+import { WebSocketNotif  } from "../services/websocketnotif.service"
 import { AuthService } from "../services/auth.service"
-import { WebsocketService } from "../services/websocket.service"
+ 
+// Updated Notification model
+export interface Notification {
+  type: "CHAT_MESSAGE" | "REQUEST_UPDATE" | "SYSTEM"
+  userId: string
+  letterTitle: string
+  status: "ACCEPTED" | "WAITING" | "DENIED"
+  timestamp: number
+}
 
 @Component({
   selector: "app-notification",
@@ -17,81 +23,41 @@ import { WebsocketService } from "../services/websocket.service"
   styleUrls: ["./notification.component.css"],
 })
 export class NotificationBellComponent implements OnInit, OnDestroy {
-  private notificationsSubscription: Subscription | null = null
-  private unreadCountSubscription: Subscription | null = null
-  private websocketConnectionSubscription: Subscription | null = null
-  
+  private websocketNotificationSubscription: Subscription | null = null
+  private unreadCountSubject = new BehaviorSubject<number>(0)
+
   notifications: Notification[] = []
-  unreadCount = 0
   showNotifications = false
   isConnected = false
+  viewedNotifications: Set<string> = new Set() // Track viewed notifications by unique identifier
 
   constructor(
-    private notificationService: NotificationService, 
-    private websocketService: WebsocketService,
-    private authService: AuthService
+    private websocketNotifService: WebSocketNotif,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     // Check user is logged in
-    const currentUser = this.authService.getCurrentUser();
+    const currentUser = this.authService.getCurrentUser()
     if (!currentUser) {
-      console.warn('NotificationComponent: No user is logged in');
+      console.warn("NotificationComponent: No user is logged in")
     } else {
-      console.log('NotificationComponent: User logged in with ID:', currentUser.id);
+      console.log("NotificationComponent: User logged in with ID:", currentUser.id)
     }
-    
-    // Subscribe to websocket connection status
-    this.websocketConnectionSubscription = this.websocketService.connected$.subscribe(connected => {
-      console.log('WebSocket connection status:', connected ? 'connected' : 'disconnected');
-      this.isConnected = connected;
-      
-      // If connection is established, ensure we're properly subscribed
-      if (connected) {
-        // Force reconnect to ensure proper subscriptions
-        this.websocketService.disconnect();
-        setTimeout(() => this.websocketService.connect(), 500);
-      }
-    });
-    
-    // Subscribe to notifications
-    this.notificationsSubscription = this.notificationService.notifications$.subscribe((notifications) => {
-      console.log('NotificationComponent: Received notifications update:', notifications);
-      this.notifications = notifications;
-    });
 
-    // Subscribe to unread count
-    this.unreadCountSubscription = this.notificationService.unreadCount$.subscribe((count) => {
-      console.log('NotificationComponent: Unread count updated:', count);
-      this.unreadCount = count;
-    });
+    // Subscribe to notifications from the WebSocketNotifService
+    this.websocketNotificationSubscription = this.websocketNotifService.notifications$.subscribe((notification) => {
+      if (notification) {
+        console.log("NotificationComponent: Received new notification:", notification)
+        // Add the new notification to the list
+        this.notifications = [notification, ...this.notifications]
+        // Update unread count
+        this.updateUnreadCount()
+      }
+    })
 
     // Ensure WebSocket is connected
-    this.websocketService.connect();
-    
-    // Add a test notification after a delay to verify the component works
-    setTimeout(() => this.addTestNotification(), 3000);
-  }
-
-  addTestNotification(): void {
-    const testNotification: Notification = {
-      id: crypto.randomUUID(),
-      message: "This is a test notification",
-      userId: this.authService.getCurrentUser()?.id || "unknown",
-      timestamp: new Date(),
-      type: "SYSTEM",
-      read: false,
-    };
-    
-    console.log('Adding test notification:', testNotification);
-    this.notificationService['notificationsSubject'].next([
-      ...this.notificationService['notificationsSubject'].value,
-      testNotification
-    ]);
-    
-    // Update unread count
-    const currentCount = this.notificationService['unreadCountSubject'].value;
-    this.notificationService['unreadCountSubject'].next(currentCount + 1);
+    this.websocketNotifService.connect()
   }
 
   @HostListener("document:click", ["$event"])
@@ -109,26 +75,87 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
     }
   }
 
-  markAsRead(notification: Notification): void {
-    console.log('Marking notification as read:', notification.id);
-    this.notificationService.markAsRead(notification.id)
+  // Create a unique identifier for a notification
+  private getNotificationIdentifier(notification: Notification): string {
+    return `${notification.userId}-${notification.type}-${notification.letterTitle}-${notification.timestamp}`
   }
 
+  // Mark a notification as viewed
+  markAsViewed(notification: Notification): void {
+    const id = this.getNotificationIdentifier(notification)
+    console.log("Marking notification as viewed:", id)
+    this.viewedNotifications.add(id)
+    this.updateUnreadCount()
+  }
+
+  // Mark all notifications as viewed
   markAllAsRead(): void {
-    console.log('Marking all notifications as read');
-    this.notificationService.markAllAsRead()
+    console.log("Marking all notifications as viewed")
+    this.notifications.forEach((notification) => {
+      this.viewedNotifications.add(this.getNotificationIdentifier(notification))
+    })
+    this.updateUnreadCount()
+  }
+
+  // Update the unread count based on viewed notifications
+  private updateUnreadCount(): void {
+    const unreadCount = this.notifications.filter(
+      (notification) => !this.viewedNotifications.has(this.getNotificationIdentifier(notification)),
+    ).length
+    this.unreadCountSubject.next(unreadCount)
+  }
+
+  // Check if a notification has been viewed
+  isViewed(notification: Notification): boolean {
+    return this.viewedNotifications.has(this.getNotificationIdentifier(notification))
+  }
+
+  // Get unread count
+  get unreadCount(): number {
+    return this.unreadCountSubject.value
+  }
+
+  // Get appropriate icon based on notification type
+  getNotificationIcon(type: string): string {
+    switch (type) {
+      case "CHAT_MESSAGE":
+        return "message-circle"
+      case "REQUEST_UPDATE":
+        return "file-text"
+      case "SYSTEM":
+        return "bell"
+      default:
+        return "info"
+    }
+  }
+
+  // Get appropriate status class
+  getStatusClass(status: string): string {
+    switch (status) {
+      case "ACCEPTED":
+        return "status-accepted"
+      case "WAITING":
+        return "status-waiting"
+      case "DENIED":
+        return "status-denied"
+      default:
+        return ""
+    }
+  }
+
+  // Format timestamp to readable date
+  formatTimestamp(timestamp: number): string {
+    return new Date(timestamp).toLocaleString()
   }
 
   reconnectWebsocket(): void {
-    console.log('Manually reconnecting WebSocket');
-    this.websocketService.disconnect();
-    setTimeout(() => this.websocketService.connect(), 500);
+    console.log("Manually reconnecting WebSocket")
+    this.websocketNotifService.disconnect()
+    setTimeout(() => this.websocketNotifService.connect(), 500)
   }
 
   ngOnDestroy(): void {
-    console.log('NotificationComponent: Destroying component');
-    this.notificationsSubscription?.unsubscribe()
-    this.unreadCountSubscription?.unsubscribe()
-    this.websocketConnectionSubscription?.unsubscribe()
+    console.log("NotificationComponent: Destroying component")
+    this.websocketNotificationSubscription?.unsubscribe()
   }
 }

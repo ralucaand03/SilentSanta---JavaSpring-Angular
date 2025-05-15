@@ -5,6 +5,7 @@ import   { User } from "../models/user.model"
 import   { Router } from "@angular/router"
 import   { Subscription } from "rxjs"
 import { NotificationBellComponent } from "../notification/notification.component" // Import the notification component
+import { WebSocketNotif } from "../services/websocketnotif.service"
 
 @Component({
   selector: "app-header",
@@ -20,11 +21,13 @@ export class HeaderComponent implements OnInit {
   mobileMenuOpen = false
   isMobile = false
   private userSub: Subscription | null = null
+  private notificationSub: Subscription | null = null
   currentUser: User | null = null
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private websocketnotifService : WebSocketNotif
   ) {}
 
   ngOnInit(): void {
@@ -39,6 +42,10 @@ export class HeaderComponent implements OnInit {
     // Listen for window resize events
     window.addEventListener("resize", () => {
       this.checkScreenSize()
+    })
+
+    this.notificationSub = this.websocketnotifService.notifications$.subscribe((notification) => {
+      console.log("Received in HEADER");
     })
   }
 

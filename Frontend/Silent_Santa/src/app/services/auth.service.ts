@@ -14,7 +14,7 @@ import { throwError } from "rxjs"
 })
 export class AuthService {
   private baseUrl = "http://localhost:8080/api/users"
-  private currentUserSubject = new BehaviorSubject<User | null>(null)
+  currentUserSubject = new BehaviorSubject<User | null>(null)
   public currentUser$ = this.currentUserSubject.asObservable()
   private tokenExpirationTimer: any
 

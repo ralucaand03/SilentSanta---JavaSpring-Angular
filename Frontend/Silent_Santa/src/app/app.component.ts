@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from "./footer/footer.component";
-import { WebsocketService } from './services/websocket.service';
+import { WebSocketNotif } from './services/websocketnotif.service';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   title = 'Silent_Santa';
   
   constructor(
-    private websocketService: WebsocketService,
+    private websocketService: WebSocketNotif,
     private authService: AuthService
   ) {}
   
