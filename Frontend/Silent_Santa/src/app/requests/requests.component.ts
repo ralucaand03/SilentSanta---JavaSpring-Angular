@@ -70,10 +70,11 @@ export class RequestsComponent implements OnInit {
     const userId = currentUser.id
 
     // Fetch user's requests
-    this.requestsService.getUserRequests(userId).subscribe({
+    this.requestsService.getUserWaitingRequests(userId).subscribe({
       next: (requests: Letters[]) => {
         this.userRequests = requests
-        this.filteredRequests = [...requests]
+        // Only show WAITING requests in the My Letter Requests section
+        this.filteredRequests = requests.filter((request) => request.status === "WAITING") 
         this.allRequests = [...requests]
 
         // Extract unique locations for filtering

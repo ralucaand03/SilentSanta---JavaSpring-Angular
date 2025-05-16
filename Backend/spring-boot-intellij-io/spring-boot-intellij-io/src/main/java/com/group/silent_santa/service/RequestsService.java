@@ -31,6 +31,7 @@ public class RequestsService {
         return requestsRepository.findRequestLettersByUserId(userId);
     }
 
+
     public RequestsModel addRequest(UUID userId, UUID letterId) {
         if (requestsRepository.existsByUserIdAndLetterId(userId, letterId)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Letter is already in requests");

@@ -42,6 +42,9 @@ export class RequestsService {
   getUserRequests(userId: string): Observable<Letters[]> {
     return this.http.get<Letters[]>(`${this.baseUrl}/user/${userId}`)
   }
+  getUserWaitingRequests(userId: string): Observable<Letters[]> {
+    return this.http.get<Letters[]>(`${this.baseUrl}/user/${userId}/waiting`)
+  }
 
   addRequest(userId: string, letterId: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/user/${userId}/letter/${letterId}`, {})

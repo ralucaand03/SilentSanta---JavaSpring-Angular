@@ -46,7 +46,24 @@ public class RequestsController {
         List<LettersModel> req = requestsService.getAllRequests(userId);
         return ResponseEntity.ok(req);
     }
+    // Get all WAITING requests made by a user
+    @GetMapping("/user/{userId}/waiting")
+    public ResponseEntity<?> getAllWaitingRequests(@PathVariable UUID userId) {
+        Optional<UsersModel> userOpt = usersRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
 
+        UsersModel user = userOpt.get();
+        List<RequestsModel> waitingRequests = requestsRepository.findByUserAndStatus(user, RequestsModel.RequestStatus.WAITING);
+
+        // Extract the letters from the requests
+        List<LettersModel> waitingLetters = waitingRequests.stream()
+                .map(RequestsModel::getLetter)
+                .toList();
+
+        return ResponseEntity.ok(waitingLetters);
+    }
     // Get all requests for letters posted by a user
     @GetMapping("/letter-owner/{userId}")
     public ResponseEntity<?> getLetterOwnerRequests(@PathVariable UUID userId) {
