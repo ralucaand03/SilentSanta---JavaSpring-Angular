@@ -1,0 +1,100 @@
+<div class="page">
+  <div class="activity-list-container" *ngIf="isAdmin">
+    <div class="activity-list-card">
+      <div class="activity-list-header">
+        <h1>User Activity Logs</h1>
+        <p>Monitor login and logout activities of all users</p>
+      </div>
+
+      <!-- Filter Form -->
+      <form [formGroup]="filterForm" (ngSubmit)="applyFilter()" class="activity-filter-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="activityType">Activity Type</label>
+            <select id="activityType" formControlName="activityType" class="form-control">
+              <option value="">All Activities</option>
+              <option value="LOGIN">Login</option>
+              <option value="LOGOUT">Logout</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="datetime-local" id="startDate" formControlName="startDate" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="datetime-local" id="endDate" formControlName="endDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-button" (click)="resetFilter()">Reset</button>
+          <button type="submit" class="submit-button">Apply Filter</button>
+        </div>
+      </form>
+
+      <!-- Loading Indicator -->
+      <div *ngIf="loading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Loading activities...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div class="message-container">
+        <div class="error-message" *ngIf="error">{{ error }}</div>
+        <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+      </div>
+
+      <!-- Activity Table -->
+      <div class="activity-table-container" *ngIf="!loading && activities.length > 0">
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Activity</th>
+              <th>Timestamp</th>
+              <th>IP Address</th>
+              <th>User Agent</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let activity of activities">
+              <td>
+                <div class="user-info">
+                  <span class="user-name">{{ activity.user.firstName }} {{ activity.user.lastName }}</span>
+                  <span class="user-email">{{ activity.user.email }}</span>
+                </div>
+              </td>
+              <td>
+                <span class="activity-badge" [class.login-badge]="activity.activityType === 'LOGIN'" 
+                      [class.logout-badge]="activity.activityType === 'LOGOUT'">
+                  {{ activity.activityType }}
+                </span>
+              </td>
+              <td>{{ formatDate(activity.timestamp) }}</td>
+              <td>{{ activity.ipAddress }}</td>
+              <td class="user-agent">
+                <div class="truncate-text" title="{{ activity.userAgent }}">
+                  {{ activity.userAgent }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No Data Message -->
+      <div class="no-data-message" *ngIf="!loading && activities.length === 0 && !successMessage">
+        <p>No activity logs found.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="unauthorized-message" *ngIf="!isAdmin">
+    <h2>Unauthorized Access</h2>
+    <p>You don't have permission to access this page.</p>
+    <button routerLink="/">Back to Home</button>
+  </div>
+</div>

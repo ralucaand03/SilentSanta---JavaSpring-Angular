@@ -1,0 +1,325 @@
+.activity-list-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.activity-list-card {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+  margin-bottom: 40px;
+}
+
+.activity-list-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.activity-list-header h1 {
+  font-size: 2.2rem;
+  color: #46ac97;
+  margin-bottom: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.activity-list-header h1::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #ef6e6e;
+  border-radius: 3px;
+}
+
+.activity-list-header p {
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.activity-filter-form {
+  margin-bottom: 30px;
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+label {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+input, select {
+  padding: 12px 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #46ac97;
+  box-shadow: 0 0 0 2px rgba(70, 172, 151, 0.2);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.cancel-button, .submit-button {
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-button {
+  background: none;
+  border: 1px solid #ccc;
+  color: #555;
+}
+
+.cancel-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: #aaa;
+}
+
+.submit-button {
+  background: #46ac97;
+  border: none;
+  color: white;
+}
+
+.submit-button:hover {
+  background: #3a9683;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(70, 172, 151, 0.2);
+  border-radius: 50%;
+  border-top-color: #46ac97;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.message-container {
+  margin: 15px 0;
+}
+
+.error-message {
+  color: #ef6e6e;
+  font-size: 0.9rem;
+  padding: 10px;
+  background-color: rgba(239, 110, 110, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.success-message {
+  color: #46ac97;
+  font-size: 0.9rem;
+  padding: 10px;
+  background-color: rgba(70, 172, 151, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.activity-table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.activity-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.activity-table thead {
+  background-color: #46ac97;
+  color: white;
+}
+
+.activity-table th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.activity-table tbody tr {
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: background-color 0.3s ease;
+}
+
+.activity-table tbody tr:nth-child(even) {
+  background-color: rgba(240, 240, 240, 0.7);
+}
+
+.activity-table tbody tr:hover {
+  background-color: rgba(70, 172, 151, 0.1);
+}
+
+.activity-table td {
+  padding: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.activity-badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.login-badge {
+  background-color: rgba(70, 172, 151, 0.2);
+  color: #46ac97;
+}
+
+.logout-badge {
+  background-color: rgba(239, 110, 110, 0.2);
+  color: #ef6e6e;
+}
+
+.user-agent {
+  max-width: 250px;
+}
+
+.truncate-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 40px 0;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.unauthorized-message {
+  max-width: 500px;
+  margin: 100px auto;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.unauthorized-message h2 {
+  color: #ef6e6e;
+  margin-bottom: 15px;
+}
+
+.unauthorized-message p {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.unauthorized-message button {
+  background: #46ac97;
+  border: none;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.unauthorized-message button:hover {
+  background: #3a9683;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .activity-list-card {
+    padding: 20px;
+  }
+  
+  .activity-list-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .activity-table th, 
+  .activity-table td {
+    padding: 10px;
+  }
+  
+  .user-agent {
+    max-width: 150px;
+  }
+}

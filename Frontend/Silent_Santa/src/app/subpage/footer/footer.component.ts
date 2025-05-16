@@ -1,8 +1,8 @@
 import { Component } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
-import  { SubscriberService } from "../services/subscriber.service"
-import { Subscriber } from "../models/subscriber.model"
+import  { SubscriberService } from "../../services/subscriber.service"
+import { Subscriber } from "../../models/subscriber.model"
 
 @Component({
   selector: "app-footer",
