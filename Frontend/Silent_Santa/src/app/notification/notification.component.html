@@ -54,9 +54,8 @@
           </svg>
         </div>
         <div class="notification-content">
-          <div class="notification-title">{{ notification.letterTitle }}</div>
-          <div class="notification-status"  >
-            {{ notification.status }}
+          <div class="notification-message">
+            Your request for letter <strong>{{ notification.letterTitle }}</strong> has been <strong>{{ notification.status.toLowerCase() }}</strong>.
           </div>
           <div class="notification-time">{{ formatTimestamp(notification.timestamp) }}</div>
         </div>

@@ -2,10 +2,10 @@ import { Component, type OnInit, type OnDestroy, HostListener } from "@angular/c
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
 import { BehaviorSubject, type Subscription } from "rxjs"
- 
-import { WebSocketNotif  } from "../services/websocketnotif.service"
-import { AuthService } from "../services/auth.service"
- 
+
+import   { WebSocketNotif } from "../services/websocketnotif.service"
+import   { AuthService } from "../services/auth.service"
+
 // Updated Notification model
 export interface Notification {
   type: "CHAT_MESSAGE" | "REQUEST_UPDATE" | "SYSTEM"
@@ -47,12 +47,14 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
     // Subscribe to notifications from the WebSocketNotifService
     this.websocketNotificationSubscription = this.websocketNotifService.notifications$.subscribe((notification) => {
-      if (notification) {
+      if (notification && this.isValidNotification(notification)) {
         console.log("NotificationComponent: Received new notification:", notification)
         // Add the new notification to the list
         this.notifications = [notification, ...this.notifications]
         // Update unread count
         this.updateUnreadCount()
+      } else if (notification) {
+        console.warn("NotificationComponent: Received invalid notification, ignoring:", notification)
       }
     })
 
@@ -145,13 +147,40 @@ export class NotificationBellComponent implements OnInit, OnDestroy {
 
   // Format timestamp to readable date
   formatTimestamp(timestamp: number): string {
-    return new Date(timestamp).toLocaleString()
+    if (!timestamp || isNaN(timestamp)) {
+      return "Unknown date"
+    }
+    try {
+      const date = new Date(timestamp)
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return "Unknown date"
+      }
+      return date.toLocaleString()
+    } catch (error) {
+      console.error("Error formatting timestamp:", error)
+      return "Unknown date"
+    }
   }
 
   reconnectWebsocket(): void {
     console.log("Manually reconnecting WebSocket")
     this.websocketNotifService.disconnect()
     setTimeout(() => this.websocketNotifService.connect(), 500)
+  }
+
+  // Validate notification object
+  private isValidNotification(notification: Notification): boolean {
+    return (
+      notification &&
+      typeof notification === "object" &&
+      notification.type != null &&
+      notification.userId != null &&
+      notification.letterTitle != null &&
+      notification.status != null &&
+      notification.timestamp != null &&
+      !isNaN(notification.timestamp)
+    )
   }
 
   ngOnDestroy(): void {
