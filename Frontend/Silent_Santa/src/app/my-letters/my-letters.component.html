@@ -1,161 +1,167 @@
 <div class="page">
-  <div class="container">
-    <div class="page-title">
-      <h1>My Letters</h1>
-      <p class="subtitle">Manage your letters and track their status</p>
-    </div>
-
-    <!-- Loading State -->
-    <div class="loading-container" *ngIf="isLoading">
-      <div class="spinner"></div>
-      <p>Loading your letters...</p>
-    </div>
-
-    <!-- Error Message -->
-    <div class="notification error-message" *ngIf="errorMessage">
-      <p>{{ errorMessage }}</p>
-    </div>
-
-    <!-- Success Message -->
-    <div class="notification success-message" *ngIf="successMessage">
-      <p>{{ successMessage }}</p>
-    </div>
-
-    <div class="content-container" *ngIf="!isLoading">
-      <!-- Filters Section -->
-      <div class="section">
-        <div class="section-header">
-          <h2>Filters</h2>
-          <button class="primary-button" (click)="clearFilters()">Clear All</button>
+  <div class="letters-container">
+    <!-- Sidebar Filters -->
+    <aside class="filters-sidebar">
+      <div class="filters-header">
+        <h2>Filters</h2>
+        <button class="clear-filters-button" (click)="clearFilters()">Clear All</button>
+      </div>
+      
+      <div class="search-box">
+        <input 
+          type="text" 
+          placeholder="Search by name or item..." 
+          (input)="updateSearch($event)"
+          [value]="searchQuery">
+        <i class="icon-search"></i>
+      </div>
+      
+      <div class="filter-section">
+        <h3>School</h3>
+        <div class="filter-options">
+          <button 
+            class="filter-option" 
+            [class.active]="selectedLocation === null" 
+            (click)="filterByLocation(null)">
+            All Schools
+          </button>
+          <button 
+            *ngFor="let location of locations" 
+            class="filter-option" 
+            [class.active]="selectedLocation === location" 
+            (click)="filterByLocation(location)">
+            {{ location }}
+          </button>
         </div>
+      </div>
+      
+      <div class="filter-section">
+        <h3>Gender</h3>
+        <div class="filter-options">
+          <button 
+            class="filter-option" 
+            [class.active]="selectedGender === null" 
+            (click)="filterByGender(null)">
+            All
+          </button>
+          <button 
+            class="filter-option gender-boy" 
+            [class.active]="selectedGender === 'boy'" 
+            (click)="filterByGender('boy')">
+            <i class="icon-boy"></i> Boys
+          </button>
+          <button 
+            class="filter-option gender-girl" 
+            [class.active]="selectedGender === 'girl'" 
+            (click)="filterByGender('girl')">
+            <i class="icon-girl"></i> Girls
+          </button>
+        </div>
+      </div>
+      
+      <div class="filter-stats">
+        <p>Showing <span>{{ filteredApprovedLetters.length }}</span> of <span>{{ approvedLetters.length }}</span> letters</p>
+      </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="letters-content">
+      <!-- Page Title -->
+      <div class="letters-header">
+        <h1 class="page-title">My Letters</h1>
+        <p class="page-description">Manage your letters and track their status</p>
+      </div>
+      
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading your letters...</p>
+      </div>
+      
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        <p>{{ errorMessage }}</p>
+      </div>
+      
+      <!-- Success Message -->
+      <div class="success-message" *ngIf="successMessage">
+        <p>{{ successMessage }}</p>
+      </div>
 
-        <div class="filters-content">
-          <div class="search-box">
-            <input 
-              type="text" 
-              placeholder="Search by name or item..." 
-              (input)="updateSearch($event)"
-              [value]="searchQuery">
-            <i class="icon-search"></i>
-          </div>
+      <!-- Approved Letters Section -->
+      <!-- <div class="letters-header">
+        <h1 class="page-title">My Approved Letters</h1>
+        <p class="page-description">Letters you've been approved to fulfill</p>
+      </div> -->
 
-          <div class="filter-section">
-            <h3>School</h3>
-            <div class="filter-options">
-              <button 
-                class="filter-option" 
-                [class.active]="selectedLocation === null" 
-                (click)="filterByLocation(null)">
-                All Schools
-              </button>
-              <button 
-                *ngFor="let location of locations" 
-                class="filter-option" 
-                [class.active]="selectedLocation === location" 
-                (click)="filterByLocation(location)">
-                {{ location }}
-              </button>
+      <div class="letters-grid">
+        <div 
+          *ngFor="let letter of filteredApprovedLetters" 
+          class="letter-card" 
+          [class.boy]="letter.gender === 'boy'"
+          [class.girl]="letter.gender === 'girl'"
+          (click)="toggleLetterView(letter, $event)">
+          
+          <div class="letter-header">
+            <div class="letter-header-content">
+              <h2 class="child-name">{{ letter.childName }}, {{ letter.childAge }}</h2>
+              <div class="letter-badges">
+                <span class="gender-badge" [class]="letter.gender">
+                  <i [class]="'icon-' + letter.gender"></i>
+                </span>
+                <span class="location-badge">{{ letter.location }}</span>
+              </div>
             </div>
+            <div class="letter-snowflake"></div>
           </div>
-
-          <div class="filter-section">
-            <h3>Gender</h3>
-            <div class="filter-options">
-              <button 
-                class="filter-option" 
-                [class.active]="selectedGender === null" 
-                (click)="filterByGender(null)">
-                All
-              </button>
-              <button 
-                class="filter-option gender-boy" 
-                [class.active]="selectedGender === 'boy'" 
-                (click)="filterByGender('boy')">
-                <i class="icon-boy"></i> Boys
-              </button>
-              <button 
-                class="filter-option gender-girl" 
-                [class.active]="selectedGender === 'girl'" 
-                (click)="filterByGender('girl')">
-                <i class="icon-girl"></i> Girls
-              </button>
-            </div>
+          
+          <div class="letter-content" *ngIf="!letter.showImage">
+            <h3 class="wishes-title">Christmas Wishes:</h3>
+            <ul class="wishes-list">
+              <li *ngFor="let item of letter.wishList">{{ item }}</li>
+            </ul>
+            <div class="letter-hint">Double-click to see letter</div>
+          </div>
+          
+          <div class="letter-image" *ngIf="letter.showImage">
+            <img [src]="getImageSrc(letter.imagePath)" alt="Child's handwritten letter" class="letter-img">
+            <p class="image-hint">Double-click to see wishes</p>
+          </div>
+          
+          <div class="letter-footer">
+            <button 
+              class="request-button" 
+              [disabled]="letter.status === 'DONE'"
+              (click)="markAsCompleted(letter); $event.stopPropagation()">
+              <i class="icon-check"></i>
+              <span>{{ letter.status === 'DONE' ? 'Completed' : 'Mark as Completed' }}</span>
+            </button>
           </div>
         </div>
       </div>
 
-      <!-- Approved Letters Section -->
-      <div class="section">
-        <div class="section-header">
-          <h2>My Approved Letters</h2>
-          <span class="status-badge status-accepted">Approved</span>
-        </div>
-
-        <div class="letters-grid" *ngIf="filteredApprovedLetters.length > 0">
-          <div 
-            *ngFor="let letter of filteredApprovedLetters" 
-            class="letter-card" 
-            [class.boy]="letter.gender === 'boy'"
-            [class.girl]="letter.gender === 'girl'"
-            (click)="toggleLetterView(letter, $event)">
-            
-            <div class="letter-header">
-              <div class="letter-header-content">
-                <h2 class="child-name">{{ letter.childName }}, {{ letter.childAge }}</h2>
-                <div class="letter-badges">
-                  <span class="gender-badge" [class]="letter.gender">
-                    <i [class]="'icon-' + letter.gender"></i>
-                  </span>
-                  <span class="location-badge">{{ letter.location }}</span>
-                </div>
-              </div>
-              <div class="letter-snowflake"></div>
-            </div>
-            
-            <div class="letter-content" *ngIf="!letter.showImage">
-              <h3 class="wishes-title">Christmas Wishes:</h3>
-              <ul class="wishes-list">
-                <li *ngFor="let item of letter.wishList">{{ item }}</li>
-              </ul>
-              <div class="letter-hint">Double-click to see letter</div>
-            </div>
-            
-            <div class="letter-image" *ngIf="letter.showImage">
-              <img [src]="getImageSrc(letter.imagePath)" alt="Child's handwritten letter" class="letter-img">
-              <p class="image-hint">Double-click to see wishes</p>
-            </div>
-            
-            <div class="letter-footer">
-              <button 
-                class="request-button" 
-                [disabled]="letter.status === 'DONE'"
-                (click)="markAsCompleted(letter); $event.stopPropagation()">
-                <i class="icon-check"></i>
-                <span>{{ letter.status === 'DONE' ? 'Completed' : 'Mark as Completed' }}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="empty-state" *ngIf="filteredApprovedLetters.length === 0">
-          <div class="empty-icon">📭</div>
+      <div class="letters-empty" *ngIf="filteredApprovedLetters.length === 0 && !isLoading">
+        <div class="empty-state">
+          <i class="icon-search-large"></i>
           <h3>No approved letters found</h3>
           <p>You don't have any approved letter requests yet or no letters match your filters.</p>
           <button class="primary-button" routerLink="/letters">Browse Letters</button>
         </div>
       </div>
-
+      
       <!-- Admin's Posted Letters Section -->
-      <div class="section" *ngIf="isAdmin">
-        <div class="section-header">
-          <h2>Letters Posted by Me</h2>
-          <span class="admin-badge">Admin</span>
+      <div class="admin-section" *ngIf="isAdmin">
+        <div class="section-divider"></div>
+        
+        <div class="letters-header">
+          <h1 class="page-title">Letters Posted by Me</h1>
+          <p class="page-description">Manage letters you've posted as an admin</p>
         </div>
-
-        <div class="letters-grid" *ngIf="filteredAdminLetters.length > 0">
+        
+        <div class="letters-grid">
           <div 
             *ngFor="let letter of filteredAdminLetters" 
-            class="letter-card admin-letter-card" 
+            class="letter-card" 
             [class.boy]="letter.gender === 'boy'"
             [class.girl]="letter.gender === 'girl'"
             (click)="toggleLetterView(letter, $event)">
@@ -189,7 +195,7 @@
               <p class="image-hint">Double-click to see wishes</p>
             </div>
             
-            <div class="letter-footer">
+            <div class="letter-footer admin-footer">
               <div class="cute-buttons">
                 <button 
                   class="cute-button accept-button" 
@@ -208,14 +214,16 @@
             </div>
           </div>
         </div>
-
-        <div class="empty-state" *ngIf="filteredAdminLetters.length === 0">
-          <div class="empty-icon">📝</div>
-          <h3>No posted letters found</h3>
-          <p>You haven't posted any letters yet or no letters match your filters.</p>
-          <button class="primary-button" routerLink="/add-letter">Add New Letter</button>
+        
+        <div class="letters-empty" *ngIf="filteredAdminLetters.length === 0 && !isLoading">
+          <div class="empty-state">
+            <i class="icon-search-large"></i>
+            <h3>No posted letters found</h3>
+            <p>You haven't posted any letters yet or no letters match your filters.</p>
+            <button class="primary-button" routerLink="/add-letter">Add New Letter</button>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </div>

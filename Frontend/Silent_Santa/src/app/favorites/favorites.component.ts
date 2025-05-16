@@ -118,20 +118,22 @@ export class FavoritesComponent implements OnInit {
           })
           // Get user's requets and update letter.isReq property
           this.requestService.getUserRequests(userId).subscribe({
-            next: (reqLetters: Letters[]) => { 
-              const reqIds = new Set(reqLetters.map((letter) => letter.id))
- 
+            next: (reqLetters: any[]) => {
+              // Create a map of request IDs and their statuses
+              const requestStatusMap = new Map(
+                reqLetters.map((letter) => [letter.id, letter.status])
+              );
+
               this.letters.forEach((letter) => {
-                letter.isRequested = reqIds.has(letter.id)
-              })
- 
-              
+                const status = requestStatusMap.get(letter.id);
+                letter.isRequested = status === 'WAITING' || status === 'ACCEPTED';
+              });
             },
             error: (err) => {
-              console.error("Error loading requests:", err) 
-              this.applyFilters()
+              console.error("Error loading requests:", err);
+              this.applyFilters();
             },
-          })
+          });
     } else {
       this.errorMessage = "Please log in to view your favorite letters."
       this.isLoading = false

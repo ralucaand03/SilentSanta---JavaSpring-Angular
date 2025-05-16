@@ -70,6 +70,7 @@ export class MyLettersComponent implements OnInit {
     this.requestsService.getUserAcceptedRequests(userId).subscribe({
       next: (letters: Letters[]) => {
         this.approvedLetters = letters;
+        
         this.filteredApprovedLetters = [...letters];
         
         // Extract locations for filtering

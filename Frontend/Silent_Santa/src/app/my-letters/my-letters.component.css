@@ -7,6 +7,7 @@
   gap: 30px;
   flex: 1;
 }
+
 /* Sidebar Filters */
 .filters-sidebar {
   width: 300px;
@@ -183,7 +184,6 @@
   color: #46ac97;
 }
 
-
 /* Main Content */
 .letters-content {
   flex: 1;
@@ -195,20 +195,23 @@
 }
 
 .page-title {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.page-title h1 {
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   color: #46ac97;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
 }
 
-.subtitle {
-  font-size: 1.2rem;
-  color: #555;
-  margin: 0;
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #ef6e6e;
+  border-radius: 3px;
 }
 
 .page-description {
@@ -347,11 +350,6 @@
 .status-badge.denied {
   background-color: #ffebee;
   color: #e53935;
-}
-
-.status-badge.done {
-  background-color: #e0f7fa;
-  color: #0097a7;
 }
 
 .letter-content {
@@ -662,7 +660,7 @@
 }
 
 /* Loading state */
-.loading-container {
+.loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -687,7 +685,8 @@
 }
 
 /* Messages */
-.notification {
+.error-message,
+.success-message {
   padding: 1rem;
   border-radius: 4px;
   text-align: center;
@@ -709,39 +708,6 @@
   height: 2px;
   background: linear-gradient(to right, transparent, #46ac97, transparent);
   margin: 40px 0;
-}
-
-/* Section styles */
-.section {
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  border-bottom: 2px solid rgba(70, 172, 151, 0.2);
-  padding-bottom: 15px;
-}
-
-.section-header h2 {
-  color: #46ac97;
-  font-size: 1.8rem;
-  margin: 0;
-}
-
-.admin-badge {
-  background-color: #46ac97;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
 }
 
 /* Icon styles */
@@ -780,6 +746,7 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"></circle><path d="M12 8v8"></path><path d="M9 14l3 3 3-3"></path></svg>');
 }
 
+/* Icon styles for cute buttons */
 /* Icon styles for cute buttons */
 .icon-check {
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>');
@@ -825,16 +792,19 @@
 }
 
 @media (max-width: 968px) {
-  .page {
+  .letters-container {
     padding: 0 15px;
     margin-top: 80px;
+    margin-left: 20px;
   }
-  
-  .page-title h1 {
+  .letters-content {
+    margin-left: 20px;
+  }
+  .page-title {
     font-size: 2.2rem;
   }
 
-  .subtitle {
+  .page-description {
     font-size: 1rem;
   }
 
@@ -842,19 +812,21 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
   }
-  
+  .filters-sidebar {
+    max-width: 90%;
+  }
   .filter-option {
     min-width: 100px;
   }
 }
 
 @media (max-width: 780px) {
-  .page {
+  .letters-container {
     padding: 0 10px;
     margin-top: 70px;
   }
 
-  .page-title h1 {
+  .page-title {
     font-size: 1.8rem;
   }
 
@@ -884,24 +856,25 @@
   .filter-options {
     flex-direction: column;
   }
-  
-  .cute-buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cute-button {
-    width: 100%;
-  }
 }
 
 @media (max-width: 600px) {
-  .container {
-    width: 95%;
+  .letters-container {
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 0 10px;
+    margin-top: 70px;
+    align-items: center;
+    margin-right: 30px;
   }
-  
-  .page-title h1 {
+
+  .filters-sidebar {
+    align-self: center;
+    margin-left: 50px;
+  }
+  .page-title {
     font-size: 1.8rem;
+    align-self: center;
   }
 
   .letters-grid {
@@ -911,7 +884,6 @@
 
   .letter-card {
     text-align: center;
-    width: 100%;
   }
 
   .letter-footer {
@@ -932,14 +904,17 @@
     flex-direction: column;
     align-items: center;
   }
-  
-  .section {
-    padding: 20px 15px;
-  }
-  
-  .section-header {
+}
+
+/* Responsive styles for cute buttons */
+@media (max-width: 780px) {
+  .cute-buttons {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .cute-button {
+    width: 100%;
   }
 }
+ 

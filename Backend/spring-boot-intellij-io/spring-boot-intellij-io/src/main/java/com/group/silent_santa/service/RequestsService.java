@@ -66,6 +66,9 @@ public class RequestsService {
                 // Consider a more specific exception or handling for authorization
                 throw new SecurityException("You are not authorized to accept this request.");
             }
+            // Update the letter status to WORKING
+            LettersModel letter = request.getLetter();
+            letter.setStatus(LettersModel.LetterStatus.WORKING);
             request.setStatus(RequestsModel.RequestStatus.ACCEPTED);
             requestsRepository.save(request);
             // Send notification to the user who made the request
