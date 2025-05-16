@@ -27,6 +27,9 @@
       <div class="dropdown-menu" [class.open]="dropdownOpen">
         <ul>
           <li *ngIf="isAuthenticated"><a href="/my-account">My Account</a></li>
+          <li *ngIf="isAuthenticated && isAdmin"><a href="/activity-list">User Activity</a></li>
+          <li *ngIf="isAuthenticated && isAdmin"><a href="/add-letter">Add Letter</a></li>
+          
           <li *ngIf="isAuthenticated"><a href="#" (click)="logOut()">Log Out</a></li>
           <li *ngIf="!isAuthenticated"><a href="/login">Login</a></li>
           <li *ngIf="!isAuthenticated"><a href="/signup">Sign Up</a></li>
