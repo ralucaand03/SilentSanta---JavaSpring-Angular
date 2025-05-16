@@ -64,6 +64,24 @@ public class RequestsController {
 
         return ResponseEntity.ok(waitingLetters);
     }
+
+    // Get all ACCEPED requests made by a user
+    @GetMapping("/user/{userId}/accepted")
+    public ResponseEntity<?> getAllAcceptedRequests(@PathVariable UUID userId) {
+        Optional<UsersModel> userOpt = usersRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        UsersModel user = userOpt.get();
+        List<RequestsModel> waitingRequests = requestsRepository.findByUserAndStatus(user, RequestsModel.RequestStatus.ACCEPTED);
+        // Extract the letters from the requests
+        List<LettersModel> waitingLetters = waitingRequests.stream()
+                .map(RequestsModel::getLetter)
+                .toList();
+
+        return ResponseEntity.ok(waitingLetters);
+    }
     // Get all requests for letters posted by a user
     @GetMapping("/letter-owner/{userId}")
     public ResponseEntity<?> getLetterOwnerRequests(@PathVariable UUID userId) {

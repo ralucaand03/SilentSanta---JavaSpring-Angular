@@ -69,7 +69,7 @@ export class RequestsComponent implements OnInit {
 
     const userId = currentUser.id
 
-    // Fetch user's requests
+    // Fetch user's Waiting requests
     this.requestsService.getUserWaitingRequests(userId).subscribe({
       next: (requests: Letters[]) => {
         this.userRequests = requests

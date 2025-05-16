@@ -42,8 +42,13 @@ export class RequestsService {
   getUserRequests(userId: string): Observable<Letters[]> {
     return this.http.get<Letters[]>(`${this.baseUrl}/user/${userId}`)
   }
+
   getUserWaitingRequests(userId: string): Observable<Letters[]> {
     return this.http.get<Letters[]>(`${this.baseUrl}/user/${userId}/waiting`)
+  }
+
+  getUserAcceptedRequests(userId: string): Observable<Letters[]> {
+    return this.http.get<Letters[]>(`${this.baseUrl}/user/${userId}/accepted`)
   }
 
   addRequest(userId: string, letterId: string): Observable<any> {
