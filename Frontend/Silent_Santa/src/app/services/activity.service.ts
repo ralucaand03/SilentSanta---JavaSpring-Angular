@@ -31,6 +31,10 @@ export class ActivityService {
     return this.http.get<Activity[]>(`${this.baseUrl}/date-range`, { params });
   }
 
+  logActivity(userId: string, activityType: 'LOGIN' | 'LOGOUT'): Observable<any> {
+    return this.http.post(`${this.baseUrl}/log`, { userId, activityType });
+  }
+
   getFilteredActivities(filter: ActivityFilter): Observable<Activity[]> {
     if (filter.userId) {
       return this.getActivitiesByUser(filter.userId);

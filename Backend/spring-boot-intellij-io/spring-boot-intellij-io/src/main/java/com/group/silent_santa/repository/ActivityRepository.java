@@ -11,12 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<ActivityModel, UUID> {
-
+    // Add missing methods that are used in ActivityService
     List<ActivityModel> findByUser(UsersModel user);
-
+    List<ActivityModel> findByUserOrderByTimestampDesc(UsersModel user);
     List<ActivityModel> findByActivityType(ActivityModel.ActivityType activityType);
-
     List<ActivityModel> findByTimestampBetween(LocalDateTime start, LocalDateTime end);
-
     List<ActivityModel> findAllByOrderByTimestampDesc();
 }

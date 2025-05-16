@@ -38,10 +38,10 @@ public class LogInController {
         this.signUpController = signUpController;
     }
 
-    // If your code calls `logInController.setView(...)`, we do a simple setter
     public void setView(LogInView view) {
         this.view = view;
     }
+
     public void loginButtonClicked() {
         String email = view.getEmailField().getText().trim();
         String rawPassword = new String(view.getPasswordField().getPassword()).trim();
