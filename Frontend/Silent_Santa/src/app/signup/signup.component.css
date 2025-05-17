@@ -105,3 +105,65 @@ h1 {
   background-color: #ef6e6e;
   color: white;
 }
+/* Add this to your existing CSS */
+
+/* .captcha-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+}
+
+.error-message {
+  color: #ef6e6e;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 14px;
+} */
+
+/* Make sure the button is properly styled when disabled */
+/* .login-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+} */
+ /* Add styles for the captcha container */
+.captcha-container {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 78px;
+  background-color: transparent; /* Make sure background isn't hiding it */
+  overflow: visible; /* Ensure it's not being clipped */
+  border: 1px dashed #ccc; /* Debug outline to see if the container is rendering */
+  padding: 10px;
+}
+
+/* Make sure the g-recaptcha element is visible */
+.g-recaptcha {
+  display: block !important;
+  position: relative !important;
+  visibility: visible !important;
+  margin: 0 auto;
+  transform-origin: center;
+  -webkit-transform-origin: center;
+}
+
+/* Style for captcha error message */
+.captcha-error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 8px;
+  text-align: center;
+}
+
+/* Add this to ensure the reCAPTCHA iframe is visible */
+iframe[src*="recaptcha"] {
+  display: block !important;
+}
+
+/* Add this to your global styles.css if needed */
+body .grecaptcha-badge {
+  visibility: visible !important;
+}

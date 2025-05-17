@@ -1,6 +1,7 @@
 package com.group.silent_santa.controller;
 
 import com.group.silent_santa.model.UsersModel;
+import com.group.silent_santa.service.CaptchaService;
 import com.group.silent_santa.service.UsersService;
 import com.group.silent_santa.view.UsersView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,17 @@ import java.util.UUID;
 public class UsersController {
 
     private final UsersService usersService;
+    private final CaptchaService captchaService;
+
     private AdminDashboardController adminDashboardController; // no longer final
 
     private UsersView view;
 
     // Inject only the *necessary* dependencies via the constructor
     @Autowired
-    public UsersController(UsersService usersService) {
+    public UsersController(UsersService usersService, CaptchaService captchaService) {
         this.usersService = usersService;
+        this.captchaService = captchaService;
     }
 
     // Setter injection for AdminDashboardController
@@ -37,23 +41,73 @@ public class UsersController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody UsersModel user) {
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, Object> registrationData) {
         try {
+            // Log the received data (excluding sensitive info)
+            System.out.println("Received registration data with fields: " + registrationData.keySet());
+
+            // Extract captcha token from request - check both common field names
+            String captchaToken = (String) registrationData.get("captchaToken");
+            if (captchaToken == null) {
+                captchaToken = (String) registrationData.get("recaptchaResponse");
+            }
+            if (captchaToken == null) {
+                captchaToken = (String) registrationData.get("g-recaptcha-response");
+            }
+
+            // Validate captcha token
+            if (captchaToken == null || captchaToken.isEmpty()) {
+                System.out.println("Captcha token is missing in the request");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Captcha verification is required"));
+            }
+
+            // Verify captcha with the service
+            boolean isCaptchaValid = captchaService.validateCaptcha(captchaToken);
+            if (!isCaptchaValid) {
+                System.out.println("Captcha validation failed");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "Captcha verification failed"));
+            }
+
+            System.out.println("Captcha validation successful, proceeding with registration");
+
+            // Extract user data from the request
+            UsersModel user = new UsersModel();
+            user.setEmail((String) registrationData.get("email"));
+            user.setPassword((String) registrationData.get("password"));
+            user.setFirstName((String) registrationData.get("firstName"));
+            user.setLastName((String) registrationData.get("lastName"));
+
+            // Set role from the request or default to USER
+            String roleStr = (String) registrationData.get("role");
+            if (roleStr != null) {
+                // Fix the role mapping - HELPER should be ADMIN, GIVER should be USER
+                if ("HELPER".equalsIgnoreCase(roleStr)) {
+                    user.setRole(UsersModel.Role.ADMIN);
+                } else if ("GIVER".equalsIgnoreCase(roleStr)) {
+                    user.setRole(UsersModel.Role.USER);
+                } else {
+                    try {
+                        user.setRole(UsersModel.Role.valueOf(roleStr.toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        user.setRole(UsersModel.Role.USER); // Default to USER if invalid role
+                    }
+                }
+            } else {
+                user.setRole(UsersModel.Role.USER); // Default role
+            }
+
             if (usersService.findByEmail(user.getEmail()) != null) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(Map.of("message", "Email already registered"));
             }
 
-            // Fix the role mapping - HELPER should be ADMIN, GIVER should be USER
-            if ("HELPER".equalsIgnoreCase(user.getRole().toString())) {
-                user.setRole(UsersModel.Role.ADMIN);
-            } else if ("GIVER".equalsIgnoreCase(user.getRole().toString())) {
-                user.setRole(UsersModel.Role.USER);
-            }
-
             UsersModel registeredUser = usersService.registerUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
         } catch (Exception e) {
+            System.err.println("Registration error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of("message", "Registration failed: " + e.getMessage()));
         }
@@ -129,4 +183,3 @@ public class UsersController {
         adminDashboardController.openDashboard();
     }
 }
-

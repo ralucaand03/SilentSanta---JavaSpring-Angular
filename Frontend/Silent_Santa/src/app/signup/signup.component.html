@@ -1,94 +1,108 @@
-
 <div class="page">
-    <div class="signup-container"> <!-- reusing the same styling classes as in the login component -->
-      <img src="assets/elf_icon.png" alt="Elf" class="elf-image" />
-      <h1>Create an Account</h1>
+  <div class="signup-container">
+    <img src="assets/elf_icon.png" alt="Elf" class="elf-image" />
+    <h1>Create an Account</h1>
+
+    <form (submit)="onSignupSubmit()" class="inputs">
+      <div class="input-group">
+        <label for="firstname">Name</label>
+        <input 
+          type="text" 
+          id="firstname" 
+          name="firstname" 
+          [(ngModel)]="firstname"
+          placeholder=" 🖊 First Name"
+          required
+        />
+      </div> 
+      
+      <div class="input-group">
+        <label for="lastname">Last Name</label>
+        <input 
+          type="text" 
+          id="lastname" 
+          name="lastname" 
+          [(ngModel)]="lastname"
+          placeholder=" 🖊 Last Name"
+          required
+        />
+      </div>
   
-      <form (submit)="onSignupSubmit()" class="inputs">
-        <div class="input-group">
-          <label for="firstname">Name</label>
-          <input 
-            type="text" 
-            id="firstname" 
-            name="firstname" 
-            [(ngModel)]="firstname"
-            placeholder=" 🖊 First Name"
-            required
-          />
-        </div> 
-        
-          <div class="input-group">
-            <label for="lastname">Last Name</label>
-            <input 
-              type="text" 
-              id="lastname" 
-              name="lastname" 
-              [(ngModel)]="lastname"
-              placeholder=" 🖊 Last Name"
-              required
-            />
-          </div>
-    
-  
-        <div class="input-group">
-          <label for="email">Email</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            [(ngModel)]="email" 
-            placeholder=" ✉ Your email" 
-            required
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="phone">Phone</label>
-          <input 
-            type="tel" 
-            id="phone" 
-            name="phone" 
-            [(ngModel)]="phone"
-            placeholder=" ✆ Your phone"
-            required
-          />
-        </div>
-  
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
-            [(ngModel)]="password"
-            placeholder=" ◮ Your password"
-            required
-          />
-        </div>
-  
-        <div class="role-buttons">
-            <button 
-              type="button" 
-              [class.selected]="role === 'Giver'" 
-              (click)="selectRole('Giver')">
-              Giver
-            </button>
-            <button 
-              type="button" 
-              [class.selected]="role === 'Helper'" 
-              (click)="selectRole('Helper')">
-              Helper
-            </button>
-          </div>
-          <div *ngIf="errorMessage" class="error-message">
-            {{ errorMessage }}
-          </div>
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          [(ngModel)]="email" 
+          placeholder=" ✉ Your email" 
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="phone">Phone</label>
+        <input 
+          type="tel" 
+          id="phone" 
+          name="phone" 
+          [(ngModel)]="phone"
+          placeholder=" ✆ Your phone"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          name="password" 
+          [(ngModel)]="password"
+          placeholder=" ◮ Your password"
+          required
+        />
+      </div>
+
+      <div class="role-buttons">
         <button 
-          type="submit" 
-          class="login-button">
-          Sign Up
+          type="button" 
+          [class.selected]="role === 'Giver'" 
+          (click)="selectRole('Giver')">
+          Giver
         </button>
-      </form>
-    </div>
+        <button 
+          type="button" 
+          [class.selected]="role === 'Helper'" 
+          (click)="selectRole('Helper')">
+          Helper
+        </button>
+      </div>
+      
+      <!-- reCAPTCHA container -->
+      <div class="captcha-container">
+        <!-- Use the test site key for development -->
+        <div 
+          class="g-recaptcha" 
+          data-sitekey="6LczDT4rAAAAACmfWelZn7Z7H5JHSQsvqW9srIec"
+          data-callback="onCaptchaVerified"
+          data-expired-callback="onCaptchaExpired">
+        </div>
+        <div *ngIf="captchaError" class="captcha-error">
+          {{ captchaError }}
+        </div>
+      </div>
+      
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+      
+      <button 
+        type="submit" 
+        class="login-button"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Signing Up...' : 'Sign Up' }}
+      </button>
+    </form>
   </div>
-  
+</div>

@@ -55,7 +55,8 @@
         </div>
         <div class="notification-content">
           <div class="notification-message">
-            Your request for letter <strong>{{ notification.letterTitle }}</strong> has been <strong>{{ notification.status.toLowerCase() }}</strong>.
+            Your request for letter <strong>{{ notification.letterTitle }}</strong> has been 
+            <span [ngClass]="'status-text-' + notification.status.toLowerCase()">{{ notification.status.toLowerCase() }}</span>.
           </div>
           <div class="notification-time">{{ formatTimestamp(notification.timestamp) }}</div>
         </div>
