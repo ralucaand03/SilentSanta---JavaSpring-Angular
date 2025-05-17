@@ -80,7 +80,7 @@
       </div>
       
       <!-- reCAPTCHA container - Using standard checkbox reCAPTCHA v2 -->
-      <div class="captcha-container">
+          <div class="captcha-container">
         <div 
           id="recaptcha-element"
           class="g-recaptcha" 
@@ -94,10 +94,22 @@
           {{ captchaError }}
         </div>
       </div>
-      
-      <div *ngIf="errorMessage" class="error-message">
+
+      <!-- Container for the text input after CAPTCHA is verified
+      <div *ngIf="captchaVerified" class="captcha-verification-container">
+        <label for="captchaText">Type the word above:</label>
+        <input 
+          type="text" 
+          id="captchaText" 
+          [(ngModel)]="captchaText"
+          placeholder="Enter the text above" 
+          required />
+      </div> -->
+
+      <!-- <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
       </div>
+       -->
       
       <button 
         type="submit" 
