@@ -1,4 +1,4 @@
-import { Component, type OnInit } from "@angular/core"
+import { Component,   OnInit,   NgZone } from "@angular/core"
 import { FormsModule } from "@angular/forms"
 import { HeaderComponent } from "../header/header.component"
 import   { AuthService } from "../services/auth.service"
@@ -6,7 +6,6 @@ import   { Router } from "@angular/router"
 import { HttpClientModule } from "@angular/common/http"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
-import   { HttpClient } from "@angular/common/http"
 
 declare global {
   interface Window {
@@ -38,22 +37,42 @@ export class SignupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private http: HttpClient,
+    private zone: NgZone,
   ) {}
 
   ngOnInit() {
     // Set up global callbacks for reCAPTCHA
     window.onCaptchaVerified = (token: string) => {
-      console.log("reCAPTCHA verified with token:", token.substring(0, 20) + "...")
-      this.captchaResponse = token
-      this.captchaError = ""
+      // Use NgZone to ensure Angular detects the change
+      this.zone.run(() => {
+        console.log("reCAPTCHA verified with token:", token.substring(0, 20) + "...")
+        this.captchaResponse = token
+        this.captchaError = ""
+      })
     }
 
     window.onCaptchaExpired = () => {
-      console.log("reCAPTCHA expired")
-      this.captchaResponse = ""
-      this.captchaError = "reCAPTCHA verification expired. Please verify again."
+      // Use NgZone to ensure Angular detects the change
+      this.zone.run(() => {
+        console.log("reCAPTCHA expired")
+        this.captchaResponse = ""
+        this.captchaError = "reCAPTCHA verification expired. Please verify again."
+      })
     }
+
+    // Check if reCAPTCHA script is loaded
+    this.ensureRecaptchaLoaded()
+  }
+
+  // Make sure reCAPTCHA is loaded
+  private ensureRecaptchaLoaded() {
+    if (!window.grecaptcha) {
+      console.log("reCAPTCHA not loaded yet, trying again in 500ms")
+      setTimeout(() => this.ensureRecaptchaLoaded(), 500)
+      return
+    }
+
+    console.log("reCAPTCHA loaded successfully")
   }
 
   private mapRoleToBackend(role: string): string {
@@ -90,11 +109,15 @@ export class SignupComponent implements OnInit {
       email: this.email,
       phone: this.phone,
       password: this.password,
-      role: this.mapRoleToBackend(this.role),
+      role: this.role, // Send the original role value
       captchaToken: this.captchaResponse, // Use the token from the callback
     }
 
-    console.log("Submitting signup with captcha token:", this.captchaResponse.substring(0, 20) + "...")
+    console.log("Submitting signup with data:", {
+      ...signupData,
+      password: "[REDACTED]",
+      captchaToken: signupData.captchaToken ? "Present" : "Missing",
+    })
 
     this.authService.signup(signupData).subscribe({
       next: (response) => {
@@ -116,6 +139,8 @@ export class SignupComponent implements OnInit {
           this.errorMessage = "Email already registered"
         } else if (error.status === 400 && error.error && error.error.message) {
           this.errorMessage = error.error.message
+        } else if (error.status === 500 && error.error && error.error.message) {
+          this.errorMessage = "Server error: " + error.error.message
         } else {
           this.errorMessage = "An error occurred during signup. Please try again."
         }

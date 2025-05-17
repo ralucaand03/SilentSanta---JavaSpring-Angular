@@ -85,14 +85,6 @@ export class AuthService {
     return this.http.get<any>(`${this.baseUrl}/api/chat/history/${userId1}/${userId2}`)
   }
 
-  // signup(user: SignUp): Observable<SignUp> {
-  //   const userToSend = {
-  //     ...user,
-  //     role: user.role,
-  //   }
-  //   return this.http.post<SignUp>(`${this.baseUrl}/signup`, userToSend)
-  // }
-
   // Updated method to log activities using ActivityService
   private logActivity(type: "LOGIN" | "LOGOUT"): Observable<any> {
     const currentUser = this.getCurrentUser()
@@ -243,12 +235,11 @@ export class AuthService {
       captchaToken: user.captchaToken ? "Present" : "Missing",
     })
 
-    const userToSend = {
-      ...user,
-      role: user.role,
-      captchaToken: user.captchaToken, // Use captchaToken consistently
-    }
+    // Add headers to ensure proper content type
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+    })
 
-    return this.http.post<SignUp>(`${this.baseUrl}/signup`, userToSend)
+    return this.http.post<SignUp>(`${this.baseUrl}/signup`, user, { headers })
   }
 }

@@ -127,6 +127,7 @@ h1 {
   cursor: not-allowed;
 } */
  /* Add styles for the captcha container */
+/* Add styles for the captcha container */
 .captcha-container {
   margin: 20px 0;
   display: flex;
@@ -148,6 +149,7 @@ h1 {
   margin: 0 auto;
   transform-origin: center;
   -webkit-transform-origin: center;
+  z-index: 10; /* Ensure it's above other elements */
 }
 
 /* Style for captcha error message */
@@ -161,9 +163,22 @@ h1 {
 /* Add this to ensure the reCAPTCHA iframe is visible */
 iframe[src*="recaptcha"] {
   display: block !important;
+  z-index: 10;
 }
 
-/* Add this to your global styles.css if needed */
-body .grecaptcha-badge {
-  visibility: visible !important;
+/* Add this to ensure the reCAPTCHA popup is visible */
+.rc-anchor-normal,
+.rc-anchor-light,
+.rc-anchor-dark {
+  z-index: 1000 !important;
+}
+
+/* Ensure the challenge popup is visible */
+body > div[style*="z-index: 2000000000"] {
+  z-index: 2000000000 !important;
+}
+
+/* Ensure the challenge iframe is visible */
+body > iframe[style*="z-index: 2000000000"] {
+  z-index: 2000000000 !important;
 }

@@ -79,12 +79,14 @@
         </button>
       </div>
       
-      <!-- reCAPTCHA container -->
+      <!-- reCAPTCHA container - Using standard checkbox reCAPTCHA v2 -->
       <div class="captcha-container">
-        <!-- Use the test site key for development -->
         <div 
+          id="recaptcha-element"
           class="g-recaptcha" 
           data-sitekey="6LczDT4rAAAAACmfWelZn7Z7H5JHSQsvqW9srIec"
+          data-theme="light"
+          data-size="normal"
           data-callback="onCaptchaVerified"
           data-expired-callback="onCaptchaExpired">
         </div>
