@@ -260,10 +260,17 @@ export class MyLettersComponent implements OnInit {
         // Create a URL for the blob
         const url = window.URL.createObjectURL(blob)
 
+        // Sanitize the title for use as a filename
+        let filename = letter.title || `letter-${letter.id}`
+        // Replace invalid filename characters with underscores
+        filename = filename.replace(/[<>:"/\\|?*\x00-\x1F]/g, "_")
+        // Ensure the filename isn't too long
+        filename = filename.substring(0, 100)
+
         // Create a temporary anchor element to trigger download
         const a = document.createElement("a")
         a.href = url
-        a.download = `letter-${letter.id}.xml`
+        a.download = `${filename}.xml`
         document.body.appendChild(a)
         a.click()
 

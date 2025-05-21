@@ -95,10 +95,19 @@ public class XMLExportController {
             StringWriter sw = new StringWriter();
             marshaller.marshal(wrapper, sw);
 
+            // Get the letter title for the filename
+            String filename = letter.getTitle();
+            if (filename == null || filename.isEmpty()) {
+                filename = "letter-" + id;
+            } else {
+                // Sanitize the filename - replace invalid characters with underscores
+                filename = filename.replaceAll("[^a-zA-Z0-9.-]", "_");
+            }
+
             // Set up response headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_XML);
-            headers.setContentDispositionFormData("attachment", "letter-" + id + ".xml");
+            headers.setContentDispositionFormData("attachment", filename + ".xml");
 
             return ResponseEntity.ok()
                     .headers(headers)

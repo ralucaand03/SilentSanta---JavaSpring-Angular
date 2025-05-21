@@ -417,8 +417,7 @@
   color: #7f8c8d;
   margin: 0 0 1rem 0;
 }
-
-/* Cute buttons for admin section */
+ 
 .cute-buttons {
   display: flex;
   gap: 10px;
@@ -437,6 +436,7 @@
   font-family: "Comfortaa", sans-serif;
   font-size: 0.9rem;
   font-weight: 500;
+  width: 100%;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -531,16 +531,15 @@
   font-size: 0.8rem;
   color: #999;
   font-style: italic;
-}
+}  
 
-/* Add styles for the export button */
 .export-button {
   background-color: #4a6fa5;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px; 
   padding: 10px 15px;
   border-radius: 20px;
   border: none;
@@ -550,7 +549,11 @@
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-left: 10px;
+  width: 100%;
+}
+
+.export-button.full-width {
+  width: 100%;
 }
 
 .export-button:hover {
@@ -563,12 +566,36 @@
   transform: translateY(-1px);
 }
 
+/* Add the export icon */
+.icon-export {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>');
+}
+
+/* Update letter-footer to use column layout */
 .letter-footer {
   display: flex;
+  flex-direction: column;
   padding: 15px;
   gap: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   align-items: center;
+}
+
+/* Update admin-footer to maintain the same styling */
+.admin-footer {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  gap: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Update cute-buttons to use row layout with space-between */
+.cute-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .favorite-button {
@@ -607,8 +634,7 @@
 }
 
 .request-button {
-  flex: 1;
-  height: 50px;
+  flex: 1; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -617,6 +643,8 @@
   font-family: "Comfortaa", sans-serif;
   font-size: 1rem;
   font-weight: 600;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
   transition: all 0.3s ease;
   background-color: rgba(255, 255, 255, 0.3);
@@ -678,6 +706,7 @@
   padding: 12px 25px;
   font-size: 1rem;
   font-weight: 600;
+  
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: "Comfortaa", sans-serif;
@@ -798,163 +827,10 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>');
 }
 
-/* Add the export icon */
-.icon-export {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>');
-}
-
-/* Responsive styles */
-@media (max-width: 1100px) {
-  .letters-container {
-    flex-direction: column;
-  }
-
-  .filters-sidebar {
-    width: 100%;
-    position: static;
-    margin-bottom: 30px;
-  }
-
-  .filter-options {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .filter-option {
-    flex: 1;
-    min-width: 120px;
-  }
-}
-
-@media (max-width: 968px) {
-  .letters-container {
-    padding: 0 15px;
-    margin-top: 80px;
-    margin-left: 20px;
-  }
-  .letters-content {
-    margin-left: 20px;
-  }
-  .page-title {
-    font-size: 2.2rem;
-  }
-
-  .page-description {
-    font-size: 1rem;
-  }
-
-  .letters-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-  }
-  .filters-sidebar {
-    max-width: 90%;
-  }
-  .filter-option {
-    min-width: 100px;
-  }
-}
-
+/* Update responsive styles for mobile */
 @media (max-width: 780px) {
-  .letters-container {
-    padding: 0 10px;
-    margin-top: 70px;
-  }
-
-  .page-title {
-    font-size: 1.8rem;
-  }
-
-  .letters-grid {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .letter-card {
-    text-align: center;
-  }
-
-  .letter-footer {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .favorite-button {
-    align-self: center;
-  }
-
-  .request-button {
-    width: 100%;
-    height: 50px;
-  }
-
-  .filter-options {
-    flex-direction: column;
-  }
-
   .export-button {
     width: 100%;
     margin-left: 0;
-    margin-top: 10px;
-  }
-}
-
-@media (max-width: 600px) {
-  .letters-container {
-    max-width: 90%;
-    margin: 0 auto;
-    padding: 0 10px;
-    margin-top: 70px;
-    align-items: center;
-    margin-right: 30px;
-  }
-
-  .filters-sidebar {
-    align-self: center;
-    margin-left: 50px;
-  }
-  .page-title {
-    font-size: 1.8rem;
-    align-self: center;
-  }
-
-  .letters-grid {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .letter-card {
-    text-align: center;
-  }
-
-  .letter-footer {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .favorite-button {
-    align-self: center;
-  }
-
-  .request-button {
-    width: 100%;
-    height: 50px;
-  }
-
-  .filter-options {
-    flex-direction: column;
-    align-items: center;
-  }
-}
-
-/* Responsive styles for cute buttons */
-@media (max-width: 780px) {
-  .cute-buttons {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .cute-button {
-    width: 100%;
   }
 }
