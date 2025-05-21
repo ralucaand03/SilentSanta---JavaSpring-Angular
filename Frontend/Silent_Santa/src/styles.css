@@ -33,3 +33,140 @@ html,body{
   }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Dark Theme Styles - Add this to your styles.css file */
+
+/* Light Theme (Default) - Using your existing colors */
+:root {
+  --primary-color: #46ac97;
+  --primary-light: #61baa8;
+  --primary-transparent: #46ac9848;
+  --secondary-color: #ef6e6e;
+  --secondary-transparent: #ef6e6e32;
+  --text-color: #333;
+  --text-secondary: #555;
+  --text-muted: #777;
+  --background-color: #fff;
+  --card-background: rgba(255, 255, 255, 0.7);
+  --border-color: rgba(0, 0, 0, 0.05);
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-hover: rgba(0, 0, 0, 0.15);
+  --input-background: rgba(255, 255, 255, 0.5);
+  --scrollbar-thumb: #61baa8;
+  --scrollbar-thumb-hover: #46ac97;
+  --scrollbar-track: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Theme */
+.dark-theme {
+  --primary-color: #46ac97;
+  --primary-light: #61baa8;
+  --primary-transparent: rgba(70, 172, 151, 0.3);
+  --secondary-color: #ef6e6e;
+  --secondary-transparent: rgba(239, 110, 110, 0.3);
+  --text-color: #e1e1e1;
+  --text-secondary: #c5c5c5;
+  --text-muted: #a0a0a0;
+  --background-color: #1a1a2e;
+  --card-background: rgba(30, 30, 40, 0.7);
+  --border-color: rgba(255, 255, 255, 0.05);
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --shadow-hover: rgba(0, 0, 0, 0.3);
+  --input-background: rgba(40, 40, 50, 0.5);
+  --scrollbar-thumb: #46ac97;
+  --scrollbar-thumb-hover: #61baa8;
+  --scrollbar-track: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply theme variables to elements */
+body {
+  color: var(--text-color);
+  background-color: var(--background-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Update the page background gradient for dark mode */
+.dark-theme .page {
+  background: linear-gradient(to right, var(--secondary-transparent), var(--primary-transparent));
+}
+
+/* Update scrollbar for dark mode */
+.dark-theme ::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
+}
+
+.dark-theme ::-webkit-scrollbar-track {
+  background-color: var(--scrollbar-track);
+}
+
+/* Apply theme to common elements */
+.letter-card,
+.filters-sidebar,
+.empty-state {
+  background: var(--card-background);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  color: var(--text-color);
+}
+
+.letter-card:hover {
+  box-shadow: 0 12px 30px var(--shadow-hover);
+}
+
+.search-box input,
+.filter-option {
+  background: var(--input-background);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.wishes-list li,
+.letter-hint,
+.image-hint,
+.page-description {
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.empty-state p,
+.filter-stats {
+  color: var(--text-muted);
+}
+
+/* Keep primary and secondary colors consistent in both themes */
+.page-title,
+.filters-header h2,
+.wishes-title,
+.requester-info {
+  color: var(--primary-color);
+}
+
+.page-title::after,
+.wishes-title::after,
+.requester-info::after,
+.filter-section h3::before {
+  background: var(--secondary-color);
+}
+
+/* Preserve button colors */
+.primary-button,
+.accept-button {
+  background: var(--primary-color);
+}
+
+.primary-button:hover,
+.accept-button:hover {
+  background: var(--primary-light);
+}
+
+.clear-filters-button,
+.deny-button {
+  color: var(--secondary-color);
+}
+
+.deny-button:hover {
+  background-color: var(--secondary-color);
+}

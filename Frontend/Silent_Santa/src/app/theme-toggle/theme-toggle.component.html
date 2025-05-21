@@ -1,0 +1,14 @@
+<p>theme-toggle works!</p>
+<div class="theme-toggle-container">
+  <button 
+    class="theme-toggle-button" 
+    [class.dark]="isDarkMode" 
+    (click)="toggleTheme()" 
+    aria-label="Toggle dark mode">
+    <div class="toggle-icon">
+      <div class="icon-sun" *ngIf="!isDarkMode"></div>
+      <div class="icon-moon" *ngIf="isDarkMode"></div>
+    </div>
+    <span class="toggle-text">{{ isDarkMode ? 'Dark' : 'Light' }}</span>
+  </button>
+</div>
