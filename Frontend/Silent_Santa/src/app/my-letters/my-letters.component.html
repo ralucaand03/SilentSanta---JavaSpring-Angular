@@ -136,6 +136,12 @@
               <i class="icon-check"></i>
               <span>{{ letter.status === 'DONE' ? 'Completed' : 'Mark as Completed' }}</span>
             </button>
+            <button 
+              class="export-button" 
+              (click)="exportLetterXml(letter, $event)">
+              <i class="icon-export"></i>
+              <span>Export XML</span>
+            </button>
           </div>
         </div>
       </div>
@@ -209,6 +215,12 @@
                   (click)="deleteLetter(letter); $event.stopPropagation()">
                   <i class="icon-trash"></i>
                   <span>Delete</span>
+                </button>
+                <button 
+                  class="cute-button export-button" 
+                  (click)="exportLetterXml(letter, $event)">
+                  <i class="icon-export"></i>
+                  <span>Export XML</span>
                 </button>
               </div>
             </div>

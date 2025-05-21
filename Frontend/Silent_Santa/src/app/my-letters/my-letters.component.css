@@ -457,7 +457,7 @@
 }
 
 .accept-button:hover {
-  background-color: #3a9080; 
+  background-color: #3a9080;
 }
 
 .deny-button {
@@ -533,10 +533,40 @@
   font-style: italic;
 }
 
+/* Add styles for the export button */
+.export-button {
+  background-color: #4a6fa5;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  border: none;
+  font-family: "Comfortaa", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 10px;
+}
+
+.export-button:hover {
+  background-color: #3a5a8c;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.export-button:active {
+  transform: translateY(-1px);
+}
+
 .letter-footer {
   display: flex;
   padding: 15px;
-  gap: 15px;
+  gap: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   align-items: center;
 }
@@ -768,6 +798,11 @@
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>');
 }
 
+/* Add the export icon */
+.icon-export {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>');
+}
+
 /* Responsive styles */
 @media (max-width: 1100px) {
   .letters-container {
@@ -856,6 +891,12 @@
   .filter-options {
     flex-direction: column;
   }
+
+  .export-button {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 10px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -917,4 +958,3 @@
     width: 100%;
   }
 }
- 
