@@ -57,3 +57,7 @@ Silent Santa is a web platform that connects donors with needy children through 
 ---
 
 ## 📸 Screenshots
+
+
+---
+⭐ If you enjoyed this project, please give it a star! 🌟
